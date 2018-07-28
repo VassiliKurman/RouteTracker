@@ -26,15 +26,14 @@ import android.view.ViewGroup;
 import vkurman.routetracker.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * RoutesFragment is a simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link RoutesFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link RoutesFragment#newInstance} factory method to
  * create an instance of this fragment.
  *
- * RoutesFragment
- * Created by Vassili Kurman on 27/02/2018.
+  * Created by Vassili Kurman on 27/02/2018.
  * Version 1.0
   */
 public class RoutesFragment extends Fragment {
