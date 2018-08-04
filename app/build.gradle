@@ -29,6 +29,10 @@ dependencies {
 
     // RecyclerView
     implementation 'com.android.support:recyclerview-v7:27.1.0'
+    // CardView
+    implementation "com.android.support:cardview-v7:27.1.0"
+    // Design dependency
+    implementation "com.android.support:design:27.1.0"
     // Google Play services API
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'

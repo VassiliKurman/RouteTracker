@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- General -->
     <dimen name="default_margin">8dp</dimen>
     <dimen name="default_padding">8dp</dimen>
+
+    <!-- CardView -->
+    <dimen name="cardview_main_text_size">32sp</dimen>
+    <dimen name="cardview_secondary_text_size">22sp</dimen>
+    <dimen name="cardview_image_size">24dp</dimen>
+
+    <!-- Toolbar -->
+    <dimen name="toolbar_side_margin">8dp</dimen>
+
+    <!-- FAB button -->
+    <dimen name="fab_elevation">2dp</dimen>
+    <dimen name="fab_press_translation_z">6dp</dimen>
+    <dimen name="fab_margin">24dp</dimen>
 </resources>

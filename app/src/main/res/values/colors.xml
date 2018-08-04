@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!-- Custom colours -->
+    <color name="colorIcon">@color/colorPrimary</color>
+    <color name="colorPlaceholder">@color/colorPrimary</color>
+    <color name="colorError">@color/colorAccent</color>
+    <color name="colorCardViewBackground">#FFFFFF</color>
 </resources>

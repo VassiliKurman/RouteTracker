@@ -17,19 +17,27 @@ package vkurman.routetracker.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import vkurman.routetracker.R;
+import vkurman.routetracker.model.Track;
 
 /**
  * RoutesActivity
  * Created by Vassili Kurman on 27/02/2018.
  * Version 1.0
  */
-public class RoutesActivity extends AppCompatActivity {
+public class RoutesActivity extends AppCompatActivity implements RoutesFragment.OnItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
+    }
+
+    @Override
+    public void onItemSelected(Track track) {
+        // TODO
+        Toast.makeText(this, "Selected track: " + track.getName(), Toast.LENGTH_LONG).show();
     }
 }
