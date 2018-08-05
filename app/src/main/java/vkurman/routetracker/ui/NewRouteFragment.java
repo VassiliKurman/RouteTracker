@@ -16,48 +16,39 @@
 package vkurman.routetracker.ui;
 
 import android.content.Context;
-import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vkurman.routetracker.R;
-import vkurman.routetracker.adapter.TracksAdapter;
-import vkurman.routetracker.model.Track;
 
 /**
- * RoutesFragment is a simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link RoutesFragment.OnItemSelectedListener} interface
+ * {@link NewRouteFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
  *
- * Created by Vassili Kurman on 04/08/2018.
+ * Created by Vassili Kurman on 05/08/2018.
  * Version 1.0
  */
-public class RoutesFragment extends Fragment implements TracksAdapter.TrackClickListener, View.OnClickListener {
-    /**
-     * Item click listener
-     */
-    private OnItemSelectedListener mListener;
-    /**
-     * Adapter for RecycleView
-     */
-    private TracksAdapter mAdapter;
-    /**
-     * RecycleView containing list of <code>Track</code>'s.
-     */
-    private RecyclerView mRecycleView;
+public class NewRouteFragment extends Fragment implements View.OnClickListener {
 
-    @BindView(R.id.fab_add_new_track) FloatingActionButton mFloatingActionButton;
+    // Parent activity listens for this fragments interactions
+    private OnFragmentInteractionListener mListener;
+    // Toast
+    private Toast mToast;
 
-    public RoutesFragment() {
+    @BindView(R.id.btn_start) Button mStartButton;
+    @BindView(R.id.btn_stop) Button mStopButton;
+
+    public NewRouteFragment() {
         // Required empty public constructor
     }
 
@@ -70,32 +61,26 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View rootView = inflater.inflate(R.layout.fragment_routes, container, true);
+        View view = inflater.inflate(R.layout.fragment_new_route, container, false);
         // Binding views
-        ButterKnife.bind(this, rootView);
+        ButterKnife.bind(this, view);
 
-        // Get a reference to the ListView in the master_list_view xml layout file
-        mRecycleView = rootView.findViewById(R.id.recycler_view);
+        mStartButton.setEnabled(true);
+        mStartButton.setOnClickListener(this);
+        mStopButton.setEnabled(false);
+        mStopButton.setOnClickListener(this);
 
-        // This fragment is a static fragment and it is created before parent activity,
-        // therefore recipes not set
-        mAdapter = new TracksAdapter(getContext(), null, this);
-        // Set the adapter on the ListView
-        mRecycleView.setAdapter(mAdapter);
-
-        mFloatingActionButton.setOnClickListener(this);
-
-        return rootView;
+        return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnItemSelectedListener) {
-            mListener = (OnItemSelectedListener) context;
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnItemSelectedListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -103,18 +88,6 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    /**
-     * This method called when item selected from the list.
-     *
-     * @param track
-     */
-    @Override
-    public void onTrackClicked(Track track) {
-        if (mListener != null) {
-            mListener.onItemSelected(track);
-        }
     }
 
     /**
@@ -127,15 +100,35 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnItemSelectedListener {
-        void onItemSelected(Track track);
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 
     @Override
     public void onClick(View view) {
-        if(view == mFloatingActionButton) {
-            Intent intent = new Intent(getActivity(), NewRouteActivity.class);
-            startActivity(intent);
+        if(view == mStartButton) {
+            mStartButton.setEnabled(false);
+            // Displaying Toast
+            if(mToast != null) {
+                mToast.cancel();
+            }
+            mToast = Toast.makeText(getContext(), "Started tracking!", Toast.LENGTH_SHORT);
+            mToast.show();
+            // TODO start tracking
+
+            mStopButton.setEnabled(true);
+        } else if (view == mStopButton) {
+            mStopButton.setEnabled(false);
+            // Displaying Toast
+            if(mToast != null) {
+                mToast.cancel();
+            }
+            mToast = Toast.makeText(getContext(), "Stopped tracking!", Toast.LENGTH_SHORT);
+            mToast.show();
+            // TODO stop tracking
+
+            mStartButton.setEnabled(true);
         }
     }
 }

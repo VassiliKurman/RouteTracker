@@ -4,4 +4,20 @@
     <!-- App strings -->
     <string name="track_image_description">Track image in RecycleView</string>
     <string name="action_add">Add new track</string>
+
+    <string name="timestamp">Timestamp</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="altitude">Altitude</string>
+    <string name="duration">Duration</string>
+
+    <string name="int_zero">0</string>
+    <string name="double_zero">0.0000</string>
+
+    <!-- ActionBar strings -->
+    <string name="title_new_track_activity">New track</string>
+
+    <!-- Button strings -->
+    <string name="button_start">Start</string>
+    <string name="button_stop">Stop</string>
 </resources>

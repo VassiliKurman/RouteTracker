@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="" />
+            android:value="@string/GEO_API_KEY" />
 
         <activity android:name=".ui.RoutesActivity">
             <intent-filter>
@@ -30,7 +30,9 @@
             android:name=".provider.TrackerContentProvider"
             android:authorities="vkurman.routetracker"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="true" />
+
+        <activity android:name=".ui.NewRouteActivity"></activity>
     </application>
 
 </manifest>

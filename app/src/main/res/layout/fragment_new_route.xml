@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright (C) 2018 The Android Open Source Project
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.-->
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.NewRouteFragment">
+
+    <View
+        android:id="@+id/vertical_divider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/label_duration"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+    <View
+        android:id="@+id/horizontal_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintTop_toBottomOf="@id/vertical_divider"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <!-- Labels -->
+    <TextView
+        android:id="@+id/label_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toLeftOf="@id/vertical_divider"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/timestamp"/>
+    <TextView
+        android:id="@+id/label_latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toLeftOf="@id/vertical_divider"
+        app:layout_constraintTop_toBottomOf="@id/label_timestamp"
+        android:text="@string/latitude"/>
+    <TextView
+        android:id="@+id/label_longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toLeftOf="@id/vertical_divider"
+        app:layout_constraintTop_toBottomOf="@id/label_latitude"
+        android:text="@string/longitude"/>
+    <TextView
+        android:id="@+id/label_altitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toLeftOf="@id/vertical_divider"
+        app:layout_constraintTop_toBottomOf="@id/label_longitude"
+        android:text="@string/altitude"/>
+    <TextView
+        android:id="@+id/label_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toLeftOf="@id/vertical_divider"
+        app:layout_constraintTop_toBottomOf="@id/label_altitude"
+        android:text="@string/duration"/>
+
+    <!-- Data -->
+    <TextView
+        android:id="@+id/text_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/vertical_divider"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/double_zero"/>
+    <TextView
+        android:id="@+id/text_latitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/vertical_divider"
+        app:layout_constraintTop_toBottomOf="@id/text_timestamp"
+        android:text="@string/double_zero"/>
+    <TextView
+        android:id="@+id/text_longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/vertical_divider"
+        app:layout_constraintTop_toBottomOf="@id/text_latitude"
+        android:text="@string/double_zero"/>
+    <TextView
+        android:id="@+id/text_altitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/vertical_divider"
+        app:layout_constraintTop_toBottomOf="@id/text_longitude"
+        android:text="@string/double_zero"/>
+    <TextView
+        android:id="@+id/text_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/vertical_divider"
+        app:layout_constraintTop_toBottomOf="@id/text_altitude"
+        android:text="@string/int_zero"/>
+
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_divider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btn_stop"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="@string/button_start" />
+    <Button
+        android:id="@+id/btn_stop"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_divider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/btn_start"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="@string/button_stop" />
+
+</android.support.constraint.ConstraintLayout>
