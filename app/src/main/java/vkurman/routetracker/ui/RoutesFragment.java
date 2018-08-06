@@ -17,20 +17,22 @@ package vkurman.routetracker.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vkurman.routetracker.R;
 import vkurman.routetracker.adapter.TracksAdapter;
-import vkurman.routetracker.model.Track;
 
 /**
  * RoutesFragment is a simple {@link Fragment} subclass.
@@ -50,12 +52,13 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
      * Adapter for RecycleView
      */
     private TracksAdapter mAdapter;
-    /**
-     * RecycleView containing list of <code>Track</code>'s.
-     */
-    private RecyclerView mRecycleView;
 
+    /**
+     * Binding Views
+     */
+    @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.fab_add_new_track) FloatingActionButton mFloatingActionButton;
+    @BindView(R.id.swipe_refresh_layout) SwipeRefreshLayout refreshLayout;
 
     public RoutesFragment() {
         // Required empty public constructor
@@ -73,17 +76,20 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
         final View rootView = inflater.inflate(R.layout.fragment_routes, container, true);
         // Binding views
         ButterKnife.bind(this, rootView);
-
-        // Get a reference to the ListView in the master_list_view xml layout file
-        mRecycleView = rootView.findViewById(R.id.recycler_view);
-
+        // use a linear layout manager
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         // This fragment is a static fragment and it is created before parent activity,
         // therefore recipes not set
         mAdapter = new TracksAdapter(getContext(), null, this);
         // Set the adapter on the ListView
-        mRecycleView.setAdapter(mAdapter);
-
+        mRecyclerView.setAdapter(mAdapter);
+        // Setting listener for FAB
         mFloatingActionButton.setOnClickListener(this);
+        // Setting SwipeRefreshLayout.OnRefreshListener
+        if(getActivity() instanceof SwipeRefreshLayout.OnRefreshListener) {
+            refreshLayout.setOnRefreshListener((SwipeRefreshLayout.OnRefreshListener) getActivity());
+        }
 
         return rootView;
     }
@@ -108,12 +114,12 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
     /**
      * This method called when item selected from the list.
      *
-     * @param track
+     * @param trackId
      */
     @Override
-    public void onTrackClicked(Track track) {
+    public void onTrackClicked(long trackId) {
         if (mListener != null) {
-            mListener.onItemSelected(track);
+            mListener.onItemSelected(trackId);
         }
     }
 
@@ -128,14 +134,37 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnItemSelectedListener {
-        void onItemSelected(Track track);
+        void onItemSelected(long trackId);
     }
 
+    /**
+     * Callback for click on a button
+     *
+     * @param view
+     */
     @Override
     public void onClick(View view) {
         if(view == mFloatingActionButton) {
             Intent intent = new Intent(getActivity(), NewRouteActivity.class);
             startActivity(intent);
+        }
+    }
+
+    /**
+     * Pass new Cursor here into fragment if data has been updated.
+     *
+     * @param data
+     */
+    protected void updateData(Cursor data) {
+        if(refreshLayout != null && refreshLayout.isRefreshing()) {
+            refreshLayout.setRefreshing(false);
+        }
+
+        if(mAdapter == null) {
+            mAdapter = new TracksAdapter(getActivity(), data, this);
+            mRecyclerView.setAdapter(mAdapter);
+        } else {
+            mAdapter.updateData(data);
         }
     }
 }

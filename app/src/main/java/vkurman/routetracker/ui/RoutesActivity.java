@@ -15,11 +15,19 @@
  */
 package vkurman.routetracker.ui;
 
+import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import vkurman.routetracker.R;
+import vkurman.routetracker.adapter.TracksAdapter;
+import vkurman.routetracker.loader.TracksLoader;
 import vkurman.routetracker.model.Track;
 
 /**
@@ -27,17 +35,64 @@ import vkurman.routetracker.model.Track;
  * Created by Vassili Kurman on 27/02/2018.
  * Version 1.0
  */
-public class RoutesActivity extends AppCompatActivity implements RoutesFragment.OnItemSelectedListener {
+public class RoutesActivity extends AppCompatActivity implements RoutesFragment.OnItemSelectedListener,
+        LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
+
+    /**
+     * Unique id for loader
+     */
+    private int mTracksLoaderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
+
+        mTracksLoaderId = TracksLoader.ID;
+        retrieveData();
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        return new TracksLoader(this);
     }
 
     @Override
-    public void onItemSelected(Track track) {
-        // TODO
-        Toast.makeText(this, "Selected track: " + track.getName(), Toast.LENGTH_LONG).show();
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+        if(data == null) {
+            return;
+        }
+        RoutesFragment fragment = (RoutesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_master_list);
+        if(fragment != null) {
+            fragment.updateData(data);
+        } else {
+            Toast.makeText(this, "Error finding fragment with list of tracks", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {}
+
+    @Override
+    public void onItemSelected(long trackId) {
+        // TODO load TrackDetailsActivity
+        Toast.makeText(this, "Selected track id: " + trackId, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRefresh() {
+        retrieveData();
+    }
+
+    /**
+     * Calling Loader to retrieve data from database
+     */
+    private void retrieveData() {
+        if(getSupportLoaderManager().getLoader(mTracksLoaderId) == null) {
+            getSupportLoaderManager().initLoader(mTracksLoaderId, null, this).forceLoad();
+        } else {
+            getSupportLoaderManager().getLoader(mTracksLoaderId).forceLoad();
+        }
     }
 }

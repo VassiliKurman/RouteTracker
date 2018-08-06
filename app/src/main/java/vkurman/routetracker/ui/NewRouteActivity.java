@@ -17,13 +17,13 @@ package vkurman.routetracker.ui;
 
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import vkurman.routetracker.R;
+import vkurman.routetracker.model.RouteManager;
 
 /**
  * NewRouteActivity is an Activity for creating new Track.
@@ -41,6 +41,7 @@ public class NewRouteActivity extends AppCompatActivity implements NewRouteFragm
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.title_new_track_activity);
 
+        // Track fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         NewRouteFragment newRouteFragment = new NewRouteFragment();
         fragmentManager.beginTransaction()
@@ -52,7 +53,9 @@ public class NewRouteActivity extends AppCompatActivity implements NewRouteFragm
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Toast.makeText(this, "Switching track recording in background!", Toast.LENGTH_LONG).show();
+                if (RouteManager.getInstance().isTracking(this)) {
+                    Toast.makeText(this, "Switching track recording in background!", Toast.LENGTH_LONG).show();
+                }
                 // TODO save track in background
                 finish();
                 return true;

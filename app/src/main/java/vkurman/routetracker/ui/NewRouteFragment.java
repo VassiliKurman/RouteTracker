@@ -15,19 +15,41 @@
  */
 package vkurman.routetracker.ui;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vkurman.routetracker.R;
+import vkurman.routetracker.model.RouteManager;
+import vkurman.routetracker.model.Track;
+import vkurman.routetracker.receiver.LocationReceiver;
+import vkurman.routetracker.utils.RouteTrackerUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,15 +60,66 @@ import vkurman.routetracker.R;
  * Created by Vassili Kurman on 05/08/2018.
  * Version 1.0
  */
-public class NewRouteFragment extends Fragment implements View.OnClickListener {
+public class NewRouteFragment extends Fragment implements View.OnClickListener,
+        GoogleMap.OnMyLocationButtonClickListener,
+        GoogleMap.OnMyLocationClickListener,
+        OnMapReadyCallback {
 
+    /**
+     * MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
+     * app-defined int constant. The callback method gets the
+     * result of the request.
+     */
+    public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 101;
     // Parent activity listens for this fragments interactions
     private OnFragmentInteractionListener mListener;
     // Toast
     private Toast mToast;
+    // Google Map
+    private GoogleMap mMap;
+    // List of Locations
+    private List<Location> locations;
 
-    @BindView(R.id.btn_start) Button mStartButton;
-    @BindView(R.id.btn_stop) Button mStopButton;
+    @BindView(R.id.text_timestamp)
+    TextView mTextTimestamp;
+    @BindView(R.id.text_latitude)
+    TextView mTextLatitude;
+    @BindView(R.id.text_longitude)
+    TextView mTextLongitude;
+    @BindView(R.id.text_altitude)
+    TextView mTextAltitude;
+    @BindView(R.id.text_duration)
+    TextView mTextDuration;
+    @BindView(R.id.btn_start)
+    Button mStartButton;
+    @BindView(R.id.btn_stop)
+    Button mStopButton;
+
+    private LocationReceiver mLocationReceiver = new LocationReceiver(){
+        @Override
+        protected void locationChanged(Location location) {
+            if(location != null) {
+                Toast.makeText(getContext(), "Retrieved last location", Toast.LENGTH_SHORT).show();
+                if(locations == null) {
+                    locations = new ArrayList<>();
+                }
+                locations.add(location);
+
+                mTextTimestamp.setText(String.format(Locale.getDefault(), "%d milliseconds", location.getTime()));
+                mTextLatitude.setText(String.format(Locale.getDefault(), "%f", location.getLatitude()));
+                mTextLongitude.setText(String.format(Locale.getDefault(), "%f", location.getLongitude()));
+                mTextAltitude.setText(String.format(Locale.getDefault(), "%f", location.getAltitude()));
+                mTextDuration.setText(RouteTrackerUtils.convertMillisecondsToFormattedString(location.getTime() - locations.get(0).getTime()));
+            } else {
+                Toast.makeText(getContext(), "Last known location is missing", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void providerStateChanged(boolean enabled) {
+            Toast.makeText(getActivity(), "Provider " + (enabled ? "enabled" : "disabled"), Toast.LENGTH_SHORT).show();
+        }
+    };
 
     public NewRouteFragment() {
         // Required empty public constructor
@@ -70,7 +143,24 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener {
         mStopButton.setEnabled(false);
         mStopButton.setOnClickListener(this);
 
+        // Map fragment
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map_container);
+        mapFragment.getMapAsync(this);
+
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mLocationReceiver,
+                new IntentFilter(RouteManager.ACTION_LOCATION));
+    }
+    @Override
+    public void onStop() {
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mLocationReceiver);
+        super.onStop();
     }
 
     @Override
@@ -107,28 +197,97 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        if(view == mStartButton) {
-            mStartButton.setEnabled(false);
+        if (view == mStartButton) {
             // Displaying Toast
-            if(mToast != null) {
+            if (mToast != null) {
                 mToast.cancel();
             }
             mToast = Toast.makeText(getContext(), "Started tracking!", Toast.LENGTH_SHORT);
             mToast.show();
             // TODO start tracking
-
-            mStopButton.setEnabled(true);
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            } else {
+                startLocationTracking();
+            }
         } else if (view == mStopButton) {
             mStopButton.setEnabled(false);
             // Displaying Toast
-            if(mToast != null) {
+            if (mToast != null) {
                 mToast.cancel();
             }
             mToast = Toast.makeText(getContext(), "Stopped tracking!", Toast.LENGTH_SHORT);
             mToast.show();
-            // TODO stop tracking
-
+            // stop tracking
+            if (RouteManager.getInstance().isTracking(getActivity())) {
+                RouteManager.getInstance().stopLocationUpdates(getActivity());
+            }
             mStartButton.setEnabled(true);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted! Do the task that need to do.
+                    startLocationTracking();
+                } else {
+                    // permission denied! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void startLocationTracking() {
+        mStartButton.setEnabled(false);
+        mStopButton.setEnabled(true);
+        if (!RouteManager.getInstance().isTracking(getActivity())) {
+            RouteManager.getInstance().startLocationUpdates(getActivity());
+        }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mMap = map;
+        // Check for location permission.
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+            mMap.setOnMyLocationButtonClickListener(this);
+            mMap.setOnMyLocationClickListener(this);
+        }
+    }
+
+    @Override
+    public void onMyLocationClick(@NonNull Location location) {
+        Toast.makeText(getContext(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        Toast.makeText(getContext(), "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+        // Return false so that we don't consume the event and the default behavior still occurs
+        // (the camera animates to the user's current position).
+        return false;
     }
 }

@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- Needed if app targets Android 5.0 (API level 21) or higher. -->
-    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature android:required="true" android:name="android.hardware.location.gps" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +17,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/GEO_API_KEY" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity android:name=".ui.RoutesActivity">
             <intent-filter>
@@ -25,6 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.NewRouteActivity" />
 
         <provider
             android:name=".provider.TrackerContentProvider"
@@ -32,7 +36,14 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".ui.NewRouteActivity"></activity>
+        <receiver
+            android:name=".receiver.LocationReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="vkurman.routetracker.ACTION_LOCATION"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
