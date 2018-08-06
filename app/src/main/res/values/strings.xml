@@ -17,7 +17,12 @@
     <!-- ActionBar strings -->
     <string name="title_new_track_activity">New track</string>
 
+    <!-- Settings strings -->
+    <string name="action_settings">Settings</string>
+
     <!-- Button strings -->
     <string name="button_start">Start</string>
     <string name="button_stop">Stop</string>
+    <string name="title_activity_settings">Settings</string>
+
 </resources>

@@ -17,7 +17,6 @@ package vkurman.routetracker.ui;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -103,6 +102,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
                 if(locations == null) {
                     locations = new ArrayList<>();
                 }
+
                 locations.add(location);
 
                 mTextTimestamp.setText(String.format(Locale.getDefault(), "%d milliseconds", location.getTime()));

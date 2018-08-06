@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="wifi enabled"
+        android:title="WiFi" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="example_switch"
+        android:summary="Summary"
+        android:title="Title" />
+
+    <EditTextPreference
+        android:capitalize="words"
+        android:defaultValue="DefaultValue"
+        android:inputType="textCapWords"
+        android:key="example_text"
+        android:maxLines="1"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="Title" />
+
+</PreferenceScreen>
