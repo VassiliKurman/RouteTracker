@@ -19,14 +19,17 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +37,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +52,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import vkurman.routetracker.R;
 import vkurman.routetracker.model.RouteManager;
-import vkurman.routetracker.model.Track;
 import vkurman.routetracker.receiver.LocationReceiver;
 import vkurman.routetracker.utils.RouteTrackerUtils;
 
@@ -64,6 +69,10 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback {
 
+    /**
+     * Tag for logging
+     */
+    public static final String TAG = NewRouteFragment.class.getSimpleName();
     /**
      * MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
      * app-defined int constant. The callback method gets the
@@ -97,15 +106,20 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
     private LocationReceiver mLocationReceiver = new LocationReceiver(){
         @Override
         protected void locationChanged(Location location) {
+            Log.d(TAG, "Entered LocationReceiver.locationChanged()");
             if(location != null) {
-                Toast.makeText(getContext(), "Retrieved last location", Toast.LENGTH_SHORT).show();
                 if(locations == null) {
                     locations = new ArrayList<>();
                 }
 
                 locations.add(location);
 
-                mTextTimestamp.setText(String.format(Locale.getDefault(), "%d milliseconds", location.getTime()));
+                // Putting Marker to map
+                LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(currentLatLng));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+
+                mTextTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(location.getTime()));
                 mTextLatitude.setText(String.format(Locale.getDefault(), "%f", location.getLatitude()));
                 mTextLongitude.setText(String.format(Locale.getDefault(), "%f", location.getLongitude()));
                 mTextAltitude.setText(String.format(Locale.getDefault(), "%f", location.getAltitude()));
@@ -113,11 +127,12 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
             } else {
                 Toast.makeText(getContext(), "Last known location is missing", Toast.LENGTH_SHORT).show();
             }
+            Log.d(TAG, "... exiting LocationReceiver.locationChanged()");
         }
 
         @Override
         public void providerStateChanged(boolean enabled) {
-            Toast.makeText(getActivity(), "Provider " + (enabled ? "enabled" : "disabled"), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Location provider " + (enabled ? "enabled" : "disabled"), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -231,7 +246,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
             mToast.show();
             // stop tracking
             if (RouteManager.getInstance().isTracking(getActivity())) {
-                RouteManager.getInstance().stopLocationUpdates(getActivity());
+                RouteManager.getInstance().stopTracking(getActivity());
             }
             mStartButton.setEnabled(true);
         }
@@ -257,12 +272,19 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    /**
+     * Starts tracking location either after permissions are granted (if needed) or
+     * straight away after start button is pressed (if permissions are granted earlier).
+     */
     @SuppressLint("MissingPermission")
     private void startLocationTracking() {
         mStartButton.setEnabled(false);
         mStopButton.setEnabled(true);
         if (!RouteManager.getInstance().isTracking(getActivity())) {
-            RouteManager.getInstance().startLocationUpdates(getActivity());
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            String name = prefs.getString(getString(R.string.pref_key_default_user_name), getString(R.string.pref_value_default_user_name));
+            String id = prefs.getString(getString(R.string.pref_key_default_user_id), getString(R.string.pref_value_default_user_id));
+            RouteManager.getInstance().startTracking(getActivity(), name, id);
         }
     }
 

@@ -139,7 +139,7 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TracksView
                 holder.mTrackName.setText(name);
                 holder.mTrackOwner.setText(owner);
                 Picasso.get()
-                        .load(image.isEmpty() ? null : image)
+                        .load(image == null ? null : image.isEmpty() ? null : image)
                         .placeholder(R.drawable.placeholder)
                         .error(R.drawable.error)
                         .into(holder.mTrackImage);

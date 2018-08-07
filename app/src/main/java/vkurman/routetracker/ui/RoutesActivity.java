@@ -16,6 +16,7 @@
 package vkurman.routetracker.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,10 +25,13 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import java.util.UUID;
 
 import vkurman.routetracker.R;
 import vkurman.routetracker.adapter.TracksAdapter;
@@ -52,7 +56,7 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
 
-
+        defaultSetup();
 
         mTracksLoaderId = TracksLoader.ID;
         retrieveData();
@@ -117,5 +121,23 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
         } else {
             getSupportLoaderManager().getLoader(mTracksLoaderId).forceLoad();
         }
+    }
+
+    /**
+     * App default setup.
+     */
+    private void defaultSetup() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String defaultUserId = getString(R.string.pref_value_default_user_id);
+        String userId = sharedPreferences.getString(
+                getString(R.string.pref_key_default_user_id),
+                defaultUserId);
+        if(userId.equals(defaultUserId)) {
+            // Setting up user id
+            userId = UUID.randomUUID().toString();
+            sharedPreferences.edit().putString(getString(R.string.pref_key_default_user_id), userId).apply();
+        }
+        // TODO clear bellow
+        //String name = sharedPreferences.getString(getString(R.string.pref_key_default_user_name), userId);
     }
 }

@@ -15,8 +15,12 @@
  */
 package vkurman.routetracker.utils;
 
+import java.text.SimpleDateFormat;
+
 /**
- * RouteTrackerUtils
+ * RouteTrackerUtils is a small utility class to perform general text and number
+ * formatting and conversion.
+ *
  * Created by Vassili Kurman on 06/08/2018.
  * Version 1.0
  */
@@ -43,5 +47,15 @@ public class RouteTrackerUtils {
         int min = ((seconds - sec) / 60) % 60;
         int h = (seconds - (min * 60) - seconds) / 3600;
         return String.format("%02d:%02d:%02d", h, min, sec);
+    }
+
+    /**
+     * Converts milliseconds and returns in local Date and Time format.
+     *
+     * @param milliseconds
+     * @return String - formatted local Date and Time
+     */
+    public static String convertMillisecondsToDateTimeFormat(long milliseconds) {
+        return SimpleDateFormat.getDateTimeInstance().format(milliseconds);
     }
 }

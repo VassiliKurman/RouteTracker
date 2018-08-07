@@ -19,54 +19,43 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * <code>Track</code> is a track, made of at least one segment containing
- * <code>Waypoint</code>'s - an ordered list of points describing the path.
- * <p>
- * Tracks are a record of where a person has been and routes are suggestions
- * about where they might go in the future.
- *
- * Created by Vassili Kurman on 01/08/2018.
+ * User
+ * Created by Vassili Kurman on 07/08/2018.
  * Version 1.0
  */
-public class Track implements Parcelable {
+public class User implements Parcelable {
 
-    private long id;
+    private String id;
     private String name;
-    private String owner;
-    private String image;
 
     /**
      * Classes implementing the <code>Parcelable</code> interface must
      * also have a non-null static field called <code>CREATOR</code> of
      * a type that implements the <code>Parcelable.Creator</code> interface.
      */
-    public static final Parcelable.Creator<Track> CREATOR
-            = new Parcelable.Creator<Track>() {
-        public Track createFromParcel(Parcel in) {
-            return new Track(in);
+    public static final Parcelable.Creator<User> CREATOR
+            = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
         }
 
-        public Track[] newArray(int size) {
-            return new Track[size];
+        public User[] newArray(int size) {
+            return new User[size];
         }
     };
 
-    private Track(Parcel in) {
-        id = in.readLong();
+    private User(Parcel in) {
+        id = in.readString();
         name = in.readString();
-        owner = in.readString();
-        image = in.readString();
     }
 
     /**
      * Public constructor to create object that has been retrieved from persistent
      * location, like database.
      */
-    public Track(long id, String name, String owner, String image) {
+    public User(String id, String name) {
         this.id = id;
         this.name = name;
-        this.owner = owner;
-        this.image = image;
     }
 
     @Override
@@ -79,17 +68,15 @@ public class Track implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
+        dest.writeString(id);
         dest.writeString(name);
-        dest.writeString(owner);
-        dest.writeString(image);
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -99,21 +86,5 @@ public class Track implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 }

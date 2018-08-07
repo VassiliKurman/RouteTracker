@@ -40,7 +40,7 @@ public class TrackerDbHelper extends SQLiteOpenHelper {
     /**
      * If the database schema changes, than the database version needs to be incremented
      */
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Constructor
     TrackerDbHelper(Context context) {
@@ -50,15 +50,20 @@ public class TrackerDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         // Create a table to hold the track data
+        final String SQL_CREATE_USERS_TABLE = "CREATE TABLE " + UsersEntry.TABLE_NAME_USERS+ " (" +
+                UsersEntry.COLUMN_USERS_ID + " TEXT NOT NULL," +
+                UsersEntry.COLUMN_USERS_NAME + " TEXT)";
+
+        // Create a table to hold the track data
         final String SQL_CREATE_TRACKS_TABLE = "CREATE TABLE " + TracksEntry.TABLE_NAME_TRACKS + " (" +
-                TracksEntry.COLUMN_TRACKS_ID + " INTEGER PRIMARY KEY," +
+                TracksEntry.COLUMN_TRACKS_ID + " INTEGER NOT NULL PRIMARY KEY," +
                 TracksEntry.COLUMN_TRACKS_NAME + " TEXT NOT NULL, " +
                 TracksEntry.COLUMN_TRACKS_OWNER + " TEXT NOT NULL, " +
                 TracksEntry.COLUMN_TRACKS_IMAGE + " TEXT)";
 
         // Create a table to hold the waypoint data
         final String SQL_CREATE_WAYPOINTS_TABLE = "CREATE TABLE " + WaypointsEntry.TABLE_NAME_WAYPOINTS + " (" +
-                WaypointsEntry.COLUMN_WAYPOINTS_ID + " INTEGER PRIMARY KEY," +
+                WaypointsEntry.COLUMN_WAYPOINTS_ID + " INTEGER NOT NULL PRIMARY KEY," +
                 WaypointsEntry.COLUMN_WAYPOINTS_TRACK_ID + " INTEGER NOT NULL, " +
                 WaypointsEntry.COLUMN_WAYPOINTS_LATITUDE + " REAL NOT NULL, " +
                 WaypointsEntry.COLUMN_WAYPOINTS_LONGITUDE + " REAL NOT NULL, " +
@@ -66,10 +71,11 @@ public class TrackerDbHelper extends SQLiteOpenHelper {
                 WaypointsEntry.COLUMN_WAYPOINTS_TIMESTAMP + " INTEGER NOT NULL)";
 
         try {
-            sqLiteDatabase.execSQL(SQL_CREATE_WAYPOINTS_TABLE);
+            sqLiteDatabase.execSQL(SQL_CREATE_USERS_TABLE);
             sqLiteDatabase.execSQL(SQL_CREATE_TRACKS_TABLE);
-        } catch (SQLException sqle) {
-            Log.e(TAG, "SQL error creating tables: " + sqle);
+            sqLiteDatabase.execSQL(SQL_CREATE_WAYPOINTS_TABLE);
+        } catch (SQLException e) {
+            Log.e(TAG, "SQL error creating tables: " + e);
         }
     }
 
@@ -78,6 +84,7 @@ public class TrackerDbHelper extends SQLiteOpenHelper {
         // For this project simply drop the table and create a new one.
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WaypointsEntry.TABLE_NAME_WAYPOINTS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TracksEntry.TABLE_NAME_TRACKS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + UsersEntry.TABLE_NAME_USERS);
 
         onCreate(sqLiteDatabase);
     }
@@ -87,6 +94,7 @@ public class TrackerDbHelper extends SQLiteOpenHelper {
         // For this project simply drop the table and create a new one.
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WaypointsEntry.TABLE_NAME_WAYPOINTS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TracksEntry.TABLE_NAME_TRACKS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + UsersEntry.TABLE_NAME_USERS);
 
         onCreate(sqLiteDatabase);
     }

@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 
 /**
  * LocationReceiver is a BroadcastReceiver to receive Location updates.
@@ -27,8 +28,14 @@ import android.location.LocationManager;
  * Version 1.0
  */
 public class LocationReceiver extends BroadcastReceiver {
+    /**
+     * Tag for logging
+     */
+    public static final String TAG = LocationReceiver.class.getSimpleName();
+
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d(TAG, "Entered onReceive()");
         // Successfully got location
         Location location = intent.getParcelableExtra(LocationManager.KEY_LOCATION_CHANGED);
         if (location != null) {
@@ -41,6 +48,7 @@ public class LocationReceiver extends BroadcastReceiver {
                     .getBooleanExtra(LocationManager.KEY_PROVIDER_ENABLED, false);
             providerStateChanged(enabled);
         }
+        Log.d(TAG, "... exiting onReceive()");
     }
 
     /**

@@ -38,6 +38,10 @@ public class TrackerContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     /**
+     * This is the path for the "users" directory
+     */
+    public static final String PATH_USERS = "users";
+    /**
      * This is the path for the "tracks" directory
      */
     public static final String PATH_TRACKS = "tracks";
@@ -46,8 +50,22 @@ public class TrackerContract {
      */
     public static final String PATH_WAYPOINTS = "waypoints";
 
+    public static final long INVALID_USER_ID = -1;
     public static final long INVALID_TRACK_ID = -1;
     public static final long INVALID_WAYPOINT_ID = -1;
+
+    /**
+     * Inner class for User columns
+     */
+    public static final class UsersEntry implements BaseColumns {
+        // Entry content URI = base content URI + path
+        public static final Uri CONTENT_URI_USERS =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_USERS).build();
+        // Users table
+        public static final String TABLE_NAME_USERS = "users";
+        public static final String COLUMN_USERS_ID = "id";
+        public static final String COLUMN_USERS_NAME = "name";
+    }
 
     /**
      * Inner class for Track columns
@@ -56,7 +74,7 @@ public class TrackerContract {
         // Entry content URI = base content URI + path
         public static final Uri CONTENT_URI_TRACKS =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_TRACKS).build();
-        // Recipes table
+        // Tracks table
         public static final String TABLE_NAME_TRACKS = "tracks";
         public static final String COLUMN_TRACKS_ID = "id";
         public static final String COLUMN_TRACKS_NAME = "name";

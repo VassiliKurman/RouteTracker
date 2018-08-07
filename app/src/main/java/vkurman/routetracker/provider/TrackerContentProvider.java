@@ -40,8 +40,10 @@ public class TrackerContentProvider extends ContentProvider {
     // and related ints (101, 102, ..) for items in that directory.
     public static final int TRACKS = 100;
     public static final int WAYPOINTS = 200;
+    public static final int USERS = 300;
     public static final int TRACK_WITH_ID = 101;
     public static final int WAYPOINTS_WITH_ID = 201;
+    public static final int USERS_WITH_ID = 301;
 
     // Declaring a static variable for the Uri matcher that you construct
     private static final UriMatcher sUriMatcher = buildUriMatcher();
@@ -59,6 +61,8 @@ public class TrackerContentProvider extends ContentProvider {
         uriMatcher.addURI(TrackerContract.AUTHORITY, TrackerContract.PATH_TRACKS + "/#", TRACK_WITH_ID);
         uriMatcher.addURI(TrackerContract.AUTHORITY, TrackerContract.PATH_WAYPOINTS, WAYPOINTS);
         uriMatcher.addURI(TrackerContract.AUTHORITY, TrackerContract.PATH_WAYPOINTS + "/#", WAYPOINTS_WITH_ID);
+        uriMatcher.addURI(TrackerContract.AUTHORITY, TrackerContract.PATH_USERS, USERS);
+        uriMatcher.addURI(TrackerContract.AUTHORITY, TrackerContract.PATH_USERS + "/#", USERS_WITH_ID);
 
         return uriMatcher;
     }
@@ -85,6 +89,15 @@ public class TrackerContentProvider extends ContentProvider {
         Uri returnUri;
         long id;
         switch (match) {
+            case USERS:
+                // Insert new values into the database
+                id = db.insertWithOnConflict(TrackerContract.UsersEntry.TABLE_NAME_USERS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                if (id > 0) {
+                    returnUri = ContentUris.withAppendedId(TrackerContract.UsersEntry.CONTENT_URI_USERS, id);
+                } else {
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                }
+                break;
             case TRACKS:
                 // Insert new values into the database
                 id = db.insertWithOnConflict(TrackerContract.TracksEntry.TABLE_NAME_TRACKS, null, values, SQLiteDatabase.CONFLICT_REPLACE);
@@ -132,6 +145,28 @@ public class TrackerContentProvider extends ContentProvider {
         Cursor retCursor;
         String id;
         switch (match) {
+            // Query for the users directory
+            case USERS:
+                Log.d(TAG, "Retrieving all users");
+                retCursor = db.query(TrackerContract.UsersEntry.TABLE_NAME_USERS,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case USERS_WITH_ID:
+                id = uri.getPathSegments().get(1);
+                Log.d(TAG, "Retrieving user: " + id);
+                retCursor = db.query(TrackerContract.UsersEntry.TABLE_NAME_USERS,
+                        projection,
+                        "id=?",
+                        new String[]{id},
+                        null,
+                        null,
+                        sortOrder);
+                break;
             // Query for the tracks directory
             case TRACKS:
                 Log.d(TAG, "Retrieving all tracks");

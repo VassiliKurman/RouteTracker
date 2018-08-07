@@ -16,21 +16,42 @@
 package vkurman.routetracker.model;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.tasks.Task;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import vkurman.routetracker.R;
+import vkurman.routetracker.provider.TrackerDbUtils;
 
 /**
  * RouteManager is a class to manage start, update end end for route tracking.
+ *
  * Created by Vassili Kurman on 28/07/2018.
  * Version 1.0
  */
-public class RouteManager {
+public class RouteManager extends LocationCallback {
+    /**
+     * Tag for logging
+     */
+    private static final String TAG = RouteManager.class.getSimpleName();
     /**
      * Action for BroadcastReceiver
      */
@@ -43,6 +64,8 @@ public class RouteManager {
      * Reference to LocationManager
      */
     private LocationManager mLocationManager;
+
+    private Track mTrack;
 
     /**
      * Private constructor used in singleton pattern
@@ -74,18 +97,45 @@ public class RouteManager {
         return PendingIntent.getBroadcast(context, 0, intent, flags);
     }
 
+    public void startTracking(Context context, String userName, String userId) {
+        Log.d(TAG, "Entered startLocationUpdates()");
+        if(permissionsGranted(context)) {
+            mTrack = new Track(Calendar.getInstance().getTimeInMillis(), userName, userId, null);
+
+            TrackerDbUtils.addTrack(context, mTrack);
+
+            startLocationUpdates(context);
+        }
+        Log.d(TAG, "... exiting startLocationUpdates()");
+    }
+
+    public void stopTracking(Context context) {
+        Log.d(TAG, "Entered startLocationUpdates()");
+        mTrack = null;
+        stopLocationUpdates(context);
+        Log.d(TAG, "... exiting startLocationUpdates()");
+    }
+
+    private boolean permissionsGranted(Context context) {
+        return
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
     /**
      * Starting to update route locations
      *
      * @param context
      */
-    public void startLocationUpdates(Context context) {
+    @SuppressLint("MissingPermission")
+    private void startLocationUpdates(Context context) {
+        Log.d(TAG, "Entered startLocationUpdates()");
         // Checking if permissions are granted
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (permissionsGranted(context)) {
             // Checking if have reference to LocationManager
             if (mLocationManager == null) {
                 mLocationManager = (LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
             }
             String locationProvider = LocationManager.GPS_PROVIDER;
             // Get the last known location and broadcast it if there is one
@@ -97,8 +147,18 @@ public class RouteManager {
             }
             // Start updates from the location manager
             PendingIntent pendingIntent = getLocationPendingIntent(context,true);
-            mLocationManager.requestLocationUpdates(locationProvider, 0, 0, pendingIntent);
+            // Getting preferences for tracking
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            long minTime = sharedPreferences.getLong(
+                    context.getString(R.string.pref_key_default_tracking_minimum_time), 5000);
+            float minDistance = sharedPreferences.getFloat(
+                    context.getString(R.string.pref_key_default_tracking_minimum_distance), 5.0f);
+
+            mLocationManager.requestLocationUpdates(locationProvider, minTime, minDistance, pendingIntent);
+        } else {
+            Log.e(TAG, "Not all permissions are granted");
         }
+        Log.d(TAG, "... exiting startLocationUpdates()");
     }
 
     /**
@@ -108,10 +168,13 @@ public class RouteManager {
      * @param location
      */
     private void broadcastLocation(Context context, Location location) {
+        Log.d(TAG, "Entered broadcastLocation()");
         Intent intent = new Intent(ACTION_LOCATION);
         intent.putExtra(LocationManager.KEY_LOCATION_CHANGED, location);
-
+        Log.d(TAG, "Sending broadcast ...");
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        Log.d(TAG, "... broadcast sent");
+        Log.d(TAG, "Exiting broadcastLocation()");
     }
 
     /**
@@ -119,14 +182,22 @@ public class RouteManager {
      *
      * @param context
      */
-    public void stopLocationUpdates(Context context) {
+    private void stopLocationUpdates(Context context) {
+        Log.d(TAG, "Entered stopLocationUpdates() ...");
+        Log.d(TAG, "Retrieving pending intent...");
         PendingIntent pendingIntent = getLocationPendingIntent(context, false);
         if (pendingIntent != null) {
+            Log.d(TAG, "... pending intent retrieved!");
             if(mLocationManager != null) {
+                Log.d(TAG, "Removing updates from LocationManager ...");
                 mLocationManager.removeUpdates(pendingIntent);
+                Log.d(TAG, "... removed updates from LocationManager");
             }
             pendingIntent.cancel();
+        } else {
+            Log.e(TAG, "... pending intent not retrieved");
         }
+        Log.d(TAG, "... exiting stopLocationUpdates()");
     }
 
     /**
