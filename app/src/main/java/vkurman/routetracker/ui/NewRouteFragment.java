@@ -34,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,6 +89,8 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
     // List of Locations
     private List<Location> locations;
 
+    @BindView(R.id.text_track_name)
+    EditText mTextTrackName;
     @BindView(R.id.text_timestamp)
     TextView mTextTimestamp;
     @BindView(R.id.text_latitude)
@@ -282,9 +285,9 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
         mStopButton.setEnabled(true);
         if (!RouteManager.getInstance().isTracking(getActivity())) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            String name = prefs.getString(getString(R.string.pref_key_default_user_name), getString(R.string.pref_value_default_user_name));
-            String id = prefs.getString(getString(R.string.pref_key_default_user_id), getString(R.string.pref_value_default_user_id));
-            RouteManager.getInstance().startTracking(getActivity(), name, id);
+            String trackName = mTextTrackName.getText().toString();
+            String userId = prefs.getString(getString(R.string.pref_key_default_user_id), getString(R.string.pref_value_default_user_id));
+            RouteManager.getInstance().startTracking(getActivity(), trackName, userId, null);
         }
     }
 

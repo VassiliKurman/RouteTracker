@@ -30,7 +30,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/default_padding">
+        android:padding="@dimen/default_padding" >
 
         <ImageView
             android:id="@+id/iv_list_track_image"
@@ -58,14 +58,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/default_padding"
-            android:paddingBottom="@dimen/default_padding"
             android:adjustViewBounds="true"
             app:layout_constraintLeft_toLeftOf="@id/tv_list_track_name"
             app:layout_constraintTop_toBottomOf="@id/tv_list_track_name"
             android:textSize="@dimen/cardview_secondary_text_size"
-            android:textColor="@color/colorCardViewBackground"
             tools:text="Owner"/>
-
+        <TextView
+            android:id="@+id/tv_list_track_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/default_padding"
+            android:paddingBottom="@dimen/default_padding"
+            app:layout_constraintLeft_toLeftOf="@id/tv_list_track_owner"
+            app:layout_constraintTop_toBottomOf="@id/tv_list_track_owner"
+            android:textSize="@dimen/cardview_secondary_text_size"
+            tools:text="Owner"/>
+<!--
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -73,7 +81,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" >
         </FrameLayout>
-
+-->
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

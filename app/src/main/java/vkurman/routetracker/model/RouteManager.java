@@ -64,7 +64,9 @@ public class RouteManager extends LocationCallback {
      * Reference to LocationManager
      */
     private LocationManager mLocationManager;
-
+    /**
+     * Current running track.
+     */
     private Track mTrack;
 
     /**
@@ -97,10 +99,14 @@ public class RouteManager extends LocationCallback {
         return PendingIntent.getBroadcast(context, 0, intent, flags);
     }
 
-    public void startTracking(Context context, String userName, String userId) {
+    public void startTracking(Context context, String trackName, String userId, String imageUri) {
         Log.d(TAG, "Entered startLocationUpdates()");
         if(permissionsGranted(context)) {
-            mTrack = new Track(Calendar.getInstance().getTimeInMillis(), userName, userId, null);
+            long trackId = Calendar.getInstance().getTimeInMillis();
+            mTrack = new Track(trackId,
+                    (trackName == null || trackName.isEmpty()) ? Long.toString(trackId) : trackName,
+                    userId,
+                    imageUri);
 
             TrackerDbUtils.addTrack(context, mTrack);
 
@@ -135,7 +141,6 @@ public class RouteManager extends LocationCallback {
             // Checking if have reference to LocationManager
             if (mLocationManager == null) {
                 mLocationManager = (LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-
             }
             String locationProvider = LocationManager.GPS_PROVIDER;
             // Get the last known location and broadcast it if there is one
@@ -149,10 +154,20 @@ public class RouteManager extends LocationCallback {
             PendingIntent pendingIntent = getLocationPendingIntent(context,true);
             // Getting preferences for tracking
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+            long defTimeValue = 5000;
+            float defDistanceValue = 5.0f;
+            try {
+                defTimeValue = Long.valueOf(context.getString(R.string.pref_value_default_tracking_minimum_time));
+                defDistanceValue = Float.valueOf(context.getString(R.string.pref_value_default_tracking_minimum_distance));
+            } catch (NumberFormatException e) {
+                Log.e(TAG, "Error formatting numbers");
+            }
+
             long minTime = sharedPreferences.getLong(
-                    context.getString(R.string.pref_key_default_tracking_minimum_time), 5000);
+                    context.getString(R.string.pref_key_default_tracking_minimum_time), defTimeValue);
             float minDistance = sharedPreferences.getFloat(
-                    context.getString(R.string.pref_key_default_tracking_minimum_distance), 5.0f);
+                    context.getString(R.string.pref_key_default_tracking_minimum_distance), defDistanceValue);
 
             mLocationManager.requestLocationUpdates(locationProvider, minTime, minDistance, pendingIntent);
         } else {

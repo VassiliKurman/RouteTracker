@@ -34,6 +34,7 @@ import butterknife.BindView;
 import vkurman.routetracker.R;
 import vkurman.routetracker.model.Track;
 import vkurman.routetracker.provider.TrackerContract;
+import vkurman.routetracker.utils.RouteTrackerUtils;
 
 /**
  * TracksAdapter is an Adapter for RecycleView to display tracks.
@@ -83,6 +84,7 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TracksView
         @BindView(R.id.iv_list_track_image) ImageView mTrackImage;
         @BindView(R.id.tv_list_track_name) TextView mTrackName;
         @BindView(R.id.tv_list_track_owner) TextView mTrackOwner;
+        @BindView(R.id.tv_list_track_timestamp) TextView mTrackTimestamp;
 
         TracksViewHolder(View view) {
             super(view);
@@ -135,9 +137,11 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TracksView
                 String name = mTracks.getString(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_NAME));
                 String owner = mTracks.getString(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER));
                 String image = mTracks.getString(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_IMAGE));
+                long timestamp = mTracks.getLong(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_ID));
 
                 holder.mTrackName.setText(name);
                 holder.mTrackOwner.setText(owner);
+                holder.mTrackTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(timestamp));
                 Picasso.get()
                         .load(image == null ? null : image.isEmpty() ? null : image)
                         .placeholder(R.drawable.placeholder)

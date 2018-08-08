@@ -6,8 +6,10 @@
 
     <!-- CardView -->
     <dimen name="cardview_main_text_size">32sp</dimen>
-    <dimen name="cardview_secondary_text_size">22sp</dimen>
-    <dimen name="cardview_image_size">24dp</dimen>
+    <dimen name="cardview_secondary_text_size">16sp</dimen>
+    <dimen name="cardview_image_size">48dp</dimen>
+    <dimen name="cardview_elevation">1dp</dimen>
+    <dimen name="cardview_elevation_raised">8dp</dimen>
 
     <!-- Toolbar -->
     <dimen name="toolbar_side_margin">8dp</dimen>
@@ -16,4 +18,5 @@
     <dimen name="fab_elevation">2dp</dimen>
     <dimen name="fab_press_translation_z">6dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
+
 </resources>
