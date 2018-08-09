@@ -18,6 +18,7 @@
 
     <!-- ActionBar strings -->
     <string name="title_new_track_activity">New track</string>
+    <string name="description_header_image">Header image for routes</string>
 
     <!-- Button strings -->
     <string name="button_start">Start</string>
