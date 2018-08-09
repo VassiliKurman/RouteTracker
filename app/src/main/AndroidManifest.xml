@@ -24,21 +24,23 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".ui.RoutesActivity"
+        <activity
+            android:name=".ui.RoutesActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.NewRouteActivity"
+        <activity
+            android:name=".ui.NewRouteActivity"
             android:label="@string/title_new_track_activity"
             android:parentActivityName=".ui.RoutesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.RoutesActivity" />
         </activity>
-
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings"
@@ -63,6 +65,7 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".ui.TrackDetailsActivity"></activity>
     </application>
 
 </manifest>
