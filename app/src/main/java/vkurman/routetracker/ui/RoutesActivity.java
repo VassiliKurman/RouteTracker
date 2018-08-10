@@ -27,16 +27,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.UUID;
 
 import vkurman.routetracker.R;
-import vkurman.routetracker.adapter.TracksAdapter;
 import vkurman.routetracker.loader.TracksLoader;
-import vkurman.routetracker.model.Track;
+import vkurman.routetracker.utils.RouteTrackerConstants;
 
 /**
  * RoutesActivity
@@ -105,6 +103,18 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
     public void onItemSelected(long trackId) {
         // TODO load TrackDetailsActivity
         Toast.makeText(this, "Selected track id: " + trackId, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, TrackDetailsActivity.class);
+        intent.putExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID, trackId);
+        startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT) {
+            if(resultCode == RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_DELETED) {
+                retrieveData();
+            }
+        }
     }
 
     @Override
@@ -127,6 +137,9 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
      * App default setup.
      */
     private void defaultSetup() {
+        // Setting default values for the preferences when app started first time.
+        PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String defaultUserId = getString(R.string.pref_value_default_user_id);
         String userId = sharedPreferences.getString(
@@ -137,7 +150,5 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
             userId = UUID.randomUUID().toString();
             sharedPreferences.edit().putString(getString(R.string.pref_key_default_user_id), userId).apply();
         }
-        // TODO clear bellow
-        //String name = sharedPreferences.getString(getString(R.string.pref_key_default_user_name), userId);
     }
 }

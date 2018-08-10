@@ -11,6 +11,13 @@
     <string name="altitude">Altitude</string>
     <string name="duration">Duration</string>
 
+    <string name="label_track_id">Id</string>
+    <string name="label_track_name">Track</string>
+    <string name="label_date">Date</string>
+    <string name="label_track_owner">Owner</string>
+    <string name="text_unknown">Unknown</string>
+    <string name="text_unspecified">Unspecified</string>
+
     <string name="track_name_tooltip_text">Track name</string>
 
     <string name="int_zero">0</string>
@@ -18,6 +25,7 @@
 
     <!-- ActionBar strings -->
     <string name="title_new_track_activity">New track</string>
+    <string name="title_details_activity">Track details</string>
     <string name="description_header_image">Header image for routes</string>
 
     <!-- Button strings -->
@@ -35,12 +43,13 @@
 
     <!-- Preference keys and values strings -->
     <string name="pref_key_default_user_id" translatable="false">user_id</string>
-    <string name="pref_value_default_user_id">Unknown</string>
-    <string name="pref_key_default_user_name" translatable="false">user_id</string>
-    <string name="pref_value_default_user_name">Unknown</string>
+    <string name="pref_value_default_user_id">@string/text_unknown</string>
+    <string name="pref_key_default_user_name" translatable="false">user_name</string>
+    <string name="pref_value_default_user_name">@string/text_unspecified</string>
 
     <string name="pref_key_default_tracking_minimum_time" translatable="false">minimum_time</string>
     <string name="pref_value_default_tracking_minimum_time">5000</string>
     <string name="pref_key_default_tracking_minimum_distance" translatable="false">minimum_distance</string>
     <string name="pref_value_default_tracking_minimum_distance">5.0f</string>
+
 </resources>

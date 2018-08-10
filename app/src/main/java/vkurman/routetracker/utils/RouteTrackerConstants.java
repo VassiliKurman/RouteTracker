@@ -22,4 +22,13 @@ package vkurman.routetracker.utils;
  */
 public class RouteTrackerConstants {
     public static final String INTENT_NAME_FOR_TRACK_ID = "trackId";
+
+    // Request codes
+    public static final int ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT = 801;
+
+    // Result codes
+    public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_UNCHANGED = 901;
+    public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_UPDATED = 902;
+    public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_DELETED = 903;
+    public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_SHARED = 904;
 }

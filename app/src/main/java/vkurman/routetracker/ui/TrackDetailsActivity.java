@@ -34,6 +34,8 @@ import vkurman.routetracker.utils.RouteTrackerConstants;
 public class TrackDetailsActivity extends AppCompatActivity {
     // Key for logging
     private static final String TAG = TrackDetailsActivity.class.getSimpleName();
+    // Initial track id
+    public static final int INITIAL_TRACK_ID = -1;
     // Keys for saved instance
     private static final String TRACK = "track";
     private static final String WAYPOINTS = "waypoints";
@@ -50,7 +52,7 @@ public class TrackDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_track_details);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setTitle(R.string.title_details_activity);
+        getSupportActionBar().setTitle(R.string.title_details_activity);
         if(savedInstanceState != null) {
             mTrack = savedInstanceState.getParcelable(TRACK);
             mWaypoints = (Waypoint[]) savedInstanceState.getParcelableArray(WAYPOINTS);
@@ -60,8 +62,12 @@ public class TrackDetailsActivity extends AppCompatActivity {
             }
         }  else {
             // Retrieving track id
-            int trackId = getIntent().getParcelableExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID);
-            // TODO retrieve track and waypoint from database
+            int trackId = getIntent().getIntExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID, INITIAL_TRACK_ID);
+            if(trackId != INITIAL_TRACK_ID) {
+                // TODO retrieve track and waypoint from database
+
+                // TODO display data in fragments
+            }
         }
     }
 

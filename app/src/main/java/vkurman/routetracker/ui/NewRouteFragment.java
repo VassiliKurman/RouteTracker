@@ -18,10 +18,13 @@ package vkurman.routetracker.ui;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -29,6 +32,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -216,42 +220,23 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onClick(View view) {
         if (view == mStartButton) {
-            // Displaying Toast
-            if (mToast != null) {
-                mToast.cancel();
-            }
-            mToast = Toast.makeText(getContext(), "Started tracking!", Toast.LENGTH_SHORT);
-            mToast.show();
-            // TODO start tracking
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
+            final LocationManager manager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
+            if(!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                requestToEnableGps();
             } else {
-                startLocationTracking();
+                if(permissionsGranted()) {
+                    // Starting location tracking
+                    startLocationTracking();
+                } else {
+                    ActivityCompat.requestPermissions(getActivity(),
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    return;
+                }
             }
         } else if (view == mStopButton) {
-            mStopButton.setEnabled(false);
-            // Displaying Toast
-            if (mToast != null) {
-                mToast.cancel();
-            }
-            mToast = Toast.makeText(getContext(), "Stopped tracking!", Toast.LENGTH_SHORT);
-            mToast.show();
-            // stop tracking
-            if (RouteManager.getInstance().isTracking(getActivity())) {
-                RouteManager.getInstance().stopTracking(getActivity());
-            }
-            mStartButton.setEnabled(true);
+            // Stopping location tracking
+            stopLocationTracking();
         }
     }
 
@@ -263,16 +248,33 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted! Do the task that need to do.
+                    // permission granted
+                    if(mToast != null) {
+                        mToast.cancel();
+                    }
+                    mToast.makeText(getContext(), "Permissions granted", Toast.LENGTH_SHORT).show();
+                    // permission was granted!
                     startLocationTracking();
                 } else {
-                    // permission denied! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                    // permission denied
+                    if(mToast != null) {
+                        mToast.cancel();
+                    }
+                    mToast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
         }
+    }
+
+    /**
+     * Checking is all necessary permissions are granted
+     *
+     * @return boolean
+     */
+    private boolean permissionsGranted() {
+        return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     /**
@@ -282,21 +284,54 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
     @SuppressLint("MissingPermission")
     private void startLocationTracking() {
         mStartButton.setEnabled(false);
-        mStopButton.setEnabled(true);
         if (!RouteManager.getInstance().isTracking(getActivity())) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
             String trackName = mTextTrackName.getText().toString();
             String userId = prefs.getString(getString(R.string.pref_key_default_user_id), getString(R.string.pref_value_default_user_id));
             RouteManager.getInstance().startTracking(getActivity(), trackName, userId, null);
         }
+        mStopButton.setEnabled(true);
     }
 
+    /**
+     * Stopping location tracking.
+     */
+    private void stopLocationTracking() {
+        mStopButton.setEnabled(false);
+        // stop tracking
+        if (RouteManager.getInstance().isTracking(getActivity())) {
+            RouteManager.getInstance().stopTracking(getActivity());
+        }
+        mStartButton.setEnabled(true);
+    }
+
+    /**
+     * Requesting to switch on GPS
+     */
+    private void requestToEnableGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("GPS is disabled! Do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
         // Check for location permission.
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (permissionsGranted()) {
             mMap.setMyLocationEnabled(true);
             mMap.setOnMyLocationButtonClickListener(this);
             mMap.setOnMyLocationClickListener(this);
@@ -304,15 +339,10 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(getContext(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
-    }
+    public void onMyLocationClick(@NonNull Location location) {}
 
     @Override
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(getContext(), "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
         return false;
     }
 }
