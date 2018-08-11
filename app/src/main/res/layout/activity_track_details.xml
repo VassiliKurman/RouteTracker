@@ -17,22 +17,30 @@
     android:layout_height="match_parent"
     tools:context=".ui.TrackDetailsActivity">
 
-    <!-- Container for media fragment -->
+    <!-- Toolbar -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
+    <!-- Container for track fragment -->
     <fragment
         android:id="@+id/track_container"
         android:name="vkurman.routetracker.ui.TrackDetailsFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
     <!-- Container for map fragment -->
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <fragment
         android:id="@+id/map_container"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="1"
         tools:context="vkurman.routetracker.ui.TrackDetailsActivity"
         app:layout_constraintTop_toBottomOf="@id/track_container"
         app:layout_constraintStart_toStartOf="parent"

@@ -9,35 +9,39 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License.-->
-
-<ScrollView
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.NewRouteActivity">
 
-    <!-- LinearLayout for holding route details fragments -->
-    <LinearLayout
-        android:id="@+id/track_details_linear_layout"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:orientation="vertical"
-        android:padding="@dimen/default_margin" >
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+
         <!-- Container for track fragment -->
-        <FrameLayout android:id="@+id/track_container"
+        <FrameLayout
+            android:id="@+id/track_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
         <!-- Container for map fragment -->
-        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+        <fragment
             android:id="@+id/map_container"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            tools:context="vkurman.routetracker.ui.NewRouteFragment" />
+            android:layout_height="0dp"
+            app:layout_constraintVertical_weight="1"
+            tools:context="vkurman.routetracker.ui.NewRouteFragment"
+            app:layout_constraintTop_toBottomOf="@id/track_container"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    </LinearLayout>
-
-</ScrollView>
+</android.support.constraint.ConstraintLayout>

@@ -28,6 +28,12 @@
     <string name="title_details_activity">Track details</string>
     <string name="description_header_image">Header image for routes</string>
 
+    <!-- Navigation drawer strings -->
+    <string name="nav_my_tracks_title">My track</string>
+    <string name="nav_shared_tracks_title">Shared tracks</string>
+    <string name="nav_credits_title">Credits</string>
+    <string name="nav_about_title">About</string>
+
     <!-- Button strings -->
     <string name="button_start">Start</string>
     <string name="button_stop">Stop</string>

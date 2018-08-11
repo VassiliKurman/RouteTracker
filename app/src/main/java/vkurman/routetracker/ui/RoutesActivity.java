@@ -21,15 +21,21 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -47,16 +53,77 @@ import vkurman.routetracker.utils.RouteTrackerConstants;
 public class RoutesActivity extends AppCompatActivity implements RoutesFragment.OnItemSelectedListener,
         LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
 
+    /**
+     * Tag for logging
+     */
     private static final String TAG = RoutesActivity.class.getSimpleName();
     /**
      * Unique id for loader
      */
     private int mTracksLoaderId;
+    /**
+     * Layout for navigation drawer
+     */
+    private DrawerLayout mDrawerLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
+        // Setup toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if(getSupportActionBar() != null) {
+            ActionBar actionbar = getSupportActionBar();
+            actionbar.setDisplayHomeAsUpEnabled(true);
+            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+        }
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerLayout.addDrawerListener(
+                new DrawerLayout.DrawerListener() {
+                    @Override
+                    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+                        // TODO
+                    }
+
+                    @Override
+                    public void onDrawerOpened(@NonNull View drawerView) {
+                        // TODO
+                    }
+
+                    @Override
+                    public void onDrawerClosed(@NonNull View drawerView) {
+                        // TODO
+                    }
+
+                    @Override
+                    public void onDrawerStateChanged(int newState) {
+                        // TODO
+                    }
+                }
+        );
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        // set item as selected to persist highlight
+                        menuItem.setChecked(true);
+                        // close drawer when item is tapped
+                        mDrawerLayout.closeDrawers();
+                        // change title in action bar
+                        if(getSupportActionBar() != null) {
+                            getSupportActionBar().setTitle(menuItem.getTitle());
+                        }
+
+                        // TODO ask to load corresponding data
+
+                        return true;
+                    }
+                });
 
         defaultSetup();
 
@@ -72,11 +139,14 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.action_settings) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

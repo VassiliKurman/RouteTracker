@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_my_tracks"
+            android:icon="@drawable/ic_tracks_local"
+            android:title="@string/nav_my_tracks_title" />
+        <item
+            android:id="@+id/nav_shared_tracks"
+            android:icon="@drawable/ic_tracks_shared"
+            android:title="@string/nav_shared_tracks_title" />
+        <item
+            android:id="@+id/nav_credits"
+            android:icon="@drawable/ic_credits"
+            android:title="@string/nav_credits_title" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about"
+            android:title="@string/nav_about_title" />
+    </group>
+</menu>

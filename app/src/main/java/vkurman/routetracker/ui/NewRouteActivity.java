@@ -20,7 +20,7 @@ import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -36,14 +36,16 @@ import vkurman.routetracker.utils.RouteTrackerConstants;
  */
 public class NewRouteActivity extends AppCompatActivity implements NewRouteFragment.OnFragmentInteractionListener {
 
-    private static final String TAG = NewRouteActivity.class.getSimpleName();
     private int mResultCode = RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_UNCHANGED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_route);
-
+        // Setup toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // Show the Up button and title in the action bar.
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.title_new_track_activity);
@@ -63,7 +65,6 @@ public class NewRouteActivity extends AppCompatActivity implements NewRouteFragm
             case android.R.id.home:
                 if (RouteManager.getInstance().isTracking(this)) {
                     Toast.makeText(this, "Switching track recording in background!", Toast.LENGTH_LONG).show();
-
                     // TODO save track in background
                 }
 
