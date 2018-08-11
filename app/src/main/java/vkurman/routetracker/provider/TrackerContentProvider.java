@@ -142,8 +142,8 @@ public class TrackerContentProvider extends ContentProvider {
 
         // Write URI match code and set a variable to return a Cursor
         int match = sUriMatcher.match(uri);
-        Cursor retCursor;
         String id;
+        Cursor retCursor;
         switch (match) {
             // Query for the users directory
             case USERS:
@@ -161,7 +161,7 @@ public class TrackerContentProvider extends ContentProvider {
                 Log.d(TAG, "Retrieving user: " + id);
                 retCursor = db.query(TrackerContract.UsersEntry.TABLE_NAME_USERS,
                         projection,
-                        "id=?",
+                        TrackerContract.UsersEntry.COLUMN_USERS_ID + "=?",
                         new String[]{id},
                         null,
                         null,
@@ -183,7 +183,7 @@ public class TrackerContentProvider extends ContentProvider {
                 Log.d(TAG, "Retrieving tracks: " + id);
                 retCursor = db.query(TrackerContract.TracksEntry.TABLE_NAME_TRACKS,
                         projection,
-                        "id=?",
+                        TrackerContract.TracksEntry.COLUMN_TRACKS_ID + "=?",
                         new String[]{id},
                         null,
                         null,

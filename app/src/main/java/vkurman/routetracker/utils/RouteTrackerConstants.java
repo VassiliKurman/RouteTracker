@@ -31,4 +31,8 @@ public class RouteTrackerConstants {
     public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_UPDATED = 902;
     public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_DELETED = 903;
     public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_SHARED = 904;
+
+    // Loader codes
+    public static final int LOADER_TRACK_INDEX = 0;
+    public static final int LOADER_WAYPOINTS_INDEX = 1;
 }
