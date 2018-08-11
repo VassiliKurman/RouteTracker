@@ -45,7 +45,6 @@ import vkurman.routetracker.utils.RouteTrackerConstants;
  * Version 1.0
  */
 public class RoutesActivity extends AppCompatActivity implements RoutesFragment.OnItemSelectedListener,
-        RoutesFragment.OnDataRequestListener,
         LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String TAG = RoutesActivity.class.getSimpleName();
@@ -110,11 +109,6 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
         Intent intent = new Intent(this, TrackDetailsActivity.class);
         intent.putExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID, trackId);
         startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT);
-    }
-
-    @Override
-    public void onDataRequested() {
-        retrieveData();
     }
 
     @Override
