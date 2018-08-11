@@ -35,6 +35,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import vkurman.routetracker.R;
 import vkurman.routetracker.model.Track;
+import vkurman.routetracker.model.Waypoint;
 import vkurman.routetracker.utils.RouteTrackerUtils;
 
 /**
@@ -45,13 +46,20 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
         OnMapReadyCallback {
 
     private static final String TRACK = "track";
+    private static final String WAYPOINTS = "waypoints";
+
     /**
      * Reference to Track
      */
     private Track mTrack;
-    // Google Map
+    /**
+     * List of locations
+     */
+    private Waypoint[] mWaypoints;
+    /**
+     * Google Map
+     */
     private GoogleMap mMap;
-    // List of Locations
 
     /**
      * Binding Views
@@ -80,6 +88,7 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
         // Load the saved state (the Parcelable step) if there is one
         if(savedInstanceState != null) {
             mTrack = savedInstanceState.getParcelable(TRACK);
+            mWaypoints = (Waypoint[]) savedInstanceState.getParcelableArray(WAYPOINTS);
             if(mTrack != null) {
                 displayData();
             }
@@ -93,8 +102,9 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
      *
      * @param track - provided track
      */
-    public void setTrack(Track track) {
+    public void setTrackData(Track track, Waypoint[] waypoints) {
         mTrack = track;
+        mWaypoints = waypoints;
         displayData();
     }
 
@@ -104,6 +114,7 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
     @Override
     public void onSaveInstanceState(@NonNull Bundle currentState) {
         currentState.putParcelable(TRACK, mTrack);
+        currentState.putParcelableArray(WAYPOINTS, mWaypoints);
     }
 
 
@@ -131,15 +142,8 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
     }
 
     @Override
-    public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(getContext(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
-    }
+    public void onMyLocationClick(@NonNull Location location) {}
 
     @Override
-    public boolean onMyLocationButtonClick() {
-        Toast.makeText(getContext(), "MyLocation button clicked", Toast.LENGTH_SHORT).show();
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
-        return false;
-    }
+    public boolean onMyLocationButtonClick() {return false;}
 }

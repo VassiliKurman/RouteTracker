@@ -18,7 +18,6 @@ package vkurman.routetracker.ui;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
@@ -175,7 +174,7 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
 
         TrackDetailsFragment fragment = (TrackDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.track_container);
         if(fragment != null) {
-            fragment.setTrack(mTrack);
+            fragment.setTrackData(mTrack, mWaypoints);
         } else {
             Toast.makeText(this, "Error finding track fragment", Toast.LENGTH_SHORT).show();
         }
