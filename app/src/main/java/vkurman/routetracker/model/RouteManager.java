@@ -100,7 +100,7 @@ public class RouteManager extends LocationCallback {
     }
 
     public void startTracking(Context context, String trackName, String userId, String imageUri) {
-        Log.d(TAG, "Entered startLocationUpdates()");
+        Log.d(TAG, "Entered startTracking()...");
         if(permissionsGranted(context)) {
             long trackId = Calendar.getInstance().getTimeInMillis();
             mTrack = new Track(trackId,
@@ -112,16 +112,22 @@ public class RouteManager extends LocationCallback {
 
             startLocationUpdates(context);
         }
-        Log.d(TAG, "... exiting startLocationUpdates()");
+        Log.d(TAG, "...exiting startTracking()");
     }
 
     public void stopTracking(Context context) {
-        Log.d(TAG, "Entered startLocationUpdates()");
+        Log.d(TAG, "Entered stopTracking()...");
         mTrack = null;
         stopLocationUpdates(context);
-        Log.d(TAG, "... exiting startLocationUpdates()");
+        Log.d(TAG, "...exiting stopTracking()");
     }
 
+    /**
+     * Checking if necessary permitions are granted.
+     *
+     * @param context - app context
+     * @return boolean
+     */
     private boolean permissionsGranted(Context context) {
         return
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -131,11 +137,11 @@ public class RouteManager extends LocationCallback {
     /**
      * Starting to update route locations
      *
-     * @param context
+     * @param context - app context
      */
     @SuppressLint("MissingPermission")
     private void startLocationUpdates(Context context) {
-        Log.d(TAG, "Entered startLocationUpdates()");
+        Log.d(TAG, "Entered startLocationUpdates()...");
         // Checking if permissions are granted
         if (permissionsGranted(context)) {
             // Checking if have reference to LocationManager
@@ -153,27 +159,28 @@ public class RouteManager extends LocationCallback {
             // Start updates from the location manager
             PendingIntent pendingIntent = getLocationPendingIntent(context,true);
             // Getting preferences for tracking
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+//            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+//
+//            long defTimeValue = 5000;
+//            float defDistanceValue = 5.0f;
+//            try {
+//                defTimeValue = Long.valueOf(context.getString(R.string.pref_value_default_tracking_minimum_time));
+//                defDistanceValue = Float.valueOf(context.getString(R.string.pref_value_default_tracking_minimum_distance));
+//            } catch (NumberFormatException e) {
+//                Log.e(TAG, "Error formatting numbers");
+//            }
+//
+//            long minTime = sharedPreferences.getLong(
+//                    context.getString(R.string.pref_key_default_tracking_minimum_time), defTimeValue);
+//            float minDistance = sharedPreferences.getFloat(
+//                    context.getString(R.string.pref_key_default_tracking_minimum_distance), defDistanceValue);
 
-            long defTimeValue = 5000;
-            float defDistanceValue = 5.0f;
-            try {
-                defTimeValue = Long.valueOf(context.getString(R.string.pref_value_default_tracking_minimum_time));
-                defDistanceValue = Float.valueOf(context.getString(R.string.pref_value_default_tracking_minimum_distance));
-            } catch (NumberFormatException e) {
-                Log.e(TAG, "Error formatting numbers");
-            }
-
-            long minTime = sharedPreferences.getLong(
-                    context.getString(R.string.pref_key_default_tracking_minimum_time), defTimeValue);
-            float minDistance = sharedPreferences.getFloat(
-                    context.getString(R.string.pref_key_default_tracking_minimum_distance), defDistanceValue);
-
-            mLocationManager.requestLocationUpdates(locationProvider, minTime, minDistance, pendingIntent);
+//            mLocationManager.requestLocationUpdates(locationProvider, minTime, minDistance, pendingIntent);
+            mLocationManager.requestLocationUpdates(locationProvider, 0, 0, pendingIntent);
         } else {
             Log.e(TAG, "Not all permissions are granted");
         }
-        Log.d(TAG, "... exiting startLocationUpdates()");
+        Log.d(TAG, "...exiting startLocationUpdates()");
     }
 
     /**
@@ -183,13 +190,15 @@ public class RouteManager extends LocationCallback {
      * @param location
      */
     private void broadcastLocation(Context context, Location location) {
-        Log.d(TAG, "Entered broadcastLocation()");
+        Log.d(TAG, "Entered broadcastLocation()...");
         Intent intent = new Intent(ACTION_LOCATION);
         intent.putExtra(LocationManager.KEY_LOCATION_CHANGED, location);
-        Log.d(TAG, "Sending broadcast ...");
+
+        Log.d(TAG, "Sending broadcast...");
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-        Log.d(TAG, "... broadcast sent");
-        Log.d(TAG, "Exiting broadcastLocation()");
+        Log.d(TAG, "...broadcast sent");
+
+        Log.d(TAG, "...exiting broadcastLocation()");
     }
 
     /**

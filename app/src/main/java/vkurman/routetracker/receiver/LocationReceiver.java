@@ -15,12 +15,16 @@
  */
 package vkurman.routetracker.receiver;
 
+import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import vkurman.routetracker.model.RouteManager;
 
 /**
  * LocationReceiver is a BroadcastReceiver to receive Location updates.
@@ -39,14 +43,18 @@ public class LocationReceiver extends BroadcastReceiver {
         // Successfully got location
         Location location = intent.getParcelableExtra(LocationManager.KEY_LOCATION_CHANGED);
         if (location != null) {
-            locationChanged(location);
+            Log.d(TAG, "Sending location data...");
+            locationChanged(context, location);
+            Log.d(TAG, "... location data sent");
             return;
         }
         // Something went wrong
         if (intent.hasExtra(LocationManager.KEY_PROVIDER_ENABLED)) {
             boolean enabled = intent
                     .getBooleanExtra(LocationManager.KEY_PROVIDER_ENABLED, false);
+            Log.d(TAG, "Sending provider state change...");
             providerStateChanged(enabled);
+            Log.d(TAG, "...provider state change sent");
         }
         Log.d(TAG, "... exiting onReceive()");
     }
@@ -56,7 +64,14 @@ public class LocationReceiver extends BroadcastReceiver {
      *
      * @param location
      */
-    protected void locationChanged(Location location) {}
+    protected void locationChanged(Context context, Location location) {
+        Intent intent = new Intent(RouteManager.ACTION_LOCATION);
+        intent.putExtra(LocationManager.KEY_LOCATION_CHANGED, location);
+
+        Log.d(TAG, "Sending broadcast from locationChanged()...");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+        Log.d(TAG, "...broadcast sent from locationChanged()");
+    }
 
     /**
      * Provider state changed. Needs overriding in Activity or Fragment.

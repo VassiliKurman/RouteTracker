@@ -112,7 +112,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
 
     private LocationReceiver mLocationReceiver = new LocationReceiver(){
         @Override
-        protected void locationChanged(Location location) {
+        protected void locationChanged(Context context, Location location) {
             Log.d(TAG, "Entered LocationReceiver.locationChanged()");
             if(location != null) {
                 if(locations == null) {
