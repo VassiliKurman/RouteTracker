@@ -58,6 +58,7 @@ import butterknife.ButterKnife;
 import vkurman.routetracker.R;
 import vkurman.routetracker.model.RouteManager;
 import vkurman.routetracker.receiver.LocationReceiver;
+import vkurman.routetracker.utils.RouteTrackerConstants;
 import vkurman.routetracker.utils.RouteTrackerUtils;
 
 /**
@@ -78,12 +79,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
      * Tag for logging
      */
     public static final String TAG = NewRouteFragment.class.getSimpleName();
-    /**
-     * MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
-     * app-defined int constant. The callback method gets the
-     * result of the request.
-     */
-    public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 101;
+
     // Parent activity listens for this fragments interactions
     private OnFragmentInteractionListener mListener;
     // Toast
@@ -213,8 +209,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(int code);
     }
 
     @Override
@@ -225,12 +220,16 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
                 requestToEnableGps();
             } else {
                 if(permissionsGranted()) {
+                    // Notifying listener about change
+                    if(mListener != null) {
+                        mListener.onFragmentInteraction(RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_CREATED);
+                    }
                     // Starting location tracking
                     startLocationTracking();
                 } else {
                     ActivityCompat.requestPermissions(getActivity(),
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                            RouteTrackerConstants.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
                     return;
                 }
             }
@@ -244,7 +243,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+            case RouteTrackerConstants.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -284,6 +283,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
     @SuppressLint("MissingPermission")
     private void startLocationTracking() {
         mStartButton.setEnabled(false);
+        mTextTrackName.setEnabled(false);
         if (!RouteManager.getInstance().isTracking(getActivity())) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
             String trackName = mTextTrackName.getText().toString();

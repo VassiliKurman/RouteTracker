@@ -23,16 +23,26 @@ package vkurman.routetracker.utils;
 public class RouteTrackerConstants {
     public static final String INTENT_NAME_FOR_TRACK_ID = "trackId";
 
+    public static final String INTENT_EXTRA_FOR_RESULT_CODE = "track_result_code";
+
     // Request codes
     public static final int ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT = 801;
 
     // Result codes
     public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_UNCHANGED = 901;
-    public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_UPDATED = 902;
-    public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_DELETED = 903;
-    public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_SHARED = 904;
+    public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_CREATED = 902;
+    public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_UPDATED = 903;
+    public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_DELETED = 904;
+    public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_SHARED = 905;
 
     // Loader codes
     public static final int LOADER_TRACK_INDEX = 0;
     public static final int LOADER_WAYPOINTS_INDEX = 1;
+
+    /**
+     * MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an
+     * app-defined int constant. The callback method gets the
+     * result of the request.
+     */
+    public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 101;
 }

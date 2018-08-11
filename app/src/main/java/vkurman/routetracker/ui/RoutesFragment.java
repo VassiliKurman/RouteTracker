@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -33,6 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import vkurman.routetracker.R;
 import vkurman.routetracker.adapter.TracksAdapter;
+import vkurman.routetracker.utils.RouteTrackerConstants;
 
 /**
  * RoutesFragment is a simple {@link Fragment} subclass.
@@ -47,7 +49,7 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
     /**
      * Item click listener
      */
-    private OnItemSelectedListener mListener;
+    private OnItemSelectedListener mOnItemSelectedListener;
     /**
      * Adapter for RecycleView
      */
@@ -70,7 +72,7 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_routes, container, true);
@@ -98,7 +100,7 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnItemSelectedListener) {
-            mListener = (OnItemSelectedListener) context;
+            mOnItemSelectedListener = (OnItemSelectedListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnItemSelectedListener");
@@ -108,18 +110,18 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mOnItemSelectedListener = null;
     }
 
     /**
      * This method called when item selected from the list.
      *
-     * @param trackId
+     * @param trackId - track id
      */
     @Override
     public void onTrackClicked(long trackId) {
-        if (mListener != null) {
-            mListener.onItemSelected(trackId);
+        if (mOnItemSelectedListener != null) {
+            mOnItemSelectedListener.onItemSelected(trackId);
         }
     }
 
@@ -140,20 +142,20 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
     /**
      * Callback for click on a button
      *
-     * @param view
+     * @param view - View
      */
     @Override
     public void onClick(View view) {
         if(view == mFloatingActionButton) {
             Intent intent = new Intent(getActivity(), NewRouteActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT);
         }
     }
 
     /**
      * Pass new Cursor here into fragment if data has been updated.
      *
-     * @param data
+     * @param data - Cursor
      */
     protected void updateData(Cursor data) {
         if(refreshLayout != null && refreshLayout.isRefreshing()) {

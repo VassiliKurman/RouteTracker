@@ -23,10 +23,12 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Objects;
 
 import vkurman.routetracker.R;
 import vkurman.routetracker.loader.TrackDetailsLoader;
@@ -79,20 +81,22 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
             mTrackId = savedInstanceState.getLong(TRACK_ID);
             mTrack = savedInstanceState.getParcelable(TRACK);
             mWaypoints = (Waypoint[]) savedInstanceState.getParcelableArray(WAYPOINTS);
-
+            // Setting title for actionBar
             if(mTrack != null) {
                 getSupportActionBar().setTitle(mTrack.getName());
             }
         }  else {
-            mTracksLoaderId = TrackDetailsLoader.ID;
-            // Retrieving track id
-            mTrackId = getIntent().getLongExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID, INITIAL_TRACK_ID);
-            if(mTrackId != INITIAL_TRACK_ID) {
-                // Retrieving data
-                retrieveData();
-                // passing data to fragments
-                // TODO display data in fragments
+            // Checking that intent has extra in it
+            if(getIntent().hasExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID)) {
+                mTracksLoaderId = TrackDetailsLoader.ID;
+                // Retrieving track id
+                mTrackId = getIntent().getLongExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID, INITIAL_TRACK_ID);
+                if(mTrackId != INITIAL_TRACK_ID) {
+                    // Retrieving data
+                    retrieveData();
+                }
             }
+
         }
     }
 
@@ -119,11 +123,13 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
      * Calling Loader to retrieve data from database
      */
     private void retrieveData() {
+        Log.d(TAG, "Requesting for data...");
         if(getSupportLoaderManager().getLoader(mTracksLoaderId) == null) {
             getSupportLoaderManager().initLoader(mTracksLoaderId, null, this).forceLoad();
         } else {
-            getSupportLoaderManager().getLoader(mTracksLoaderId).forceLoad();
+            Objects.requireNonNull(getSupportLoaderManager().getLoader(mTracksLoaderId)).forceLoad();
         }
+        Log.d(TAG, "...request for data sent");
     }
 
     @NonNull
@@ -169,9 +175,11 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
             }
         }
 
-        // S
-        getSupportActionBar().setTitle(TextUtils.isEmpty(mTrack.getName()) ? Long.toString(mTrack.getId()) : mTrack.getName());
-
+        // Setting title for action bar
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(TextUtils.isEmpty(mTrack.getName()) ? Long.toString(mTrack.getId()) : mTrack.getName());
+        }
+        // Passing data to fragment
         TrackDetailsFragment fragment = (TrackDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.track_container);
         if(fragment != null) {
             fragment.setTrackData(mTrack, mWaypoints);

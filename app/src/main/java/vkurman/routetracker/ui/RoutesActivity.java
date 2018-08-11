@@ -15,6 +15,7 @@
  */
 package vkurman.routetracker.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -26,10 +27,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import vkurman.routetracker.R;
@@ -42,8 +45,10 @@ import vkurman.routetracker.utils.RouteTrackerConstants;
  * Version 1.0
  */
 public class RoutesActivity extends AppCompatActivity implements RoutesFragment.OnItemSelectedListener,
+        RoutesFragment.OnDataRequestListener,
         LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
 
+    private static final String TAG = RoutesActivity.class.getSimpleName();
     /**
      * Unique id for loader
      */
@@ -90,6 +95,7 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
         }
         RoutesFragment fragment = (RoutesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_master_list);
         if(fragment != null) {
+            Log.d(TAG, "Passing new data to fragment");
             fragment.updateData(data);
         } else {
             Toast.makeText(this, "Error finding fragment with list of tracks", Toast.LENGTH_LONG).show();
@@ -101,18 +107,33 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
 
     @Override
     public void onItemSelected(long trackId) {
-        // TODO load TrackDetailsActivity
-        Toast.makeText(this, "Selected track id: " + trackId, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, TrackDetailsActivity.class);
         intent.putExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID, trackId);
         startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT);
     }
 
     @Override
+    public void onDataRequested() {
+        retrieveData();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT) {
-            if(resultCode == RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_DELETED) {
-                retrieveData();
+            if(resultCode == Activity.RESULT_OK) {
+                long fragment_response_code = data.getLongExtra(
+                        RouteTrackerConstants.INTENT_EXTRA_FOR_RESULT_CODE,
+                        RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_UNCHANGED);
+                if(fragment_response_code == RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_CREATED) {
+                    Log.d(TAG, "Track created");
+                    retrieveData();
+                } else if(fragment_response_code == RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_UPDATED) {
+                    Log.d(TAG, "Track updated");
+                    retrieveData();
+                } else if(fragment_response_code == RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_DELETED) {
+                    Log.d(TAG, "Track deleted");
+                    retrieveData();
+                }
             }
         }
     }
@@ -129,7 +150,7 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
         if(getSupportLoaderManager().getLoader(mTracksLoaderId) == null) {
             getSupportLoaderManager().initLoader(mTracksLoaderId, null, this).forceLoad();
         } else {
-            getSupportLoaderManager().getLoader(mTracksLoaderId).forceLoad();
+            Objects.requireNonNull(getSupportLoaderManager().getLoader(mTracksLoaderId)).forceLoad();
         }
     }
 

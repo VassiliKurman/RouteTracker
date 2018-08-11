@@ -15,15 +15,18 @@
  */
 package vkurman.routetracker.ui;
 
-import android.net.Uri;
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import vkurman.routetracker.R;
 import vkurman.routetracker.model.RouteManager;
+import vkurman.routetracker.utils.RouteTrackerConstants;
 
 /**
  * NewRouteActivity is an Activity for creating new Track.
@@ -33,13 +36,18 @@ import vkurman.routetracker.model.RouteManager;
  */
 public class NewRouteActivity extends AppCompatActivity implements NewRouteFragment.OnFragmentInteractionListener {
 
+    private static final String TAG = NewRouteActivity.class.getSimpleName();
+    private int mResultCode = RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_UNCHANGED;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_route);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.title_new_track_activity);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.title_new_track_activity);
+        }
 
         // Track fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -55,8 +63,15 @@ public class NewRouteActivity extends AppCompatActivity implements NewRouteFragm
             case android.R.id.home:
                 if (RouteManager.getInstance().isTracking(this)) {
                     Toast.makeText(this, "Switching track recording in background!", Toast.LENGTH_LONG).show();
+
+                    // TODO save track in background
                 }
-                // TODO save track in background
+
+                Intent intent = new Intent();
+                intent.putExtra(
+                        RouteTrackerConstants.INTENT_EXTRA_FOR_RESULT_CODE,
+                        mResultCode);
+                setResult(Activity.RESULT_OK, intent);
                 finish();
                 return true;
             default:
@@ -65,7 +80,7 @@ public class NewRouteActivity extends AppCompatActivity implements NewRouteFragm
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-        // TODO handle interactions if needed
+    public void onFragmentInteraction(int code) {
+        mResultCode = code;
     }
 }
