@@ -39,6 +39,12 @@
     <string name="button_stop">Stop</string>
     <string name="title_activity_settings">Settings</string>
 
+    <!-- Dialog strings -->
+    <string name="dialog_title">Enter track name</string>
+    <string name="dialog_hint_track_name">Track name here</string>
+    <string name="dialog_ok">OK</string>
+    <string name="dialog_cancel">Cancel</string>
+
     <!-- Settings strings -->
     <string name="action_settings">Settings</string>
     <string name="pref_title_user_id">User id</string>
@@ -57,5 +63,8 @@
     <string name="pref_value_default_tracking_minimum_time">5000</string>
     <string name="pref_key_default_tracking_minimum_distance" translatable="false">minimum_distance</string>
     <string name="pref_value_default_tracking_minimum_distance">5.0f</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

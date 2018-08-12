@@ -17,10 +17,12 @@ package vkurman.routetracker.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -34,9 +36,18 @@ import vkurman.routetracker.utils.RouteTrackerConstants;
  * Created by Vassili Kurman on 05/08/2018.
  * Version 1.0
  */
-public class NewRouteActivity extends AppCompatActivity implements NewRouteFragment.OnFragmentInteractionListener {
+public class NewRouteActivity extends AppCompatActivity implements
+        NewRouteFragment.OnFragmentInteractionListener,
+        TrackNameDialogFragment.TrackNameDialogListener {
 
+    /**
+     * Default result code
+     */
     private int mResultCode = RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_UNCHANGED;
+    /**
+     * Reference to child fragment
+     */
+    private NewRouteFragment mNewRouteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +64,9 @@ public class NewRouteActivity extends AppCompatActivity implements NewRouteFragm
 
         // Track fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
-        NewRouteFragment newRouteFragment = new NewRouteFragment();
+        mNewRouteFragment = new NewRouteFragment();
         fragmentManager.beginTransaction()
-                .add(R.id.track_container, newRouteFragment)
+                .add(R.id.track_container, mNewRouteFragment)
                 .commit();
     }
 
@@ -83,5 +94,34 @@ public class NewRouteActivity extends AppCompatActivity implements NewRouteFragm
     @Override
     public void onFragmentInteraction(int code) {
         mResultCode = code;
+    }
+
+    @Override
+    public void onTrackNameRequest() {
+        // Create an instance of the dialog fragment and show it
+        TrackNameDialogFragment dialog = new TrackNameDialogFragment();
+        dialog.show(getSupportFragmentManager(), "TrackNameDialogFragment");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog){
+        if(dialog instanceof TrackNameDialogFragment) {
+            TrackNameDialogFragment d = (TrackNameDialogFragment) dialog;
+            String trackName = d.getTrackName();
+            if(!TextUtils.isEmpty(trackName)) {
+                // Change Activity title
+                if(getSupportActionBar() != null) {
+                    getSupportActionBar().setTitle(trackName);
+                }
+                mNewRouteFragment.startLocationTracking(trackName);
+            } else {
+                Toast.makeText(this, "Track name not specified", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog){
+        // Do nothing as track name is not set
     }
 }

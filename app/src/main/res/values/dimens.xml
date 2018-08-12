@@ -19,4 +19,16 @@
     <dimen name="fab_press_translation_z">6dp</dimen>
     <dimen name="fab_margin">24dp</dimen>
 
+    <!-- Dialog -->
+    <dimen name="dialog_title_height">64dp</dimen>
+    <dimen name="dialog_title_side_padding">24dp</dimen>
+    <dimen name="dialog_title_top_padding">16dp</dimen>
+    <dimen name="dialog_title_bottom_padding">24dp</dimen>
+    <dimen name="dialog_text_height">64dp</dimen>
+    <dimen name="dialog_text_side_padding">24dp</dimen>
+    <dimen name="dialog_text_top_padding">16dp</dimen>
+    <dimen name="dialog_text_bottom_padding">8dp</dimen>
+    <dimen name="dialog_text_side_margin">24dp</dimen>
+    <dimen name="dialog_text_bottom_margin">8dp</dimen>
+
 </resources>

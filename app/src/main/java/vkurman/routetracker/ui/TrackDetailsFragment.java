@@ -30,9 +30,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.Locale;
@@ -137,14 +139,18 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
             mTextTrackTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(mTrack.getId()));
         }
         // TODO
-//        if(mWaypoints != null && mWaypoints.length > 0 && mMap != null) {
+        if(mWaypoints != null && mWaypoints.length > 0 && mMap != null) {
+            LatLng firstLatLng = new LatLng(mWaypoints[0].getLatitude(), mWaypoints[0].getLongitude());
+            LatLng lastLatLng = new LatLng(mWaypoints[mWaypoints.length - 1].getLatitude(), mWaypoints[mWaypoints.length - 1].getLongitude());
+            mMap.addMarker(new MarkerOptions().position(firstLatLng));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLatLng));
 //            PolylineOptions rectOptions = new PolylineOptions();
 //            for(Waypoint point : mWaypoints) {
 //                rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
 //            }
 //            // Get back the mutable Polyline
 //            mMap.addPolyline(rectOptions);
-//        }
+        }
     }
 
     /**
@@ -169,14 +175,19 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
             mMap.setOnMyLocationClickListener(this);
 
             // TODO
-//            if(mWaypoints != null && mWaypoints.length > 0) {
+            if(mWaypoints != null && mWaypoints.length > 0) {
+                LatLng firstLatLng = new LatLng(mWaypoints[0].getLatitude(), mWaypoints[0].getLongitude());
+                LatLng lastLatLng = new LatLng(mWaypoints[mWaypoints.length - 1].getLatitude(), mWaypoints[mWaypoints.length - 1].getLongitude());
+                mMap.addMarker(new MarkerOptions().position(firstLatLng));
+                mMap.addMarker(new MarkerOptions().position(lastLatLng));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLatLng));
 //                PolylineOptions rectOptions = new PolylineOptions();
 //                for(Waypoint point : mWaypoints) {
 //                    rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
 //                }
 //                // Get back the mutable Polyline
 //                mMap.addPolyline(rectOptions);
-//            }
+            }
         }
     }
 

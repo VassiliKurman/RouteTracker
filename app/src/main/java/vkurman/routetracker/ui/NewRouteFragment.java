@@ -25,20 +25,20 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,15 +49,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vkurman.routetracker.R;
 import vkurman.routetracker.model.RouteManager;
+import vkurman.routetracker.model.Track;
 import vkurman.routetracker.model.Waypoint;
 import vkurman.routetracker.provider.TrackerDbUtils;
 import vkurman.routetracker.receiver.LocationReceiver;
@@ -103,8 +102,6 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
      */
     private long mCurrentTrackId;
 
-    @BindView(R.id.text_track_name)
-    EditText mTextTrackName;
     @BindView(R.id.text_timestamp)
     TextView mTextTimestamp;
     @BindView(R.id.text_latitude)
@@ -231,6 +228,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
      */
     public interface OnFragmentInteractionListener {
         void onFragmentInteraction(int code);
+        void onTrackNameRequest();
     }
 
     @Override
@@ -245,8 +243,10 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
                     if(mListener != null) {
                         mListener.onFragmentInteraction(RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_CREATED);
                     }
-                    // Starting location tracking
-                    startLocationTracking();
+                    // Ask to enter track name
+                    if(mListener != null) {
+                        mListener.onTrackNameRequest();
+                    }
                 } else {
                     ActivityCompat.requestPermissions(getActivity(),
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -274,7 +274,10 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
                     }
                     mToast.makeText(getContext(), "Permissions granted", Toast.LENGTH_SHORT).show();
                     // permission was granted!
-                    startLocationTracking();
+                    // Ask to enter track name
+                    if(mListener != null) {
+                        mListener.onTrackNameRequest();
+                    }
                 } else {
                     // permission denied
                     if(mToast != null) {
@@ -302,15 +305,16 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
      * straight away after start button is pressed (if permissions are granted earlier).
      */
     @SuppressLint("MissingPermission")
-    private void startLocationTracking() {
+    protected void startLocationTracking(String trackName) {
         mStartButton.setEnabled(false);
-        mTextTrackName.setEnabled(false);
         if (!RouteManager.getInstance().isTracking(getActivity())) {
             mCurrentTrackId  = Calendar.getInstance().getTimeInMillis();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-            String trackName = mTextTrackName.getText().toString();
             String userId = prefs.getString(getString(R.string.pref_key_default_user_id), getString(R.string.pref_value_default_user_id));
-            RouteManager.getInstance().startTracking(getActivity(), mCurrentTrackId, trackName, userId, null);
+            // creating track
+            Track track = new Track(mCurrentTrackId, trackName, userId, null);
+            // request to start tracking
+            RouteManager.getInstance().startTracking(getActivity(), track);
         }
         mStopButton.setEnabled(true);
     }
