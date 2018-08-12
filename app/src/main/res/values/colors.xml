@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#03a9f4</color>
-    <color name="colorPrimaryDark">#007ac1</color>
-    <color name="colorAccent">#ffb300</color>
+    <color name="colorPrimary">#cddc39</color>
+    <color name="colorPrimaryDark">#99aa00</color>
+    <color name="colorAccent">#9000FF</color>
+    <color name="colorPrimaryLight">#ffff6e</color>
+    <color name="colorWhite">#FFFFFF</color>
+
+    <!-- Additional colours -->
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="detail_accent_pane_background">#455A64</color>
+    <color name="detail_accent_label">#90A4AE</color>
+    <color name="activated">#E0E0E0</color>
 
     <!-- Custom colours -->
     <color name="colorIcon">@color/colorPrimary</color>
