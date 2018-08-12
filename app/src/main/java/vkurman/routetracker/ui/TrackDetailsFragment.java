@@ -16,20 +16,26 @@
 
 package vkurman.routetracker.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -125,10 +131,30 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
     private void displayData() {
         if(mTrack != null) {
             mTextTrackName.setText(TextUtils.isEmpty(mTrack.getName()) ? getString(R.string.text_unspecified) : mTrack.getName());
-            mTextTrackId.setText(String.format("%d", mTrack.getId()));
+            mTextTrackId.setText(String.format(Locale.getDefault(), "%d", mTrack.getId()));
             mTextTrackOwner.setText(mTrack.getOwner());
             mTextTrackTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(mTrack.getId()));
         }
+        if(mWaypoints != null && mWaypoints.length > 0) {
+            PolylineOptions rectOptions = new PolylineOptions();
+            for(Waypoint point : mWaypoints) {
+                rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
+            }
+            // Get back the mutable Polyline
+            mMap.addPolyline(rectOptions);
+
+        }
+    }
+
+    /**
+     * Checking is all necessary permissions are granted
+     *
+     * @return boolean
+     */
+    private boolean permissionsGranted() {
+        return getContext() != null
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     @SuppressLint("MissingPermission")
@@ -136,9 +162,11 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
     public void onMapReady(GoogleMap map) {
         mMap = map;
         // Check for location permission.
-        mMap.setMyLocationEnabled(false);
-        mMap.setOnMyLocationButtonClickListener(this);
-        mMap.setOnMyLocationClickListener(this);
+        if(permissionsGranted()) {
+            mMap.setMyLocationEnabled(true);
+            mMap.setOnMyLocationButtonClickListener(this);
+            mMap.setOnMyLocationClickListener(this);
+        }
     }
 
     @Override
