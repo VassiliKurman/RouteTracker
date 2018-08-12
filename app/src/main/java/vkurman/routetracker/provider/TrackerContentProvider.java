@@ -25,6 +25,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.Objects;
+
 /**
  * TrackerContentProvider. Content provider for tracks.
  *
@@ -69,8 +71,28 @@ public class TrackerContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
-        // TODO
-        throw new UnsupportedOperationException("Not yet implemented");
+        final SQLiteDatabase db = mTrackerDbHelper.getWritableDatabase();
+
+        // Write URI matching code to identify the match for the tracks directory
+        int match = sUriMatcher.match(uri);
+        // number of rows that were deleted from the database
+        int count;
+        switch (match) {
+            case USERS:
+                count = db.delete(TrackerContract.UsersEntry.TABLE_NAME_USERS, selection, selectionArgs);
+                break;
+            case TRACKS:
+                count = db.delete(TrackerContract.TracksEntry.TABLE_NAME_TRACKS, selection, selectionArgs);
+                break;
+            case WAYPOINTS:
+                count = db.delete(TrackerContract.WaypointsEntry.TABLE_NAME_WAYPOINTS, selection, selectionArgs);
+                break;
+            // Default case throws an UnsupportedOperationException
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        // Return number of rows that were deleted from the database
+        return count;
     }
 
     @Override
@@ -217,7 +239,7 @@ public class TrackerContentProvider extends ContentProvider {
         }
 
         // Set a notification URI on the Cursor and return that Cursor
-        retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        retCursor.setNotificationUri(Objects.requireNonNull(getContext()).getContentResolver(), uri);
 
         // Return the desired Cursor
         return retCursor;
@@ -226,7 +248,27 @@ public class TrackerContentProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        // TODO
-        throw new UnsupportedOperationException("Not yet implemented");
+        final SQLiteDatabase db = mTrackerDbHelper.getWritableDatabase();
+
+        // Write URI matching code to identify the match for the tracks directory
+        int match = sUriMatcher.match(uri);
+        // number of rows affected in the database
+        int count;
+        switch (match) {
+            case USERS:
+                count = db.update(TrackerContract.UsersEntry.TABLE_NAME_USERS, values, selection, selectionArgs);
+                break;
+            case TRACKS:
+                count = db.update(TrackerContract.TracksEntry.TABLE_NAME_TRACKS, values, selection, selectionArgs);
+                break;
+            case WAYPOINTS:
+                count = db.update(TrackerContract.WaypointsEntry.TABLE_NAME_WAYPOINTS, values, selection, selectionArgs);
+                break;
+            // Default case throws an UnsupportedOperationException
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        // Return number of rows affected in the database
+        return count;
     }
 }

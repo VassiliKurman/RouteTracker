@@ -50,6 +50,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -57,6 +58,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import vkurman.routetracker.R;
 import vkurman.routetracker.model.RouteManager;
+import vkurman.routetracker.model.Waypoint;
+import vkurman.routetracker.provider.TrackerDbUtils;
 import vkurman.routetracker.receiver.LocationReceiver;
 import vkurman.routetracker.utils.RouteTrackerConstants;
 import vkurman.routetracker.utils.RouteTrackerUtils;
@@ -79,15 +82,26 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
      * Tag for logging
      */
     public static final String TAG = NewRouteFragment.class.getSimpleName();
-
-    // Parent activity listens for this fragments interactions
+    /**
+     * Parent activity listens for this fragments interactions
+     */
     private OnFragmentInteractionListener mListener;
-    // Toast
+    /**
+     * Toast
+     */
     private Toast mToast;
-    // Google Map
+    /**
+     * Google Map
+     */
     private GoogleMap mMap;
-    // List of Locations
-    private List<Location> locations;
+    /**
+     * Starting location
+     */
+    private Location mStartLocation;
+    /**
+     * Current track id
+     */
+    private long mCurrentTrackId;
 
     @BindView(R.id.text_track_name)
     EditText mTextTrackName;
@@ -111,11 +125,18 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
         protected void locationChanged(Context context, Location location) {
             Log.d(TAG, "Entered LocationReceiver.locationChanged()");
             if(location != null) {
-                if(locations == null) {
-                    locations = new ArrayList<>();
+                if(mStartLocation == null) {
+                    mStartLocation = location;
                 }
-
-                locations.add(location);
+                // Adding Track to Database
+                TrackerDbUtils.addWaypoint(
+                        context, new Waypoint(
+                                location.getTime(),
+                                mCurrentTrackId,
+                                location.getLatitude(),
+                                location.getLongitude(),
+                                location.getAltitude(),
+                                location.getTime()));
 
                 // Putting Marker to map
                 LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -126,7 +147,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
                 mTextLatitude.setText(String.format(Locale.getDefault(), "%f", location.getLatitude()));
                 mTextLongitude.setText(String.format(Locale.getDefault(), "%f", location.getLongitude()));
                 mTextAltitude.setText(String.format(Locale.getDefault(), "%f", location.getAltitude()));
-                mTextDuration.setText(RouteTrackerUtils.convertMillisecondsToFormattedString(location.getTime() - locations.get(0).getTime()));
+                mTextDuration.setText(RouteTrackerUtils.convertMillisecondsToFormattedString(location.getTime() - mStartLocation.getTime()));
             } else {
                 Toast.makeText(getContext(), "Last known location is missing", Toast.LENGTH_SHORT).show();
             }
@@ -285,10 +306,11 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
         mStartButton.setEnabled(false);
         mTextTrackName.setEnabled(false);
         if (!RouteManager.getInstance().isTracking(getActivity())) {
+            mCurrentTrackId  = Calendar.getInstance().getTimeInMillis();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
             String trackName = mTextTrackName.getText().toString();
             String userId = prefs.getString(getString(R.string.pref_key_default_user_id), getString(R.string.pref_value_default_user_id));
-            RouteManager.getInstance().startTracking(getActivity(), trackName, userId, null);
+            RouteManager.getInstance().startTracking(getActivity(), mCurrentTrackId, trackName, userId, null);
         }
         mStopButton.setEnabled(true);
     }

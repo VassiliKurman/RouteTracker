@@ -99,15 +99,14 @@ public class RouteManager extends LocationCallback {
         return PendingIntent.getBroadcast(context, 0, intent, flags);
     }
 
-    public void startTracking(Context context, String trackName, String userId, String imageUri) {
+    public void startTracking(Context context, long trackId, String trackName, String userId, String imageUri) {
         Log.d(TAG, "Entered startTracking()...");
         if(permissionsGranted(context)) {
-            long trackId = Calendar.getInstance().getTimeInMillis();
             mTrack = new Track(trackId,
                     (trackName == null || trackName.isEmpty()) ? Long.toString(trackId) : trackName,
                     userId,
                     imageUri);
-
+            // Adding Track to Database
             TrackerDbUtils.addTrack(context, mTrack);
 
             startLocationUpdates(context);

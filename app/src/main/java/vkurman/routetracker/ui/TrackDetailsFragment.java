@@ -111,6 +111,7 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
     public void setTrackData(Track track, Waypoint[] waypoints) {
         mTrack = track;
         mWaypoints = waypoints;
+        // Displaying data
         displayData();
     }
 
@@ -135,15 +136,15 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
             mTextTrackOwner.setText(mTrack.getOwner());
             mTextTrackTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(mTrack.getId()));
         }
-        if(mWaypoints != null && mWaypoints.length > 0) {
-            PolylineOptions rectOptions = new PolylineOptions();
-            for(Waypoint point : mWaypoints) {
-                rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
-            }
-            // Get back the mutable Polyline
-            mMap.addPolyline(rectOptions);
-
-        }
+        // TODO
+//        if(mWaypoints != null && mWaypoints.length > 0 && mMap != null) {
+//            PolylineOptions rectOptions = new PolylineOptions();
+//            for(Waypoint point : mWaypoints) {
+//                rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
+//            }
+//            // Get back the mutable Polyline
+//            mMap.addPolyline(rectOptions);
+//        }
     }
 
     /**
@@ -166,6 +167,16 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
             mMap.setMyLocationEnabled(true);
             mMap.setOnMyLocationButtonClickListener(this);
             mMap.setOnMyLocationClickListener(this);
+
+            // TODO
+//            if(mWaypoints != null && mWaypoints.length > 0) {
+//                PolylineOptions rectOptions = new PolylineOptions();
+//                for(Waypoint point : mWaypoints) {
+//                    rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
+//                }
+//                // Get back the mutable Polyline
+//                mMap.addPolyline(rectOptions);
+//            }
         }
     }
 

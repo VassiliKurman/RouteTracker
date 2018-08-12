@@ -174,7 +174,7 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
                     long trackId = cursor.getLong(cursor.getColumnIndex(TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_TRACK_ID));
                     double latitude = cursor.getDouble(cursor.getColumnIndex(TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_LATITUDE));
                     double longitude = cursor.getDouble(cursor.getColumnIndex(TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_LONGITUDE));
-                    float altitude = cursor.getFloat(cursor.getColumnIndex(TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_ALTITUDE));
+                    double altitude = cursor.getDouble(cursor.getColumnIndex(TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_ALTITUDE));
                     long timeStamp = cursor.getLong(cursor.getColumnIndex(TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_TIMESTAMP));
                     mWaypoints[i] = new Waypoint(id, trackId, latitude, longitude, altitude, timeStamp);
                 }

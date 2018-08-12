@@ -32,7 +32,7 @@ public class Waypoint implements Parcelable {
     private long trackId;
     private double latitude;
     private double longitude;
-    private float altitude;
+    private double altitude;
     private long timeStamp;
 
     /**
@@ -56,14 +56,14 @@ public class Waypoint implements Parcelable {
         trackId = in.readLong();
         latitude = in.readDouble();
         longitude = in.readDouble();
-        altitude = in.readFloat();
+        altitude = in.readDouble();
         timeStamp = in.readLong();
     }
 
     /**
      * Public constructor to create brand new <code>Waypoint</code> object.
      */
-    public Waypoint(long id, long trackId, double latitude, double longitude, float altitude, long timeStamp) {
+    public Waypoint(long id, long trackId, double latitude, double longitude, double altitude, long timeStamp) {
         this.id = id;
         this.trackId = trackId;
         this.latitude = latitude;
@@ -86,7 +86,7 @@ public class Waypoint implements Parcelable {
         dest.writeLong(trackId);
         dest.writeDouble(latitude);
         dest.writeDouble(longitude);
-        dest.writeFloat(altitude);
+        dest.writeDouble(altitude);
         dest.writeLong(timeStamp);
     }
 
@@ -122,11 +122,11 @@ public class Waypoint implements Parcelable {
         this.longitude = longitude;
     }
 
-    public float getAltitude() {
+    public double getAltitude() {
         return altitude;
     }
 
-    public void setAltitude(float altitude) {
+    public void setAltitude(double altitude) {
         this.altitude = altitude;
     }
 
