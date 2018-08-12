@@ -1,0 +1,185 @@
+<!--Copyright (C) 2018 The Android Open Source Project
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:padding="@dimen/widget_margin">
+
+    <LinearLayout
+        android:id="@+id/widget_linear_top_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <!-- Widget title -->
+        <FrameLayout
+            android:id="@+id/widget_title_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            <!-- Widget title -->
+            <TextView
+                android:id="@+id/widget_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/widget_title"
+                android:textSize="@dimen/widget_title_text_size"
+                android:paddingTop="@dimen/widget_title_top_padding"
+                android:paddingStart="@dimen/widget_title_side_padding"
+                android:paddingEnd="@dimen/widget_title_side_padding"
+                android:paddingBottom="@dimen/widget_title_bottom_padding"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite"
+                android:background="@color/colorPrimary"/>
+        </FrameLayout>
+
+        <!-- Widget content -->
+        <LinearLayout
+            android:id="@+id/widget_content_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/widget_content_padding_top"
+            android:paddingBottom="@dimen/widget_content_padding_bottom"
+            android:paddingStart="@dimen/widget_content_padding_sides"
+            android:paddingEnd="@dimen/widget_content_padding_sides" >
+
+            <LinearLayout
+                android:id="@+id/widget_content_labels_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginEnd="@dimen/widget_between_content_margin">
+
+                <!-- Widget labels -->
+                <TextView
+                    android:id="@+id/widget_label_latitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/widget_content_description_latitude"
+                    android:text="@string/latitude"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/widget_text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/widget_label_longitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/widget_content_description_longitude"
+                    android:text="@string/longitude"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/widget_text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/widget_label_altitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/widget_content_description_altitude"
+                    android:text="@string/altitude"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/widget_text_size"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/widget_label_timestamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/widget_content_description_timestamp"
+                    android:text="@string/timestamp"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/widget_text_size"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/widget_content_data_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Widget labels -->
+                <TextView
+                    android:id="@+id/widget_data_latitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/widget_content_description_latitude_data"
+                    android:text="@string/widget_default_latitude"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/widget_text_size"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/widget_data_longitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/widget_content_description_longitude_data"
+                    android:text="@string/widget_default_longitude"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/widget_text_size"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/widget_data_altitude"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/widget_content_description_altitude_data"
+                    android:text="@string/widget_default_altitude"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/widget_text_size"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/widget_data_timestamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/widget_content_description_timestamp_data"
+                    android:text="@string/widget_default_timestamp"
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/widget_text_size"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Widget buttons -->
+        <FrameLayout
+            android:id="@+id/widget_button_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/widget_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/widget_button_margin_side"
+                android:layout_marginEnd="@dimen/widget_button_margin_side"
+                android:text="@string/widget_button_start"/>
+        </FrameLayout>
+
+    </LinearLayout>
+</FrameLayout>

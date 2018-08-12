@@ -31,4 +31,24 @@
     <dimen name="dialog_text_side_margin">24dp</dimen>
     <dimen name="dialog_text_bottom_margin">8dp</dimen>
 
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
+
+    <dimen name="widget_title_text_size">24sp</dimen>
+    <dimen name="widget_title_side_padding">24dp</dimen>
+    <dimen name="widget_title_top_padding">16dp</dimen>
+    <dimen name="widget_title_bottom_padding">24dp</dimen>
+    <dimen name="widget_content_padding_top">8dp</dimen>
+    <dimen name="widget_content_padding_bottom">8dp</dimen>
+    <dimen name="widget_content_padding_sides">24dp</dimen>
+    <dimen name="widget_between_content_margin">8dp</dimen>
+    <dimen name="widget_text_size">16sp</dimen>
+    <dimen name="widget_text_side_padding">8dp</dimen>
+    <dimen name="widget_text_top_padding">8dp</dimen>
+    <dimen name="bottom_text_bottom_padding">8dp</dimen>
+    <dimen name="widget_button_margin_side">24dp</dimen>
+
 </resources>
