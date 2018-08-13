@@ -21,7 +21,9 @@ package vkurman.routetracker.utils;
  * Version 1.0
  */
 public class RouteTrackerConstants {
-    public static final String INTENT_NAME_FOR_TRACK_ID = "trackId";
+    // Intent extras
+    public static final String INTENT_EXTRA_NAME_FOR_TRACK_ID = "trackId";
+    public static final String INTENT_EXTRA_IS_TRACK_SHARED = "shared";
 
     public static final String INTENT_EXTRA_FOR_RESULT_CODE = "track_result_code";
 

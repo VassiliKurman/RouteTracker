@@ -57,7 +57,7 @@
                     android:layout_gravity="top"
                     android:layout_marginLeft="@dimen/toolbar_side_margin"
                     android:layout_marginRight="@dimen/toolbar_side_margin"
-                    app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                     app:contentInsetStart="8dp"
                     app:layout_collapseMode="pin" />
 

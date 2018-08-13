@@ -205,7 +205,8 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
     @Override
     public void onItemSelected(long trackId) {
         Intent intent = new Intent(this, TrackDetailsActivity.class);
-        intent.putExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID, trackId);
+        intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID, trackId);
+        intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_IS_TRACK_SHARED, mCurrentMenuItem == R.id.nav_shared_tracks);
         startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT);
     }
 

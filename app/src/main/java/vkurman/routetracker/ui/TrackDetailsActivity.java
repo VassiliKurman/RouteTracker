@@ -95,10 +95,13 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
             }
         }  else {
             // Checking that intent has extra in it
-            if(getIntent().hasExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID)) {
+            if(getIntent().hasExtra(RouteTrackerConstants.INTENT_EXTRA_IS_TRACK_SHARED)) {
+                
+            }
+            if(getIntent().hasExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID)) {
                 mTracksLoaderId = TrackDetailsLoader.ID;
                 // Retrieving track id
-                mTrackId = getIntent().getLongExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID, INITIAL_TRACK_ID);
+                mTrackId = getIntent().getLongExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID, INITIAL_TRACK_ID);
                 if(mTrackId != INITIAL_TRACK_ID) {
                     // Retrieving data
                     retrieveData();
