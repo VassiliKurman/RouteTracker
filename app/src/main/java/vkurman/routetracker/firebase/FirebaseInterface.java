@@ -23,7 +23,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +40,8 @@ public class FirebaseInterface {
 
     private static FirebaseInterface mFirebaseInterface;
     private static FirebaseDatabase mFirebaseDatabase;
-    private static DatabaseReference mDatabaseReference;
+    private static DatabaseReference mDatabaseReferenceTracks;
+    private static DatabaseReference mDatabaseReferenceWaypoints;
     private ChildEventListener mChildEventListener;
 
     private static FirebaseInterfaceListener mListener;
@@ -49,7 +49,8 @@ public class FirebaseInterface {
 
     private FirebaseInterface(){
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mDatabaseReference = mFirebaseDatabase.getReference().child(RouteTrackerConstants.FIREBASE_DATABASE_REFERENCE);
+        mDatabaseReferenceTracks = mFirebaseDatabase.getReference().child(RouteTrackerConstants.FIREBASE_DATABASE_REFERENCE_TRACKS);
+        mDatabaseReferenceWaypoints = mFirebaseDatabase.getReference().child(RouteTrackerConstants.FIREBASE_DATABASE_REFERENCE_WAYPOINTS);
     }
 
     public static FirebaseInterface getInstance(){
@@ -69,7 +70,7 @@ public class FirebaseInterface {
         if(track == null || waypoints == null) {
             return;
         }
-        mDatabaseReference.child(RouteTrackerConstants.FIREBASE_DATABASE_REFERENCE_TRACKS).setValue(track);
+        mDatabaseReferenceTracks.child(Long.toString(track.getId())).setValue(track);
 
         List<Waypoint> list = Arrays.asList(waypoints);
         shareWaypoints(track, list);
@@ -82,7 +83,7 @@ public class FirebaseInterface {
      * @param waypoints - List<Waypoint>
      */
     private static void shareWaypoints(Track track, List<Waypoint> waypoints) {
-        mDatabaseReference.child(RouteTrackerConstants.FIREBASE_DATABASE_REFERENCE_WAYPOINTS).child(Long.toString(track.getId())).setValue(waypoints);
+        mDatabaseReferenceWaypoints.child(Long.toString(track.getId())).setValue(waypoints);
     }
 
     public interface FirebaseInterfaceListener {
@@ -110,11 +111,11 @@ public class FirebaseInterface {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         };
-        mDatabaseReference.child(RouteTrackerConstants.FIREBASE_DATABASE_REFERENCE_TRACKS).addChildEventListener(mChildEventListener);
+        mDatabaseReferenceTracks.addChildEventListener(mChildEventListener);
     }
 
     public void detachListener() {
-        mDatabaseReference.removeEventListener(mChildEventListener);
+        mDatabaseReferenceTracks.removeEventListener(mChildEventListener);
         mListener = null;
     }
 }

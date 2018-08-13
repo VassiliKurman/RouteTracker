@@ -38,9 +38,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.Objects;
 import java.util.UUID;
 
@@ -119,6 +116,11 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        // Detaching listener if menu item is different than shared tracks
+                        if(mCurrentMenuItem == R.id.nav_shared_tracks && mCurrentMenuItem != menuItem.getItemId()) {
+                            FirebaseInterface.getInstance().detachListener();
+                        }
+
                         mCurrentMenuItem = menuItem.getItemId();
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);

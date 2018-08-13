@@ -58,6 +58,10 @@ public class Track implements Parcelable {
         image = in.readString();
     }
 
+    public Track(){
+        // Default constructor required for calls to DataSnapshot.getValue(Track.class)
+    }
+
     /**
      * Public constructor to create object that has been retrieved from persistent
      * location, like database.

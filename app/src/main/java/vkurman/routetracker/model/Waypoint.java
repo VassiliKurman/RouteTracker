@@ -51,6 +51,10 @@ public class Waypoint implements Parcelable {
         }
     };
 
+    public Waypoint(){
+        // Default constructor required for calls to DataSnapshot.getValue(Waypoint.class)
+    }
+
     private Waypoint(Parcel in) {
         id = in.readLong();
         trackId = in.readLong();

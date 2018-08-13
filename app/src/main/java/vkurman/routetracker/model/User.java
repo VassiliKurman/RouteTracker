@@ -44,6 +44,10 @@ public class User implements Parcelable {
         }
     };
 
+    public User() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
     private User(Parcel in) {
         id = in.readString();
         name = in.readString();

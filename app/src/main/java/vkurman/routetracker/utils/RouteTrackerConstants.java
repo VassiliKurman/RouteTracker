@@ -42,7 +42,6 @@ public class RouteTrackerConstants {
     public static final int LOADER_WAYPOINTS_INDEX = 1;
 
     // Firebase database
-    public static final String FIREBASE_DATABASE_REFERENCE = "tracker";
     public static final String FIREBASE_DATABASE_REFERENCE_TRACKS = "tracks";
     public static final String FIREBASE_DATABASE_REFERENCE_WAYPOINTS = "waypoints";
 
