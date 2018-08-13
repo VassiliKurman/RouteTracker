@@ -23,51 +23,70 @@
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/label_duration"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
     <View
         android:id="@+id/horizontal_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         app:layout_constraintTop_toBottomOf="@id/vertical_divider"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Labels -->
     <TextView
         android:id="@+id/label_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toLeftOf="@id/vertical_divider"
+        app:layout_constraintStart_toEndOf="@id/vertical_divider"
         app:layout_constraintTop_toTopOf="@id/vertical_divider"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
+        android:textStyle="bold"
         android:text="@string/timestamp"/>
     <TextView
         android:id="@+id/label_latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toLeftOf="@id/vertical_divider"
+        app:layout_constraintStart_toEndOf="@id/vertical_divider"
         app:layout_constraintTop_toBottomOf="@id/label_timestamp"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
+        android:textStyle="bold"
         android:text="@string/latitude"/>
     <TextView
         android:id="@+id/label_longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toLeftOf="@id/vertical_divider"
+        app:layout_constraintStart_toEndOf="@id/vertical_divider"
         app:layout_constraintTop_toBottomOf="@id/label_latitude"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
+        android:textStyle="bold"
         android:text="@string/longitude"/>
     <TextView
         android:id="@+id/label_altitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toLeftOf="@id/vertical_divider"
+        app:layout_constraintStart_toEndOf="@id/vertical_divider"
         app:layout_constraintTop_toBottomOf="@id/label_longitude"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
+        android:textStyle="bold"
         android:text="@string/altitude"/>
     <TextView
         android:id="@+id/label_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toLeftOf="@id/vertical_divider"
+        app:layout_constraintStart_toEndOf="@id/vertical_divider"
         app:layout_constraintTop_toBottomOf="@id/label_altitude"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
+        android:textStyle="bold"
         android:text="@string/duration"/>
 
     <!-- Data -->
@@ -75,36 +94,51 @@
         android:id="@+id/text_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/vertical_divider"
+        app:layout_constraintStart_toEndOf="@id/label_timestamp"
         app:layout_constraintTop_toTopOf="@id/vertical_divider"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
         android:text="@string/double_zero"/>
     <TextView
         android:id="@+id/text_latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/vertical_divider"
+        app:layout_constraintStart_toEndOf="@id/label_latitude"
         app:layout_constraintTop_toBottomOf="@id/text_timestamp"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
         android:text="@string/double_zero"/>
     <TextView
         android:id="@+id/text_longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/vertical_divider"
+        app:layout_constraintStart_toEndOf="@id/label_longitude"
         app:layout_constraintTop_toBottomOf="@id/text_latitude"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
         android:text="@string/double_zero"/>
     <TextView
         android:id="@+id/text_altitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/vertical_divider"
+        app:layout_constraintStart_toEndOf="@id/label_altitude"
         app:layout_constraintTop_toBottomOf="@id/text_longitude"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
         android:text="@string/double_zero"/>
     <TextView
         android:id="@+id/text_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/vertical_divider"
+        app:layout_constraintStart_toEndOf="@id/label_duration"
         app:layout_constraintTop_toBottomOf="@id/text_altitude"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
         android:text="@string/int_zero"/>
 
     <Button

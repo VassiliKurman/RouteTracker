@@ -72,8 +72,6 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
     /**
      * Binding Views
      */
-    @BindView(R.id.text_track_name)
-    TextView mTextTrackName;
     @BindView(R.id.text_track_id)
     TextView mTextTrackId;
     @BindView(R.id.text_track_owner)
@@ -133,7 +131,6 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
      */
     private void displayData() {
         if(mTrack != null) {
-            mTextTrackName.setText(TextUtils.isEmpty(mTrack.getName()) ? getString(R.string.text_unspecified) : mTrack.getName());
             mTextTrackId.setText(String.format(Locale.getDefault(), "%d", mTrack.getId()));
             mTextTrackOwner.setText(mTrack.getOwner());
             mTextTrackTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(mTrack.getId()));
