@@ -21,6 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.AsyncTaskLoader;
 
 import vkurman.routetracker.provider.TrackerContract;
+import vkurman.routetracker.utils.RouteTrackerConstants;
 
 /**
  * TracksLoader is an AsyncTaskLoader that loads Track's in background thread.
@@ -37,7 +38,7 @@ public class TracksLoader extends AsyncTaskLoader<Cursor> {
     /**
      * TracksLoader unique id
      */
-    public static final int ID = 1001;
+    public static final int ID = RouteTrackerConstants.LOADER_TRACKS_ID;
 
     public TracksLoader(@NonNull Context context) {
         super(context);

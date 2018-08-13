@@ -30,10 +30,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vkurman.routetracker.R;
+import vkurman.routetracker.adapter.SharedTracksAdapter;
 import vkurman.routetracker.adapter.TracksAdapter;
+import vkurman.routetracker.model.Track;
 import vkurman.routetracker.utils.RouteTrackerConstants;
 
 /**
@@ -45,7 +49,8 @@ import vkurman.routetracker.utils.RouteTrackerConstants;
  * Created by Vassili Kurman on 04/08/2018.
  * Version 1.0
  */
-public class RoutesFragment extends Fragment implements TracksAdapter.TrackClickListener, View.OnClickListener {
+public class RoutesFragment extends Fragment implements TracksAdapter.TrackClickListener,
+        SharedTracksAdapter.SharedTracksListener, View.OnClickListener {
     /**
      * Item click listener
      */
@@ -53,7 +58,7 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
     /**
      * Adapter for RecycleView
      */
-    private TracksAdapter mAdapter;
+    private RecyclerView.Adapter mAdapter;
 
     /**
      * Binding Views
@@ -125,6 +130,13 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
         }
     }
 
+    @Override
+    public void onSharedTrackClicked(long trackId) {
+        if (mOnItemSelectedListener != null) {
+            mOnItemSelectedListener.onSharedItemSelected(trackId);
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -137,6 +149,7 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
      */
     public interface OnItemSelectedListener {
         void onItemSelected(long trackId);
+        void onSharedItemSelected(long trackId);
     }
 
     /**
@@ -162,11 +175,54 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
             refreshLayout.setRefreshing(false);
         }
 
-        if(mAdapter == null) {
+        if(mAdapter == null || mAdapter instanceof SharedTracksAdapter) {
             mAdapter = new TracksAdapter(getActivity(), data, this);
             mRecyclerView.setAdapter(mAdapter);
         } else {
-            mAdapter.updateData(data);
+            if(mAdapter instanceof TracksAdapter) {
+                ((TracksAdapter) mAdapter).updateData(data);
+            }
+        }
+    }
+
+    /**
+     * Pass new List<Track> here into fragment if data has been updated.
+     *
+     * @param data - List<Track>
+     */
+    protected void updateSharedData(List<Track> data) {
+        if(refreshLayout != null && refreshLayout.isRefreshing()) {
+            refreshLayout.setRefreshing(false);
+        }
+
+        if(mAdapter == null || mAdapter instanceof TracksAdapter) {
+            mAdapter = new SharedTracksAdapter(getActivity(), data, this);
+            mRecyclerView.setAdapter(mAdapter);
+        } else {
+            if(mAdapter instanceof SharedTracksAdapter) {
+                ((SharedTracksAdapter) mAdapter).updateData(data);
+            }
+        }
+    }
+
+    /**
+     * Pass new Track here into fragment if data has been updated.
+     *
+     * @param track - Track
+     */
+    protected void addTrack(Track track) {
+        if(refreshLayout != null && refreshLayout.isRefreshing()) {
+            refreshLayout.setRefreshing(false);
+        }
+
+        if(mAdapter == null || mAdapter instanceof TracksAdapter) {
+            mAdapter = new SharedTracksAdapter(getActivity(), null, this);
+            mRecyclerView.setAdapter(mAdapter);
+            ((SharedTracksAdapter) mAdapter).addData(track);
+        } else {
+            if(mAdapter instanceof SharedTracksAdapter) {
+                ((SharedTracksAdapter) mAdapter).addData(track);
+            }
         }
     }
 }

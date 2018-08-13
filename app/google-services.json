@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "166544987018",
+    "firebase_url": "https://routetracker-a83a3.firebaseio.com",
+    "project_id": "routetracker-a83a3",
+    "storage_bucket": "routetracker-a83a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:166544987018:android:052b709609556ec0",
+        "android_client_info": {
+          "package_name": "vkurman.routetracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "166544987018-7knhcaf0or37b97mibsshhtt532apk4m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vkurman.routetracker",
+            "certificate_hash": "6b10ee2a1f950bda8f1449f29f8112e857bf7ee7"
+          }
+        },
+        {
+          "client_id": "166544987018-d2qbds61g961d5chtk61rmc9vs9n35gu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdh0NF_CNcbJu_vVseG904soiujUrTyjg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "166544987018-d2qbds61g961d5chtk61rmc9vs9n35gu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

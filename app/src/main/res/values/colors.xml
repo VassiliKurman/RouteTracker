@@ -18,6 +18,7 @@
     <color name="colorIcon">@color/colorPrimary</color>
     <color name="colorPlaceholder">@color/colorPrimary</color>
     <color name="colorError">@color/colorAccent</color>
-    <color name="colorCardViewBackground">#FFFFFF</color>
+    <color name="colorCardViewBackground">#FFFFA2</color>
+    <color name="colorCardViewBackgroundShared">#FFBEA2</color>
     <color name="colorText">#000000</color>
 </resources>

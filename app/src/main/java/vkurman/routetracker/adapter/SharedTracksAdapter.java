@@ -17,7 +17,6 @@ package vkurman.routetracker.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
@@ -30,19 +29,22 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
 import butterknife.BindView;
 import vkurman.routetracker.R;
-import vkurman.routetracker.provider.TrackerContract;
+import vkurman.routetracker.model.Track;
 import vkurman.routetracker.utils.RouteTrackerUtils;
 
 /**
- * TracksAdapter is an Adapter for RecycleView to display tracks.
+ * SharedTracksAdapter is an Adapter for RecycleView to display tracks.
  *
- * Created by Vassili Kurman on 02/08/2018.
+ * Created by Vassili Kurman on 13/08/2018.
  * Version 1.0
  */
-public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TracksViewHolder> {
+public class SharedTracksAdapter extends RecyclerView.Adapter<SharedTracksAdapter.SharedTracksViewHolder> {
 
     private String mUserId;
     /**
@@ -52,27 +54,27 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TracksView
     /**
      * An on-click handler that allows for an Activity to interface with RecyclerView
      */
-    final private TrackClickListener mTrackClickListener;
+    final private SharedTracksListener mSharedTracksListener;
     /**
-     * Cursor of tracks
+     * List<Track> of tracks
      */
-    private Cursor mTracks;
+    private List<Track> mTracks;
 
     /**
      * An on-click handler that allows for an Activity to interface with RecyclerView
      */
-    public interface TrackClickListener {
-        void onTrackClicked(long id);
+    public interface SharedTracksListener {
+        void onSharedTrackClicked(long id);
     }
 
     /**
-     * Constructor for TracksAdapter
+     * Constructor for SharedTracksAdapter
      *
-     * @param context - context
-     * @param tracks - list of tracks
+     * @param context            - context
+     * @param tracks             - list of tracks
      * @param trackClickListener - item click listener
      */
-    public TracksAdapter(Context context, Cursor tracks, TrackClickListener trackClickListener) {
+    public SharedTracksAdapter(Context context, List<Track> tracks, SharedTracksListener trackClickListener) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String defaultUserId = context.getString(R.string.pref_value_default_user_id);
         mUserId = sharedPreferences.getString(
@@ -81,20 +83,25 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TracksView
 
         mContext = context;
         mTracks = tracks;
-        mTrackClickListener = trackClickListener;
+        mSharedTracksListener = trackClickListener;
     }
 
     /**
      * Provides a reference to the views for each data item.
      */
-    class TracksViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.container_card_view) CardView container;
-        @BindView(R.id.iv_list_track_image) ImageView mTrackImage;
-        @BindView(R.id.tv_list_track_name) TextView mTrackName;
-        @BindView(R.id.tv_list_track_owner) TextView mTrackOwner;
-        @BindView(R.id.tv_list_track_timestamp) TextView mTrackTimestamp;
+    class SharedTracksViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.container_card_view)
+        CardView container;
+        @BindView(R.id.iv_list_track_image)
+        ImageView mTrackImage;
+        @BindView(R.id.tv_list_track_name)
+        TextView mTrackName;
+        @BindView(R.id.tv_list_track_owner)
+        TextView mTrackOwner;
+        @BindView(R.id.tv_list_track_timestamp)
+        TextView mTrackTimestamp;
 
-        TracksViewHolder(View view) {
+        SharedTracksViewHolder(View view) {
             super(view);
 
             ButterKnife.bind(this, view);
@@ -109,15 +116,13 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TracksView
          */
         @Override
         public void onClick(View view) {
-            if(mTracks == null) {
+            if (mTracks == null) {
                 return;
             }
             int position = getAdapterPosition();
-            if(position >= 0 && position < mTracks.getCount()) {
-                if(mTracks.moveToPosition(position)) {
-                    long id = mTracks.getLong(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_ID));
-                    mTrackClickListener.onTrackClicked(id);
-                }
+            if (position >= 0 && position < mTracks.size()) {
+                long id = mTracks.get(position).getId();
+                mSharedTracksListener.onSharedTrackClicked(id);
             }
         }
     }
@@ -125,7 +130,7 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TracksView
     // Create new views (invoked by the layout manager)
     @Override
     @NonNull
-    public TracksAdapter.TracksViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+    public SharedTracksAdapter.SharedTracksViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                              int viewType) {
         Context context = parent.getContext();
         int layoutIdForListItem = R.layout.list_track_layout;
@@ -134,20 +139,20 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TracksView
 
         View view = inflater.inflate(layoutIdForListItem, parent, false);
 
-        return new TracksAdapter.TracksViewHolder(view);
+        return new SharedTracksAdapter.SharedTracksViewHolder(view);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(@NonNull TracksViewHolder holder, int position) {
-        if(position >= 0 && position < mTracks.getCount()) {
-            if(mTracks.moveToPosition(position)) {
-                String name = mTracks.getString(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_NAME));
-                String owner = mTracks.getString(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER));
-                String image = mTracks.getString(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_IMAGE));
-                long timestamp = mTracks.getLong(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_ID));
+    public void onBindViewHolder(@NonNull SharedTracksViewHolder holder, int position) {
+        if (position >= 0 && position < mTracks.size()) {
+            for (Track track : mTracks) {
+                String name = track.getName();
+                String owner = track.getOwner();
+                String image = track.getImage();
+                long timestamp = track.getId();
 
-                if(!owner.equals(mUserId)) {
+                if (!owner.equals(mUserId)) {
                     holder.container.setBackgroundColor(mContext.getResources().getColor(R.color.colorCardViewBackgroundShared, null));
                 }
 
@@ -166,16 +171,31 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TracksView
     // Return the size of list (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mTracks == null ? 0 : mTracks.getCount();
+        return mTracks == null ? 0 : mTracks.size();
     }
 
     /**
      * Update data in Adapter.
      *
-     * @param tracks - provided new list of tracks
+     * @param tracks - list of tracks
      */
-    public void updateData(Cursor tracks) {
+    public void updateData(List<Track> tracks) {
         mTracks = tracks;
         notifyDataSetChanged();
+    }
+
+    /**
+     * Adds track to list
+     *
+     * @param track - Track
+     */
+    public void addData(Track track) {
+        if(mTracks == null) {
+            mTracks = new ArrayList<>();
+        }
+
+        if(mTracks.add(track)) {
+            notifyDataSetChanged();
+        }
     }
 }

@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Objects;
 
 import vkurman.routetracker.R;
+import vkurman.routetracker.firebase.FirebaseInterface;
 import vkurman.routetracker.loader.TrackDetailsLoader;
 import vkurman.routetracker.model.Track;
 import vkurman.routetracker.model.Waypoint;
@@ -107,10 +109,27 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.track_menu, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                return true;
+            case R.id.action_share:
+                FirebaseInterface.getInstance().shareTrack(mTrack, mWaypoints);
+                return true;
+            case R.id.action_update:
+                // TODO
+                Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.action_delete:
+                // TODO
+                Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

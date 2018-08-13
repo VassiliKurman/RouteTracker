@@ -36,8 +36,15 @@ public class RouteTrackerConstants {
     public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_SHARED = 905;
 
     // Loader codes
+    public static final int LOADER_TRACKS_ID = 1001;
+    public static final int LOADER_SHARED_TRACKS_ID = 1002;
     public static final int LOADER_TRACK_INDEX = 0;
     public static final int LOADER_WAYPOINTS_INDEX = 1;
+
+    // Firebase database
+    public static final String FIREBASE_DATABASE_REFERENCE = "tracker";
+    public static final String FIREBASE_DATABASE_REFERENCE_TRACKS = "tracks";
+    public static final String FIREBASE_DATABASE_REFERENCE_WAYPOINTS = "waypoints";
 
     /**
      * MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION is an

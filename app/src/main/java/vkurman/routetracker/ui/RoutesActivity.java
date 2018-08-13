@@ -38,11 +38,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.Objects;
 import java.util.UUID;
 
 import vkurman.routetracker.R;
+import vkurman.routetracker.firebase.FirebaseInterface;
 import vkurman.routetracker.loader.TracksLoader;
+import vkurman.routetracker.model.Track;
 import vkurman.routetracker.utils.RouteTrackerConstants;
 
 /**
@@ -51,21 +56,25 @@ import vkurman.routetracker.utils.RouteTrackerConstants;
  * Version 1.0
  */
 public class RoutesActivity extends AppCompatActivity implements RoutesFragment.OnItemSelectedListener,
-        LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
+        LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener,
+        FirebaseInterface.FirebaseInterfaceListener {
 
     /**
      * Tag for logging
      */
     private static final String TAG = RoutesActivity.class.getSimpleName();
     /**
-     * Unique id for loader
+     * Unique id for local tracks loader
      */
     private int mTracksLoaderId;
+    /**
+     * Current menu item selected
+     */
+    private int mCurrentMenuItem = R.id.nav_my_tracks;
     /**
      * Layout for navigation drawer
      */
     private DrawerLayout mDrawerLayout;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,17 +119,34 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        mCurrentMenuItem = menuItem.getItemId();
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
-                        // close drawer when item is tapped
-                        mDrawerLayout.closeDrawers();
                         // change title in action bar
                         if(getSupportActionBar() != null) {
                             getSupportActionBar().setTitle(menuItem.getTitle());
                         }
-
-                        // TODO ask to load corresponding data
-
+                        switch (menuItem.getItemId()) {
+                            case R.id.nav_my_tracks: {
+                                // TODO ask to load corresponding data
+                                retrieveData();
+                                break;
+                            }
+                            case R.id.nav_shared_tracks: {
+                                // TODO ask to load corresponding data
+                                retrieveSharedData();
+                                break;
+                            }
+                            case R.id.nav_credits: {
+                                // TODO ask to load corresponding data
+                                break;
+                            }
+                            case R.id.nav_about: {
+                                // TODO ask to load corresponding data
+                                break;
+                            }
+                        }
+                        mDrawerLayout.closeDrawer(GravityCompat.START);
                         return true;
                     }
                 });
@@ -164,7 +190,7 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
         }
         RoutesFragment fragment = (RoutesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_master_list);
         if(fragment != null) {
-            Log.d(TAG, "Passing new data to fragment");
+            Log.d(TAG, "Passing new data to fragment from onLoadFinished() for local tracks");
             fragment.updateData(data);
         } else {
             Toast.makeText(this, "Error finding fragment with list of tracks", Toast.LENGTH_LONG).show();
@@ -179,6 +205,11 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
         Intent intent = new Intent(this, TrackDetailsActivity.class);
         intent.putExtra(RouteTrackerConstants.INTENT_NAME_FOR_TRACK_ID, trackId);
         startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT);
+    }
+
+    @Override
+    public void onSharedItemSelected(long trackId) {
+        // TODO read data from Firebase
     }
 
     @Override
@@ -204,7 +235,26 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
 
     @Override
     public void onRefresh() {
-        retrieveData();
+        switch (mCurrentMenuItem) {
+            case R.id.nav_my_tracks: {
+                // TODO ask to load corresponding data
+                retrieveData();
+                break;
+            }
+            case R.id.nav_shared_tracks: {
+                // TODO ask to load corresponding data
+                retrieveSharedData();
+                break;
+            }
+            case R.id.nav_credits: {
+                // TODO ask to load corresponding data
+                break;
+            }
+            case R.id.nav_about: {
+                // TODO ask to load corresponding data
+                break;
+            }
+        }
     }
 
     /**
@@ -216,6 +266,21 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
         } else {
             Objects.requireNonNull(getSupportLoaderManager().getLoader(mTracksLoaderId)).forceLoad();
         }
+    }
+
+    /**
+     * Calling Loader to retrieve shared data from Firebase Database
+     */
+    private void retrieveSharedData() {
+        RoutesFragment fragment = (RoutesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_master_list);
+        if(fragment != null) {
+            Log.d(TAG, "Setting data to null before update");
+            fragment.updateData(null);
+        } else {
+            Toast.makeText(this, "Error finding fragment with list of tracks", Toast.LENGTH_LONG).show();
+        }
+
+        FirebaseInterface.getInstance().attachListener(this);
     }
 
     /**
@@ -234,6 +299,20 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
             // Setting up user id
             userId = UUID.randomUUID().toString();
             sharedPreferences.edit().putString(getString(R.string.pref_key_default_user_id), userId).apply();
+        }
+    }
+
+    @Override
+    public void onTrackAdded(Track track) {
+        if(track == null) {
+            return;
+        }
+        RoutesFragment fragment = (RoutesFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_master_list);
+        if(fragment != null) {
+            Log.d(TAG, "Passing new data to fragment from onTrackAdded() for shared tracks");
+            fragment.addTrack(track);
+        } else {
+            Toast.makeText(this, "Error finding fragment with list of tracks", Toast.LENGTH_LONG).show();
         }
     }
 }

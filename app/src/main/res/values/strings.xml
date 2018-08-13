@@ -47,6 +47,9 @@
 
     <!-- Settings strings -->
     <string name="action_settings">Settings</string>
+    <string name="action_share">Share</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_update">Update</string>
     <string name="pref_title_user_id">User id</string>
     <string name="pref_title_user_name">User name</string>
     <string name="pref_title_tracking">Tracking</string>
