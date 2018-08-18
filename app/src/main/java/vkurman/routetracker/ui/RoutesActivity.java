@@ -125,9 +125,9 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
                         // change title in action bar
-                        if(getSupportActionBar() != null) {
-                            getSupportActionBar().setTitle(menuItem.getTitle());
-                        }
+//                        if(getSupportActionBar() != null) {
+//                            getSupportActionBar().setTitle(menuItem.getTitle());
+//                        }
                         switch (menuItem.getItemId()) {
                             case R.id.nav_my_tracks: {
                                 // TODO ask to load corresponding data
@@ -144,7 +144,8 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
                                 break;
                             }
                             case R.id.nav_about: {
-                                // TODO ask to load corresponding data
+                                Intent intent = new Intent(RoutesActivity.this, AboutActivity.class);
+                                startActivity(intent);
                                 break;
                             }
                         }
@@ -247,14 +248,6 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
             case R.id.nav_shared_tracks: {
                 // TODO ask to load corresponding data
                 retrieveSharedData();
-                break;
-            }
-            case R.id.nav_credits: {
-                // TODO ask to load corresponding data
-                break;
-            }
-            case R.id.nav_about: {
-                // TODO ask to load corresponding data
                 break;
             }
         }

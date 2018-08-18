@@ -27,6 +27,12 @@
     <string name="title_new_track_activity">New track</string>
     <string name="title_details_activity">Track details</string>
     <string name="description_header_image">Header image for routes</string>
+    <string name="title_about_activity">About app</string>
+
+    <!-- About activity -->
+    <string name="text_about_title">@string/app_name</string>
+    <string name="text_about_content">This is a Capstone project for Udacity's "Android Developer Nanodegree" created by Vassili Kurman 2018</string>
+    <string name="text_about_name">Created by Vassili Kurman 2018</string>
 
     <!-- Navigation drawer strings -->
     <string name="nav_my_tracks_title">My track</string>
