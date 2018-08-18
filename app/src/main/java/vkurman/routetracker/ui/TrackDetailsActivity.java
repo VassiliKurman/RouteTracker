@@ -55,6 +55,7 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
     private static final String TRACK_ID = "trackId";
     private static final String TRACK = "track";
     private static final String WAYPOINTS = "waypoints";
+    private static final String IS_SHARED = "isShared";
     /**
      * Unique id for loader
      */
@@ -71,6 +72,11 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
      * Reference to waypoints
      */
     private Waypoint[] mWaypoints;
+
+    /**
+     * Indicator that track is shared
+     */
+    private boolean isShared;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +95,7 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
             mTrackId = savedInstanceState.getLong(TRACK_ID);
             mTrack = savedInstanceState.getParcelable(TRACK);
             mWaypoints = (Waypoint[]) savedInstanceState.getParcelableArray(WAYPOINTS);
+            isShared = savedInstanceState.getBoolean(IS_SHARED);
             // Setting title for actionBar
             if(mTrack != null) {
                 getSupportActionBar().setTitle(mTrack.getName());
@@ -96,7 +103,7 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
         }  else {
             // Checking that intent has extra in it
             if(getIntent().hasExtra(RouteTrackerConstants.INTENT_EXTRA_IS_TRACK_SHARED)) {
-                
+                isShared = getIntent().getBooleanExtra(RouteTrackerConstants.INTENT_EXTRA_IS_TRACK_SHARED, false);
             }
             if(getIntent().hasExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID)) {
                 mTracksLoaderId = TrackDetailsLoader.ID;
@@ -126,14 +133,6 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
             case R.id.action_share:
                 FirebaseInterface.getInstance().shareTrack(mTrack, mWaypoints);
                 return true;
-            case R.id.action_update:
-                // TODO
-                Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_delete:
-                // TODO
-                Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -145,6 +144,7 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
         outState.putLong(TRACK_ID, mTrackId);
         outState.putParcelable(TRACK, mTrack);
         outState.putParcelableArray(WAYPOINTS, mWaypoints);
+        outState.putBoolean(IS_SHARED, isShared);
     }
 
     /**
@@ -201,6 +201,9 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
                     mWaypoints[i] = new Waypoint(id, trackId, latitude, longitude, altitude, timeStamp);
                 }
             }
+        }
+        if(cursor.isClosed()){
+            cursor.close();
         }
 
         // Setting title for action bar

@@ -125,17 +125,18 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
                         // set item as selected to persist highlight
                         menuItem.setChecked(true);
                         // change title in action bar
-//                        if(getSupportActionBar() != null) {
-//                            getSupportActionBar().setTitle(menuItem.getTitle());
-//                        }
                         switch (menuItem.getItemId()) {
                             case R.id.nav_my_tracks: {
-                                // TODO ask to load corresponding data
+                                if(getSupportActionBar() != null) {
+                                    getSupportActionBar().setTitle(menuItem.getTitle());
+                                }
                                 retrieveData();
                                 break;
                             }
                             case R.id.nav_shared_tracks: {
-                                // TODO ask to load corresponding data
+                                if(getSupportActionBar() != null) {
+                                    getSupportActionBar().setTitle(menuItem.getTitle());
+                                }
                                 retrieveSharedData();
                                 break;
                             }
