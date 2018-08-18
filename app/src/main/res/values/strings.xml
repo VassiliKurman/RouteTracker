@@ -28,11 +28,26 @@
     <string name="title_details_activity">Track details</string>
     <string name="description_header_image">Header image for routes</string>
     <string name="title_about_activity">About app</string>
+    <string name="title_credits_activity">Credits</string>
 
     <!-- About activity -->
     <string name="text_about_title">@string/app_name</string>
-    <string name="text_about_content">This is a Capstone project for Udacity's "Android Developer Nanodegree" created by Vassili Kurman 2018</string>
+    <string name="text_about_content">This is a Capstone project for Udacitys "Android Developer Nanodegree"</string>
     <string name="text_about_name">Created by Vassili Kurman 2018</string>
+
+    <!-- Credits activity -->
+    <string name="text_credits_title">Credits</string>
+    <string name="text_image_main">Tama66</string>
+    <string name="text_image_main_text">Image for CollapsingToolbar</string>
+    <string name="text_image_main_link">https://pixabay.com/en/away-bridge-wood-nature-railing-3024773/</string>
+    <string name="text_drawable_1">Nick</string>
+    <string name="text_drawable_1_text">Drawable for placeholder</string>
+    <string name="text_drawable_1_link">https://materialdesignicons.com/</string>
+    <string name="text_drawable_2">Austin Andrews @Templarian</string>
+    <string name="text_drawable_2_text">Drawable for ic_track_shared</string>
+    <string name="text_drawable_2_link">https://materialdesignicons.com/</string>
+    <string name="text_others">.. and others mentioned in relevant files!</string>
+
 
     <!-- Navigation drawer strings -->
     <string name="nav_my_tracks_title">My track</string>

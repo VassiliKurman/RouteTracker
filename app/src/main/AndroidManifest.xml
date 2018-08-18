@@ -77,7 +77,8 @@
                 android:resource="@xml/track_widget_info" />
         </receiver>
 
-        <activity android:name=".ui.AboutActivity"></activity>
+        <activity android:name=".ui.AboutActivity" />
+        <activity android:name=".ui.CreditsActivity"></activity>
     </application>
 
 </manifest>

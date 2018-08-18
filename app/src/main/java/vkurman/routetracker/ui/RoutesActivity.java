@@ -140,7 +140,8 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
                                 break;
                             }
                             case R.id.nav_credits: {
-                                // TODO ask to load corresponding data
+                                Intent intent = new Intent(RoutesActivity.this, CreditsActivity.class);
+                                startActivity(intent);
                                 break;
                             }
                             case R.id.nav_about: {

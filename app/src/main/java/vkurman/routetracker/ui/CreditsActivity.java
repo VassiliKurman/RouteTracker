@@ -23,17 +23,17 @@ import android.view.MenuItem;
 import vkurman.routetracker.R;
 
 /**
- * AboutActivity is an Activity for displaying information about app.
+ * CreditsActivity is an Activity for saying thank you to people who provided resources.
  *
- * Created by Vassili Kurman on 17/08/2018.
+ * Created by Vassili Kurman on 18/08/2018.
  * Version 1.0
  */
-public class AboutActivity extends AppCompatActivity {
+public class CreditsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
+        setContentView(R.layout.activity_credits);
 
         // Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -42,7 +42,7 @@ public class AboutActivity extends AppCompatActivity {
         // Show the Up button and title in the action bar.
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.title_about_activity);
+            getSupportActionBar().setTitle(R.string.title_credits_activity);
         }
     }
 

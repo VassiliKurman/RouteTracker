@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright (C) 2018 The Android Open Source Project
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+      http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.-->
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.CreditsActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/scrollView"/>
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_image_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                android:text="@string/text_image_main"
+                android:textSize="@dimen/credits_text_size_subtitle"
+                app:layout_constraintTop_toTopOf="parent"/>
+            <TextView
+                android:id="@+id/text_image_author_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/credits_text_padding_start"
+                android:paddingEnd="@dimen/default_padding"
+                android:text="@string/text_image_main_text"
+                app:layout_constraintTop_toBottomOf="@id/text_image_author"/>
+            <TextView
+                android:id="@+id/text_image_author_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/credits_text_padding_start"
+                android:paddingEnd="@dimen/default_padding"
+                android:text="@string/text_image_main_link"
+                app:layout_constraintTop_toBottomOf="@id/text_image_author_text"/>
+
+            <TextView
+                android:id="@+id/text_drawable1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                android:textSize="@dimen/credits_text_size_subtitle"
+                android:text="@string/text_drawable_1"
+                app:layout_constraintTop_toBottomOf="@id/text_image_author_link"/>
+            <TextView
+                android:id="@+id/text_drawable1_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/credits_text_padding_start"
+                android:paddingEnd="@dimen/default_padding"
+                android:text="@string/text_drawable_1_text"
+                app:layout_constraintTop_toBottomOf="@id/text_drawable1"/>
+            <TextView
+                android:id="@+id/text_drawable1_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/credits_text_padding_start"
+                android:paddingEnd="@dimen/default_padding"
+                android:text="@string/text_drawable_1_link"
+                app:layout_constraintTop_toBottomOf="@id/text_drawable1_text"/>
+
+            <TextView
+                android:id="@+id/text_drawable2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                android:text="@string/text_drawable_2"
+                android:textSize="@dimen/credits_text_size_subtitle"
+                app:layout_constraintTop_toBottomOf="@id/text_drawable1_link"/>
+            <TextView
+                android:id="@+id/text_drawable2_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/credits_text_padding_start"
+                android:paddingEnd="@dimen/default_padding"
+                android:text="@string/text_drawable_2_text"
+                app:layout_constraintTop_toBottomOf="@id/text_drawable2"/>
+            <TextView
+                android:id="@+id/text_drawable2_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/credits_text_padding_start"
+                android:paddingEnd="@dimen/default_padding"
+                android:text="@string/text_drawable_2_link"
+                app:layout_constraintTop_toBottomOf="@id/text_drawable2_text"/>
+
+            <TextView
+                android:id="@+id/text_others"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/default_padding"
+                android:text="@string/text_others"
+                app:layout_constraintTop_toBottomOf="@id/text_drawable2_link"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>
