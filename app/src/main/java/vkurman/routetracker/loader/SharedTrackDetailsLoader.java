@@ -24,16 +24,18 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import vkurman.routetracker.firebase.FirebaseInterface;
+import vkurman.routetracker.firebase.TrackWrapper;
 import vkurman.routetracker.provider.TrackerContract;
 import vkurman.routetracker.utils.RouteTrackerConstants;
 
 /**
- * TrackDetailsLoader is an AsyncTaskLoader that loads Track details in background thread.
+ * SharedTrackDetailsLoader is an AsyncTaskLoader that loads Track details in background thread.
  *
- * Created by Vassili Kurman on 10/08/2018.
+ * Created by Vassili Kurman on 22/08/2018.
  * Version 1.0
  */
-public class TrackDetailsLoader extends AsyncTaskLoader<List<Cursor>> {
+public class SharedTrackDetailsLoader extends AsyncTaskLoader<TrackWrapper> {
     /**
      * TAG for logging
      */
@@ -41,41 +43,32 @@ public class TrackDetailsLoader extends AsyncTaskLoader<List<Cursor>> {
     /**
      * TracksLoader unique id
      */
-    public static final int ID = RouteTrackerConstants.LOADER_TRACKS_ID;
+    public static final int ID = RouteTrackerConstants.LOADER_SHARED_TRACKS_ID;
     private long mTrackId;
 
     /**
-     * Constructor for TrackDetailsLoader.
+     * Constructor for SharedTrackDetailsLoader.
      *
      * @param context
      * @param trackId
      */
-    public TrackDetailsLoader(@NonNull Context context, long trackId) {
+    public SharedTrackDetailsLoader(@NonNull Context context, long trackId) {
         super(context);
         mTrackId = trackId;
     }
 
     @Override
-    public List<Cursor> loadInBackground() {
-        List<Cursor> data = new ArrayList<>(2);
-        Log.d(TAG, "Adding track...");
+    public TrackWrapper loadInBackground() {
+        TrackWrapper data = new TrackWrapper();
+        Log.d(TAG, "Adding shared track...");
         // Retrieving track data
-        data.add(RouteTrackerConstants.LOADER_TRACK_INDEX, getContext().getContentResolver().query(
-                TrackerContract.TracksEntry.CONTENT_URI_TRACKS,
-                null,
-                TrackerContract.TracksEntry.COLUMN_TRACKS_ID + "=?",
-                new String[]{Long.toString(mTrackId)},
-                null));
+        // TODO
 
-        Log.d(TAG, "Adding waypoints...");
+        Log.d(TAG, "Adding shared waypoints...");
         // retrieving waypoints for track
-        data.add(RouteTrackerConstants.LOADER_WAYPOINTS_INDEX, getContext().getContentResolver().query(TrackerContract.WaypointsEntry.CONTENT_URI_WAYPOINTS,
-                null,
-                TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_TRACK_ID + "=?",
-                new String[]{Long.toString(mTrackId)},
-                TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_TIMESTAMP));
+        // TODO
 
-        Log.d(TAG, "Data loaded!");
+        Log.d(TAG, "... shared data loaded!");
         return data;
     }
 }

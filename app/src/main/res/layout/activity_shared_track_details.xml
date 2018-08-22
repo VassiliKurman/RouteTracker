@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Copyright (C) 2018 The Android Open Source Project
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+  	http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.-->
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.SharedTrackDetailsActivity">
+
+    <!-- Toolbar -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <!-- Container for track fragment -->
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/container_track_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:context=".ui.SharedTrackDetailsActivity">
+
+        <!-- Labels -->
+        <TextView
+            android:id="@+id/label_track_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/container_track_details"
+            app:layout_constraintTop_toTopOf="@id/container_track_details"
+            android:paddingStart="@dimen/default_padding"
+            android:paddingEnd="@dimen/default_padding"
+            android:textSize="@dimen/default_text_size"
+            android:textStyle="bold"
+            android:text="@string/label_track_id"/>
+        <TextView
+            android:id="@+id/label_track_owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/container_track_details"
+            app:layout_constraintTop_toBottomOf="@id/label_track_id"
+            android:paddingStart="@dimen/default_padding"
+            android:paddingEnd="@dimen/default_padding"
+            android:textSize="@dimen/default_text_size"
+            android:textStyle="bold"
+            android:text="@string/label_track_owner"/>
+        <TextView
+            android:id="@+id/label_track_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/container_track_details"
+            app:layout_constraintTop_toBottomOf="@id/label_track_owner"
+            android:paddingStart="@dimen/default_padding"
+            android:paddingEnd="@dimen/default_padding"
+            android:textSize="@dimen/default_text_size"
+            android:textStyle="bold"
+            android:text="@string/label_date"/>
+
+        <!-- Data -->
+        <TextView
+            android:id="@+id/text_track_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/label_track_id"
+            app:layout_constraintTop_toTopOf="@id/container_track_details"
+            android:paddingStart="@dimen/default_padding"
+            android:paddingEnd="@dimen/default_padding"
+            android:textSize="@dimen/default_text_size"
+            android:text="@string/text_unknown"/>
+        <TextView
+            android:id="@+id/text_track_owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/label_track_owner"
+            app:layout_constraintTop_toBottomOf="@id/text_track_id"
+            android:paddingStart="@dimen/default_padding"
+            android:paddingEnd="@dimen/default_padding"
+            android:textSize="@dimen/default_text_size"
+            android:text="@string/text_unknown"/>
+        <TextView
+            android:id="@+id/text_track_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/label_track_timestamp"
+            app:layout_constraintTop_toBottomOf="@id/text_track_owner"
+            android:paddingStart="@dimen/default_padding"
+            android:paddingEnd="@dimen/default_padding"
+            android:textSize="@dimen/default_text_size"
+            android:text="@string/text_unknown"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <!-- Container for map fragment -->
+    <fragment
+        android:id="@+id/map_container"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="1"
+        tools:context="vkurman.routetracker.ui.TrackDetailsFragment"
+        app:layout_constraintTop_toBottomOf="@id/container_track_details"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

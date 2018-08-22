@@ -34,6 +34,7 @@ public class RouteTrackerConstants {
 
     // Request codes
     public static final int ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT = 801;
+    public static final int ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT_SHARED_TRACK = 802;
 
     // Result codes
     public static final int TRACK_DETAILS_ACTIVITY_RESULT_CODE_UNCHANGED = 901;

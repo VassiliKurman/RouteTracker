@@ -90,7 +90,11 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle(R.string.title_details_activity);
         }
+        // Initial track id
         mTrackId = INITIAL_TRACK_ID;
+        // Track loader id
+        mTracksLoaderId = TrackDetailsLoader.ID;
+
         if(savedInstanceState != null) {
             mTrackId = savedInstanceState.getLong(TRACK_ID);
             mTrack = savedInstanceState.getParcelable(TRACK);
@@ -106,7 +110,6 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
                 isShared = getIntent().getBooleanExtra(RouteTrackerConstants.INTENT_EXTRA_IS_TRACK_SHARED, false);
             }
             if(getIntent().hasExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID)) {
-                mTracksLoaderId = TrackDetailsLoader.ID;
                 // Retrieving track id
                 mTrackId = getIntent().getLongExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID, INITIAL_TRACK_ID);
                 if(mTrackId != INITIAL_TRACK_ID) {
@@ -120,12 +123,20 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.track_menu, menu);
-        return true;
+        if(!isShared) {
+            getMenuInflater().inflate(R.menu.track_menu, menu);
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // if track is shared return default value
+        if(isShared) {
+            return super.onOptionsItemSelected(item);
+        }
+        // if track is not shared one, return relevant value
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();

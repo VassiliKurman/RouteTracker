@@ -209,14 +209,16 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
     public void onItemSelected(long trackId) {
         Intent intent = new Intent(this, TrackDetailsActivity.class);
         intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID, trackId);
-        intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_IS_TRACK_SHARED, mCurrentMenuItem == R.id.nav_shared_tracks);
+        intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_IS_TRACK_SHARED, false);
         startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT);
     }
 
     @Override
     public void onSharedItemSelected(long trackId) {
-        // TODO read data from Firebase
-        Toast.makeText(this, "Selected track id: " + trackId, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, SharedTrackDetailsActivity.class);
+        intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID, trackId);
+        intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_IS_TRACK_SHARED, true);
+        startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT_SHARED_TRACK);
     }
 
     @Override

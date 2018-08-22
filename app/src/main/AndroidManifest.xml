@@ -78,7 +78,8 @@
         </receiver>
 
         <activity android:name=".ui.AboutActivity" />
-        <activity android:name=".ui.CreditsActivity"></activity>
+        <activity android:name=".ui.CreditsActivity" />
+        <activity android:name=".ui.SharedTrackDetailsActivity"></activity>
     </application>
 
 </manifest>
