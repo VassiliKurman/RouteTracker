@@ -216,6 +216,7 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
     @Override
     public void onSharedItemSelected(long trackId) {
         // TODO read data from Firebase
+        Toast.makeText(this, "Selected track id: " + trackId, Toast.LENGTH_SHORT).show();
     }
 
     @Override

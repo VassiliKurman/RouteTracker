@@ -147,7 +147,7 @@ public class SharedTracksAdapter extends RecyclerView.Adapter<SharedTracksAdapte
     @Override
     public void onBindViewHolder(@NonNull SharedTracksViewHolder holder, int position) {
         if (position >= 0 && position < mTracks.size()) {
-            for (Track track : mTracks) {
+            Track track = mTracks.get(position);
                 String name = track.getName();
                 String owner = TextUtils.isEmpty(track.getOwnerName()) ? track.getOwner() : track.getOwnerName();
                 String image = track.getImage();
@@ -165,7 +165,7 @@ public class SharedTracksAdapter extends RecyclerView.Adapter<SharedTracksAdapte
                         .placeholder(R.drawable.placeholder)
                         .error(R.drawable.error)
                         .into(holder.mTrackImage);
-            }
+
         }
     }
 
@@ -196,7 +196,7 @@ public class SharedTracksAdapter extends RecyclerView.Adapter<SharedTracksAdapte
         }
 
         if(mTracks.add(track)) {
-            notifyDataSetChanged();
+            notifyItemInserted(mTracks.size() - 1);
         }
     }
 }
