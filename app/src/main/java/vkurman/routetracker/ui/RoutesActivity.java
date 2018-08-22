@@ -35,7 +35,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -77,89 +76,68 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
-        // Setup toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null) {
-            ActionBar actionbar = getSupportActionBar();
-            actionbar.setDisplayHomeAsUpEnabled(true);
-            actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
-        }
 
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mDrawerLayout.addDrawerListener(
-                new DrawerLayout.DrawerListener() {
-                    @Override
-                    public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
-                        // TODO
-                    }
+            // Setup toolbar
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                ActionBar actionbar = getSupportActionBar();
+                actionbar.setDisplayHomeAsUpEnabled(true);
+                actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+            }
 
-                    @Override
-                    public void onDrawerOpened(@NonNull View drawerView) {
-                        // TODO
-                    }
+            mDrawerLayout = findViewById(R.id.drawer_layout);
 
-                    @Override
-                    public void onDrawerClosed(@NonNull View drawerView) {
-                        // TODO
-                    }
+            NavigationView navigationView = findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(
+                    new NavigationView.OnNavigationItemSelectedListener() {
+                        @Override
+                        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                            // Detaching listener if menu item is different than shared tracks
+                            if (mCurrentMenuItem == R.id.nav_shared_tracks && mCurrentMenuItem != menuItem.getItemId()) {
+                                FirebaseInterface.getInstance().detachListener();
+                            }
 
-                    @Override
-                    public void onDrawerStateChanged(int newState) {
-                        // TODO
-                    }
-                }
-        );
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        // Detaching listener if menu item is different than shared tracks
-                        if(mCurrentMenuItem == R.id.nav_shared_tracks && mCurrentMenuItem != menuItem.getItemId()) {
-                            FirebaseInterface.getInstance().detachListener();
-                        }
-
-                        mCurrentMenuItem = menuItem.getItemId();
-                        // set item as selected to persist highlight
-                        menuItem.setChecked(true);
-                        // change title in action bar
-                        switch (menuItem.getItemId()) {
-                            case R.id.nav_my_tracks: {
-                                if(getSupportActionBar() != null) {
-                                    getSupportActionBar().setTitle(menuItem.getTitle());
+                            mCurrentMenuItem = menuItem.getItemId();
+                            // set item as selected to persist highlight
+                            menuItem.setChecked(true);
+                            // change title in action bar
+                            switch (menuItem.getItemId()) {
+                                case R.id.nav_my_tracks: {
+                                    if (getSupportActionBar() != null) {
+                                        getSupportActionBar().setTitle(menuItem.getTitle());
+                                    }
+                                    retrieveData();
+                                    break;
                                 }
-                                retrieveData();
-                                break;
-                            }
-                            case R.id.nav_shared_tracks: {
-                                if(getSupportActionBar() != null) {
-                                    getSupportActionBar().setTitle(menuItem.getTitle());
+                                case R.id.nav_shared_tracks: {
+                                    if (getSupportActionBar() != null) {
+                                        getSupportActionBar().setTitle(menuItem.getTitle());
+                                    }
+                                    retrieveSharedData();
+                                    break;
                                 }
-                                retrieveSharedData();
-                                break;
+                                case R.id.nav_credits: {
+                                    Intent intent = new Intent(RoutesActivity.this, CreditsActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                }
+                                case R.id.nav_about: {
+                                    Intent intent = new Intent(RoutesActivity.this, AboutActivity.class);
+                                    startActivity(intent);
+                                    break;
+                                }
                             }
-                            case R.id.nav_credits: {
-                                Intent intent = new Intent(RoutesActivity.this, CreditsActivity.class);
-                                startActivity(intent);
-                                break;
-                            }
-                            case R.id.nav_about: {
-                                Intent intent = new Intent(RoutesActivity.this, AboutActivity.class);
-                                startActivity(intent);
-                                break;
-                            }
+                            mDrawerLayout.closeDrawer(GravityCompat.START);
+                            return true;
                         }
-                        mDrawerLayout.closeDrawer(GravityCompat.START);
-                        return true;
-                    }
-                });
+                    });
 
-        defaultSetup();
-
-        mTracksLoaderId = TracksLoader.ID;
-        retrieveData();
+            defaultSetup();
+            mTracksLoaderId = TracksLoader.ID;
+            if(savedInstanceState == null) {
+                retrieveData();
+            }
     }
 
     @Override

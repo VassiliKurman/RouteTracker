@@ -45,7 +45,8 @@ public class RouteTrackerConstants {
 
     // Loader codes
     public static final int LOADER_TRACKS_ID = 1001;
-    public static final int LOADER_SHARED_TRACKS_ID = 1002;
+    public static final int LOADER_TRACKS_DETAILS_ID = 1002;
+    public static final int LOADER_SHARED_TRACKS_ID = 1003;
     public static final int LOADER_TRACK_INDEX = 0;
     public static final int LOADER_WAYPOINTS_INDEX = 1;
 

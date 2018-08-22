@@ -41,7 +41,7 @@ public class TrackDetailsLoader extends AsyncTaskLoader<List<Cursor>> {
     /**
      * TracksLoader unique id
      */
-    public static final int ID = RouteTrackerConstants.LOADER_TRACKS_ID;
+    public static final int ID = RouteTrackerConstants.LOADER_TRACKS_DETAILS_ID;
     private long mTrackId;
 
     /**

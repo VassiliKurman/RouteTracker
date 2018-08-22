@@ -129,11 +129,11 @@
         android:id="@+id/map_container"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintVertical_weight="1"
-        tools:context="vkurman.routetracker.ui.TrackDetailsFragment"
+        android:layout_height="400dp"
+        tools:context="vkurman.routetracker.ui.SharedTrackDetailsActivity"
         app:layout_constraintTop_toBottomOf="@id/container_track_details"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>
