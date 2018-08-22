@@ -13,10 +13,12 @@
 
     <string name="label_track_id">Id</string>
     <string name="label_track_name">Track</string>
+    <string name="label_waypoints">Waypoints</string>
     <string name="label_date">Date</string>
     <string name="label_track_owner">Owner</string>
     <string name="text_unknown">Unknown</string>
     <string name="text_unspecified">Unspecified</string>
+    <string name="text_waypoints">0</string>
 
     <string name="track_name_tooltip_text">Track name</string>
 

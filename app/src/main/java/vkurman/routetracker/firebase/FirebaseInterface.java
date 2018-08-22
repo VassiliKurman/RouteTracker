@@ -118,4 +118,12 @@ public class FirebaseInterface {
         mDatabaseReferenceTracks.removeEventListener(mChildEventListener);
         mListener = null;
     }
+
+    public DatabaseReference getTrackDatabaseReference(String trackId) {
+        return mDatabaseReferenceTracks.child(trackId);
+    }
+
+    public DatabaseReference getWaypointsDatabaseReference(String trackId) {
+        return mDatabaseReferenceWaypoints.child(trackId);
+    }
 }

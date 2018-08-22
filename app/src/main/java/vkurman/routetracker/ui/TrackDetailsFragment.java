@@ -35,7 +35,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.Locale;
 
@@ -76,6 +75,8 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
     TextView mTextTrackId;
     @BindView(R.id.text_track_owner)
     TextView mTextTrackOwner;
+    @BindView(R.id.text_track_waypoints)
+    TextView mTextTrackWaypoints;
     @BindView(R.id.text_track_timestamp)
     TextView mTextTrackTimestamp;
 
@@ -133,6 +134,7 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
         if(mTrack != null) {
             mTextTrackId.setText(String.format(Locale.getDefault(), "%d", mTrack.getId()));
             mTextTrackOwner.setText(TextUtils.isEmpty(mTrack.getOwnerName()) ? mTrack.getOwner() : mTrack.getOwnerName());
+            mTextTrackWaypoints.setText(String.valueOf(mWaypoints.length));
             mTextTrackTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(mTrack.getId()));
         }
         // TODO

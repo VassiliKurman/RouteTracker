@@ -42,11 +42,22 @@
         android:textStyle="bold"
         android:text="@string/label_track_owner"/>
     <TextView
-        android:id="@+id/label_track_timestamp"
+        android:id="@+id/label_track_waypoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/label_track_owner"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
+        android:textStyle="bold"
+        android:text="@string/label_waypoints"/>
+    <TextView
+        android:id="@+id/label_track_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/label_track_waypoints"
         android:paddingStart="@dimen/default_padding"
         android:paddingEnd="@dimen/default_padding"
         android:textSize="@dimen/default_text_size"
@@ -75,11 +86,22 @@
         android:textSize="@dimen/default_text_size"
         android:text="@string/text_unknown"/>
     <TextView
+        android:id="@+id/text_track_waypoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/label_track_waypoints"
+        app:layout_constraintTop_toBottomOf="@id/text_track_owner"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textSize="@dimen/default_text_size"
+        android:text="@string/text_waypoints"/>
+
+    <TextView
         android:id="@+id/text_track_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/label_track_timestamp"
-        app:layout_constraintTop_toBottomOf="@id/text_track_owner"
+        app:layout_constraintTop_toBottomOf="@id/text_track_waypoints"
         android:paddingStart="@dimen/default_padding"
         android:paddingEnd="@dimen/default_padding"
         android:textSize="@dimen/default_text_size"
