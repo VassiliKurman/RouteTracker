@@ -311,8 +311,9 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
             mCurrentTrackId  = Calendar.getInstance().getTimeInMillis();
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
             String userId = prefs.getString(getString(R.string.pref_key_default_user_id), getString(R.string.pref_value_default_user_id));
+            String userName = prefs.getString(getString(R.string.pref_key_default_user_name), getString(R.string.pref_value_default_user_name));
             // creating track
-            Track track = new Track(mCurrentTrackId, trackName, userId, null);
+            Track track = new Track(mCurrentTrackId, trackName, userId, userName, null);
             // request to start tracking
             RouteManager.getInstance().startTracking(getActivity(), track);
         }

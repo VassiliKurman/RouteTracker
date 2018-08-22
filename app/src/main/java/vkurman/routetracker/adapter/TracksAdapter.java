@@ -22,6 +22,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,16 +144,17 @@ public class TracksAdapter extends RecyclerView.Adapter<TracksAdapter.TracksView
         if(position >= 0 && position < mTracks.getCount()) {
             if(mTracks.moveToPosition(position)) {
                 String name = mTracks.getString(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_NAME));
-                String owner = mTracks.getString(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER));
+                String ownerId = mTracks.getString(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER));
+                String ownerName = mTracks.getString(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER_NAME));
                 String image = mTracks.getString(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_IMAGE));
                 long timestamp = mTracks.getLong(mTracks.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_ID));
 
-                if(!owner.equals(mUserId)) {
+                if(!ownerId.equals(mUserId)) {
                     holder.container.setBackgroundColor(mContext.getResources().getColor(R.color.colorCardViewBackgroundShared, null));
                 }
 
                 holder.mTrackName.setText(name);
-                holder.mTrackOwner.setText(owner);
+                holder.mTrackOwner.setText((TextUtils.isEmpty(ownerName)) ? ownerId : ownerName);
                 holder.mTrackTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(timestamp));
                 Picasso.get()
                         .load(image == null ? null : image.isEmpty() ? null : image)

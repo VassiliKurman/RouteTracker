@@ -27,6 +27,11 @@ public class RouteTrackerConstants {
 
     public static final String INTENT_EXTRA_FOR_RESULT_CODE = "track_result_code";
 
+    // Widget pending intent actions
+    public static final String WIDGET_PENDING_INTENT_ACTION_START = "start";
+    public static final String WIDGET_PENDING_INTENT_ACTION_STOP = "stop";
+    public static final String WIDGET_PENDING_INTENT_ACTION_SHARE = "share";
+
     // Request codes
     public static final int ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT = 801;
 

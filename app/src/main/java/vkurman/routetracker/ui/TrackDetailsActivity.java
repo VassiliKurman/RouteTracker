@@ -181,9 +181,10 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
             cursor.moveToNext();
             long id = cursor.getLong(cursor.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_ID));
             String name = cursor.getString(cursor.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_NAME));
-            String owner = cursor.getString(cursor.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER));
+            String ownerId = cursor.getString(cursor.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER));
+            String ownerName = cursor.getString(cursor.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER_NAME));
             String image = cursor.getString(cursor.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_IMAGE));
-            mTrack = new Track(id, name, owner, image);
+            mTrack = new Track(id, name, ownerId, ownerName, image);
         }
         // Getting waypoints data from cursor
         if(data.size() > RouteTrackerConstants.LOADER_WAYPOINTS_INDEX) {

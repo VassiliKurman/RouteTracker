@@ -40,7 +40,7 @@ public class TrackerDbHelper extends SQLiteOpenHelper {
     /**
      * If the database schema changes, than the database version needs to be incremented
      */
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Constructor
     TrackerDbHelper(Context context) {
@@ -59,6 +59,7 @@ public class TrackerDbHelper extends SQLiteOpenHelper {
                 TracksEntry.COLUMN_TRACKS_ID + " INTEGER NOT NULL PRIMARY KEY," +
                 TracksEntry.COLUMN_TRACKS_NAME + " TEXT NOT NULL, " +
                 TracksEntry.COLUMN_TRACKS_OWNER + " TEXT NOT NULL, " +
+                TracksEntry.COLUMN_TRACKS_OWNER_NAME + " TEXT NOT NULL, " +
                 TracksEntry.COLUMN_TRACKS_IMAGE + " TEXT)";
 
         // Create a table to hold the waypoint data

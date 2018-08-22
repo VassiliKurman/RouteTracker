@@ -243,12 +243,10 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
     public void onRefresh() {
         switch (mCurrentMenuItem) {
             case R.id.nav_my_tracks: {
-                // TODO ask to load corresponding data
                 retrieveData();
                 break;
             }
             case R.id.nav_shared_tracks: {
-                // TODO ask to load corresponding data
                 retrieveSharedData();
                 break;
             }

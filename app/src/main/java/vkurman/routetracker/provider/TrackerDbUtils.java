@@ -62,6 +62,7 @@ public class TrackerDbUtils {
         trackContentValues.put(TrackerContract.TracksEntry.COLUMN_TRACKS_ID, track.getId());
         trackContentValues.put(TrackerContract.TracksEntry.COLUMN_TRACKS_NAME, track.getName());
         trackContentValues.put(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER, track.getOwner());
+        trackContentValues.put(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER_NAME, track.getOwnerName());
         trackContentValues.put(TrackerContract.TracksEntry.COLUMN_TRACKS_IMAGE, track.getImage());
         // Insert the content values via a ContentResolver
         return context.getContentResolver().insert(TrackerContract.TracksEntry.CONTENT_URI_TRACKS, trackContentValues);
@@ -162,6 +163,7 @@ public class TrackerDbUtils {
         // Put data into the ContentValues
         trackContentValues.put(TrackerContract.TracksEntry.COLUMN_TRACKS_NAME, track.getName());
         trackContentValues.put(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER, track.getOwner());
+        trackContentValues.put(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER_NAME, track.getOwnerName());
         trackContentValues.put(TrackerContract.TracksEntry.COLUMN_TRACKS_IMAGE, track.getImage());
 
         String selection = TrackerContract.TracksEntry.COLUMN_TRACKS_ID + "=?";

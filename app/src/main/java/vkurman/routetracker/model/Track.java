@@ -33,6 +33,7 @@ public class Track implements Parcelable {
     private long id;
     private String name;
     private String owner;
+    private String ownerName;
     private String image;
 
     /**
@@ -55,6 +56,7 @@ public class Track implements Parcelable {
         id = in.readLong();
         name = in.readString();
         owner = in.readString();
+        ownerName = in.readString();
         image = in.readString();
     }
 
@@ -66,10 +68,11 @@ public class Track implements Parcelable {
      * Public constructor to create object that has been retrieved from persistent
      * location, like database.
      */
-    public Track(long id, String name, String owner, String image) {
+    public Track(long id, String name, String owner, String ownerName, String image) {
         this.id = id;
         this.name = name;
         this.owner = owner;
+        this.ownerName = ownerName;
         this.image = image;
     }
 
@@ -86,6 +89,7 @@ public class Track implements Parcelable {
         dest.writeLong(id);
         dest.writeString(name);
         dest.writeString(owner);
+        dest.writeString(ownerName);
         dest.writeString(image);
     }
 
@@ -111,6 +115,14 @@ public class Track implements Parcelable {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 
     public String getImage() {

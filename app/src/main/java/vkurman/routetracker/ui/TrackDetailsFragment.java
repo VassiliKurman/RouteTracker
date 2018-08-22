@@ -132,7 +132,7 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
     private void displayData() {
         if(mTrack != null) {
             mTextTrackId.setText(String.format(Locale.getDefault(), "%d", mTrack.getId()));
-            mTextTrackOwner.setText(mTrack.getOwner());
+            mTextTrackOwner.setText(TextUtils.isEmpty(mTrack.getOwnerName()) ? mTrack.getOwner() : mTrack.getOwnerName());
             mTextTrackTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(mTrack.getId()));
         }
         // TODO

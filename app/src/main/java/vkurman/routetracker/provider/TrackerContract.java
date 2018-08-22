@@ -79,6 +79,7 @@ public class TrackerContract {
         public static final String COLUMN_TRACKS_ID = "id";
         public static final String COLUMN_TRACKS_NAME = "name";
         public static final String COLUMN_TRACKS_OWNER = "owner";
+        public static final String COLUMN_TRACKS_OWNER_NAME = "ownerName";
         public static final String COLUMN_TRACKS_IMAGE = "image";
     }
 
