@@ -138,7 +138,9 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
                 // Putting Marker to map
                 LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(currentLatLng));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+                mMap.setMaxZoomPreference(17.0f);
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(currentLatLng), 10, null);
+
 
                 mTextTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(location.getTime()));
                 mTextLatitude.setText(String.format(Locale.getDefault(), "%f", location.getLatitude()));

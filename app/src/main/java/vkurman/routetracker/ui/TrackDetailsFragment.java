@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,9 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -52,6 +55,7 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
 
     private static final String TRACK = "track";
     private static final String WAYPOINTS = "waypoints";
+    private static final String TAG = TrackDetailsFragment.class.getSimpleName();
 
     /**
      * Reference to Track
@@ -111,14 +115,29 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        Log.d(TAG, "***************** Fragment resumed ***************");
+
+        // Map fragment
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map_container);
+        mapFragment.getMapAsync(this);
+
+        super.onResume();
+    }
+
     /**
      * Setting track.
      *
      * @param track - provided track
      */
     public void setTrackData(Track track, Waypoint[] waypoints) {
+        Log.d(TAG, "***************** Received track data in setTrackData() ***************");
         mTrack = track;
         mWaypoints = waypoints;
+
+        areWaypointsReady = true;
         // Displaying data
         displayData();
         if (isMapReady) {
@@ -139,6 +158,7 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
      * Filling up and displaying data in the views.
      */
     private void displayData() {
+        Log.d(TAG, "***************** Displaying data! ***************");
         if (mTrack != null) {
             mTextTrackId.setText(String.format(Locale.getDefault(), "%d", mTrack.getId()));
             mTextTrackOwner.setText(TextUtils.isEmpty(mTrack.getOwnerName()) ? mTrack.getOwner() : mTrack.getOwnerName());
@@ -150,19 +170,17 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap map) {
+        Log.d(TAG, "***************** Map is ready! ***************");
         mMap = map;
         mMap.setMyLocationEnabled(true);
         mMap.setOnMyLocationButtonClickListener(this);
         mMap.setOnMyLocationClickListener(this);
-        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                isMapReady = true;
-                if (areWaypointsReady) {
-                    displayWaypointsOnMap();
-                }
-            }
-        });
+
+        isMapReady = true;
+        if (areWaypointsReady) {
+            displayWaypointsOnMap();
+        }
+
     }
 
     @Override
@@ -178,22 +196,31 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
      * Displaying waypoints on the map. it should be called when bot map is ready and wypoints are loaded.
      */
     private void displayWaypointsOnMap() {
+        Log.d(TAG, "***************** Displaying waypoints! ***************");
         // Displaying points on the map
         if (mWaypoints != null && mWaypoints.length > 0 && mMap != null) {
+            // Creating bounds fo map
+            LatLngBounds.Builder builder = LatLngBounds.builder();
+
             LatLng firstLatLng = new LatLng(mWaypoints[0].getLatitude(), mWaypoints[0].getLongitude());
             mMap.addMarker(new MarkerOptions().position(firstLatLng));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(firstLatLng));
-            mMap.moveCamera(CameraUpdateFactory.zoomIn());
-            if(mWaypoints.length > 1) {
+            if (mWaypoints.length > 1) {
                 LatLng lastLatLng = new LatLng(mWaypoints[mWaypoints.length - 1].getLatitude(), mWaypoints[mWaypoints.length - 1].getLongitude());
                 mMap.addMarker(new MarkerOptions().position(lastLatLng));
                 PolylineOptions rectOptions = new PolylineOptions();
                 for (Waypoint point : mWaypoints) {
-                    rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
+                    LatLng ll = new LatLng(point.getLatitude(), point.getLongitude());
+                    builder.include(ll);
+                    rectOptions.add(ll);
                 }
                 // Get back the mutable Polyline
                 mMap.addPolyline(rectOptions);
+            } else {
+                // If only one point exists
+                builder.include(firstLatLng);
             }
+            LatLngBounds bounds = builder.build();
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100, 100, 0));
         }
     }
 }
