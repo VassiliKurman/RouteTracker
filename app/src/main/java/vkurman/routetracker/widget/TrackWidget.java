@@ -59,7 +59,7 @@ public class TrackWidget extends AppWidgetProvider {
     /**
      * Current track id
      */
-    private long mCurrentTrackId;
+    private static long mCurrentTrackId;
 
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                        int appWidgetId) {
@@ -183,8 +183,11 @@ public class TrackWidget extends AppWidgetProvider {
      * @param context - Context
      */
     protected void startLocationTracking(Context context) {
+        Log.d(TAG, "Entered startLocationTracking()...");
         if (!RouteManager.getInstance().isTracking(context)) {
             mCurrentTrackId  = Calendar.getInstance().getTimeInMillis();
+            Log.d(TAG, "Starting tracking. Track id is: " + mCurrentTrackId);
+
             String trackName = "W" + mCurrentTrackId;
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             String userId = prefs.getString(context.getString(R.string.pref_key_default_user_id), context.getString(R.string.pref_value_default_user_id));
@@ -194,6 +197,7 @@ public class TrackWidget extends AppWidgetProvider {
             // request to start tracking
             RouteManager.getInstance().startTracking(context, track);
         }
+        Log.d(TAG, "... exiting startLocationTracking()");
     }
 
     /**
@@ -205,6 +209,7 @@ public class TrackWidget extends AppWidgetProvider {
         if (RouteManager.getInstance().isTracking(context)) {
             RouteManager.getInstance().stopTracking(context);
         }
+        mCurrentTrackId = -1;
     }
 
     /**
@@ -216,6 +221,7 @@ public class TrackWidget extends AppWidgetProvider {
     private void saveLocation(Context context, Location location) {
         // Adding Track to Database
         Log.d(TAG, "saveLocation() is started...");
+        Log.d(TAG, "Track id is: " + mCurrentTrackId);
         TrackerDbUtils.addWaypoint(
                 context, new Waypoint(
                         location.getTime(),
