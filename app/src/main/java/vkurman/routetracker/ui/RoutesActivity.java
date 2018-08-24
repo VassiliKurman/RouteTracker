@@ -15,7 +15,6 @@
  */
 package vkurman.routetracker.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -188,7 +187,7 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
         Intent intent = new Intent(this, TrackDetailsActivity.class);
         intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID, trackId);
         intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_IS_TRACK_SHARED, false);
-        startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT);
+        startActivity(intent);
     }
 
     @Override
@@ -197,27 +196,6 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
         intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID, trackId);
         intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_IS_TRACK_SHARED, true);
         startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT_SHARED_TRACK);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT) {
-            if(resultCode == Activity.RESULT_OK) {
-                long fragment_response_code = data.getLongExtra(
-                        RouteTrackerConstants.INTENT_EXTRA_FOR_RESULT_CODE,
-                        RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_UNCHANGED);
-                if(fragment_response_code == RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_CREATED) {
-                    Log.d(TAG, "Track created");
-                    retrieveData();
-                } else if(fragment_response_code == RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_UPDATED) {
-                    Log.d(TAG, "Track updated");
-                    retrieveData();
-                } else if(fragment_response_code == RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_DELETED) {
-                    Log.d(TAG, "Track deleted");
-                    retrieveData();
-                }
-            }
-        }
     }
 
     @Override
