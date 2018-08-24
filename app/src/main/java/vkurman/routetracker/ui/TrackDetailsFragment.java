@@ -16,13 +16,10 @@
 
 package vkurman.routetracker.ui;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -35,6 +32,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.Locale;
 
@@ -68,6 +66,9 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
      */
     private GoogleMap mMap;
 
+    private boolean isMapReady;
+    private boolean areWaypointsReady;
+
     /**
      * Binding Views
      */
@@ -91,13 +92,19 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
         final View rootView = inflater.inflate(R.layout.fragment_track_details, container, false);
         // Binding views
         ButterKnife.bind(this, rootView);
+        isMapReady = false;
+        areWaypointsReady = false;
 
         // Load the saved state (the Parcelable step) if there is one
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mTrack = savedInstanceState.getParcelable(TRACK);
             mWaypoints = (Waypoint[]) savedInstanceState.getParcelableArray(WAYPOINTS);
-            if(mTrack != null) {
+            areWaypointsReady = true;
+            if (mTrack != null) {
                 displayData();
+                if (isMapReady) {
+                    displayWaypointsOnMap();
+                }
             }
         }
 
@@ -114,6 +121,9 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
         mWaypoints = waypoints;
         // Displaying data
         displayData();
+        if (isMapReady) {
+            displayWaypointsOnMap();
+        }
     }
 
     /**
@@ -125,74 +135,65 @@ public class TrackDetailsFragment extends Fragment implements GoogleMap.OnMyLoca
         currentState.putParcelableArray(WAYPOINTS, mWaypoints);
     }
 
-
-
     /**
      * Filling up and displaying data in the views.
      */
     private void displayData() {
-        if(mTrack != null) {
+        if (mTrack != null) {
             mTextTrackId.setText(String.format(Locale.getDefault(), "%d", mTrack.getId()));
             mTextTrackOwner.setText(TextUtils.isEmpty(mTrack.getOwnerName()) ? mTrack.getOwner() : mTrack.getOwnerName());
             mTextTrackWaypoints.setText(mWaypoints == null ? "null" : String.valueOf(mWaypoints.length));
             mTextTrackTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(mTrack.getId()));
         }
-        // TODO
-        if(mWaypoints != null && mWaypoints.length > 0 && mMap != null) {
-            LatLng firstLatLng = new LatLng(mWaypoints[0].getLatitude(), mWaypoints[0].getLongitude());
-            LatLng lastLatLng = new LatLng(mWaypoints[mWaypoints.length - 1].getLatitude(), mWaypoints[mWaypoints.length - 1].getLongitude());
-            mMap.addMarker(new MarkerOptions().position(firstLatLng));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLatLng));
-//            PolylineOptions rectOptions = new PolylineOptions();
-//            for(Waypoint point : mWaypoints) {
-//                rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
-//            }
-//            // Get back the mutable Polyline
-//            mMap.addPolyline(rectOptions);
-        }
-    }
-
-    /**
-     * Checking is all necessary permissions are granted
-     *
-     * @return boolean
-     */
-    private boolean permissionsGranted() {
-        return getContext() != null
-                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
-        // Check for location permission.
-        if(permissionsGranted()) {
-            mMap.setMyLocationEnabled(true);
-            mMap.setOnMyLocationButtonClickListener(this);
-            mMap.setOnMyLocationClickListener(this);
-
-            // TODO
-            if(mWaypoints != null && mWaypoints.length > 0) {
-                LatLng firstLatLng = new LatLng(mWaypoints[0].getLatitude(), mWaypoints[0].getLongitude());
-                LatLng lastLatLng = new LatLng(mWaypoints[mWaypoints.length - 1].getLatitude(), mWaypoints[mWaypoints.length - 1].getLongitude());
-                mMap.addMarker(new MarkerOptions().position(firstLatLng));
-                mMap.addMarker(new MarkerOptions().position(lastLatLng));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(lastLatLng));
-//                PolylineOptions rectOptions = new PolylineOptions();
-//                for(Waypoint point : mWaypoints) {
-//                    rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
-//                }
-//                // Get back the mutable Polyline
-//                mMap.addPolyline(rectOptions);
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMyLocationButtonClickListener(this);
+        mMap.setOnMyLocationClickListener(this);
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                isMapReady = true;
+                if (areWaypointsReady) {
+                    displayWaypointsOnMap();
+                }
             }
-        }
+        });
     }
 
     @Override
-    public void onMyLocationClick(@NonNull Location location) {}
+    public void onMyLocationClick(@NonNull Location location) {
+    }
 
     @Override
-    public boolean onMyLocationButtonClick() {return false;}
+    public boolean onMyLocationButtonClick() {
+        return false;
+    }
+
+    /**
+     * Displaying waypoints on the map. it should be called when bot map is ready and wypoints are loaded.
+     */
+    private void displayWaypointsOnMap() {
+        // Displaying points on the map
+        if (mWaypoints != null && mWaypoints.length > 0 && mMap != null) {
+            LatLng firstLatLng = new LatLng(mWaypoints[0].getLatitude(), mWaypoints[0].getLongitude());
+            mMap.addMarker(new MarkerOptions().position(firstLatLng));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(firstLatLng));
+            mMap.moveCamera(CameraUpdateFactory.zoomIn());
+            if(mWaypoints.length > 1) {
+                LatLng lastLatLng = new LatLng(mWaypoints[mWaypoints.length - 1].getLatitude(), mWaypoints[mWaypoints.length - 1].getLongitude());
+                mMap.addMarker(new MarkerOptions().position(lastLatLng));
+                PolylineOptions rectOptions = new PolylineOptions();
+                for (Waypoint point : mWaypoints) {
+                    rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
+                }
+                // Get back the mutable Polyline
+                mMap.addPolyline(rectOptions);
+            }
+        }
+    }
 }

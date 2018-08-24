@@ -30,6 +30,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.ChildEventListener;
@@ -169,6 +170,8 @@ public class SharedTrackDetailsActivity extends AppCompatActivity implements OnM
             public void onMapLoaded() {
                 // Displaying points on the map
                 if(mWaypoints != null && mWaypoints.size() > 0) {
+                    LatLngBounds.Builder builder = LatLngBounds.builder();
+
                     LatLng firstLatLng = new LatLng(mWaypoints.get(0).getLatitude(), mWaypoints.get(0).getLongitude());
                     LatLng lastLatLng = new LatLng(mWaypoints.get(mWaypoints.size() - 1).getLatitude(), mWaypoints.get(mWaypoints.size() - 1).getLongitude());
                     mMap.addMarker(new MarkerOptions().position(firstLatLng));
@@ -177,10 +180,15 @@ public class SharedTrackDetailsActivity extends AppCompatActivity implements OnM
                     mMap.moveCamera(CameraUpdateFactory.zoomIn());
                     PolylineOptions rectOptions = new PolylineOptions();
                     for(Waypoint point : mWaypoints) {
-                        rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
+                        LatLng ll = new LatLng(point.getLatitude(), point.getLongitude());
+                        builder.include(ll);
+                        rectOptions.add(ll);
                     }
                     // Get back the mutable Polyline
                     mMap.addPolyline(rectOptions);
+
+                    LatLngBounds bounds = builder.build();
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
                 }
             }
         });
