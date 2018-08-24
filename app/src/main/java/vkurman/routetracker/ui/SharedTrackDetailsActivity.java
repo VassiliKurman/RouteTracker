@@ -15,13 +15,13 @@
  */
 package vkurman.routetracker.ui;
 
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -31,26 +31,20 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vkurman.routetracker.R;
 import vkurman.routetracker.firebase.FirebaseInterface;
-import vkurman.routetracker.loader.SharedTrackDetailsLoader;
-import vkurman.routetracker.loader.TrackDetailsLoader;
 import vkurman.routetracker.model.Track;
 import vkurman.routetracker.model.Waypoint;
 import vkurman.routetracker.utils.RouteTrackerConstants;
@@ -64,8 +58,6 @@ import vkurman.routetracker.utils.RouteTrackerUtils;
  */
 public class SharedTrackDetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    // Key for logging
-    private static final String TAG = SharedTrackDetailsActivity.class.getSimpleName();
     // Initial track id
     private static final long INITIAL_TRACK_ID = -1;
     // Keys for saved instance
@@ -84,7 +76,7 @@ public class SharedTrackDetailsActivity extends AppCompatActivity implements OnM
     /**
      * Reference to waypoints
      */
-    private ArrayList mWaypoints;
+    private List<Waypoint> mWaypoints;
     /**
      * Google Map
      */
@@ -124,7 +116,7 @@ public class SharedTrackDetailsActivity extends AppCompatActivity implements OnM
         if(savedInstanceState != null) {
             mTrackId = savedInstanceState.getLong(TRACK_ID);
             mTrack = savedInstanceState.getParcelable(TRACK);
-            mWaypoints = (ArrayList) savedInstanceState.getParcelableArrayList(WAYPOINTS);
+            mWaypoints = savedInstanceState.getParcelableArrayList(WAYPOINTS);
             // Setting title for actionBar
             if(mTrack != null) {
                 getSupportActionBar().setTitle(mTrack.getName());
@@ -132,7 +124,7 @@ public class SharedTrackDetailsActivity extends AppCompatActivity implements OnM
                 displayData();
             }
         }  else {
-            mWaypoints = new ArrayList();
+            mWaypoints = new ArrayList<>();
             // Checking that intent has extra in it
             if(getIntent().hasExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID)) {
                 // Retrieving track id
@@ -166,17 +158,32 @@ public class SharedTrackDetailsActivity extends AppCompatActivity implements OnM
         super.onSaveInstanceState(outState);
         outState.putLong(TRACK_ID, mTrackId);
         outState.putParcelable(TRACK, mTrack);
-        outState.putParcelableArrayList(WAYPOINTS, mWaypoints);
+        outState.putParcelableArrayList(WAYPOINTS, (ArrayList<? extends Parcelable>) mWaypoints);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                // Displaying points on the map
+                if(mWaypoints != null && mWaypoints.size() > 0) {
+                    LatLng firstLatLng = new LatLng(mWaypoints.get(0).getLatitude(), mWaypoints.get(0).getLongitude());
+                    LatLng lastLatLng = new LatLng(mWaypoints.get(mWaypoints.size() - 1).getLatitude(), mWaypoints.get(mWaypoints.size() - 1).getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(firstLatLng));
+                    mMap.addMarker(new MarkerOptions().position(lastLatLng));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(firstLatLng));
+                    mMap.moveCamera(CameraUpdateFactory.zoomIn());
+                    PolylineOptions rectOptions = new PolylineOptions();
+                    for(Waypoint point : mWaypoints) {
+                        rectOptions.add(new LatLng(point.getLatitude(), point.getLongitude()));
+                    }
+                    // Get back the mutable Polyline
+                    mMap.addPolyline(rectOptions);
+                }
+            }
+        });
     }
 
     /**
