@@ -118,19 +118,23 @@ public class TrackWidget extends AppWidgetProvider {
             remoteViews.setTextViewText(R.id.widget_data_timestamp, "Unspecified");
             remoteViews.setTextViewText(R.id.widget_button, context.getString(R.string.widget_button_start));
             // Start app
-//            PendingIntent.getActivity(context, 0, new Intent(context, RoutesActivity.class), 0);
             context.startActivity(new Intent(context, RoutesActivity.class));
         } else if (intent.getAction().equals(ACTION_LOCATION)) {
-            Log.d(TAG, "Action received: location");
-            Location location = intent.getParcelableExtra(LocationManager.KEY_LOCATION_CHANGED);
-            if (location != null) {
-                // Saving location to database
-                saveLocation(context, location);
-                // Updating texts on widget
-                remoteViews.setTextViewText(R.id.widget_data_latitude, Double.toString(location.getLatitude()));
-                remoteViews.setTextViewText(R.id.widget_data_longitude, Double.toString(location.getLongitude()));
-                remoteViews.setTextViewText(R.id.widget_data_altitude, Double.toString(location.getAltitude()));
-                remoteViews.setTextViewText(R.id.widget_data_timestamp, RouteTrackerUtils.convertMillisecondsToDateTimeFormat(location.getTime()));
+            // Checking if widget exists before saving
+            ComponentName componentName = new ComponentName(context, TrackWidget.class);
+            int[] ids = AppWidgetManager.getInstance(context).getAppWidgetIds(componentName);
+            if (ids.length > 0) {
+                Log.d(TAG, "Action received: location");
+                Location location = intent.getParcelableExtra(LocationManager.KEY_LOCATION_CHANGED);
+                if (location != null) {
+                    // Saving location to database
+                    saveLocation(context, location);
+                    // Updating texts on widget
+                    remoteViews.setTextViewText(R.id.widget_data_latitude, Double.toString(location.getLatitude()));
+                    remoteViews.setTextViewText(R.id.widget_data_longitude, Double.toString(location.getLongitude()));
+                    remoteViews.setTextViewText(R.id.widget_data_altitude, Double.toString(location.getAltitude()));
+                    remoteViews.setTextViewText(R.id.widget_data_timestamp, RouteTrackerUtils.convertMillisecondsToDateTimeFormat(location.getTime()));
+                }
             }
         }
         // Attach onClickListener to tha button
