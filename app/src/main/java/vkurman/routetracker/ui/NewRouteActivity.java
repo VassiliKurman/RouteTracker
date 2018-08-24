@@ -15,7 +15,6 @@
  */
 package vkurman.routetracker.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -40,10 +39,6 @@ public class NewRouteActivity extends AppCompatActivity implements
         NewRouteFragment.OnFragmentInteractionListener,
         TrackNameDialogFragment.TrackNameDialogListener {
 
-    /**
-     * Default result code
-     */
-    private int mResultCode = RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_UNCHANGED;
     /**
      * Reference to child fragment
      */
@@ -76,14 +71,12 @@ public class NewRouteActivity extends AppCompatActivity implements
             case android.R.id.home:
                 if (RouteManager.getInstance().isTracking(this)) {
                     Toast.makeText(this, "Switching track recording in background!", Toast.LENGTH_LONG).show();
-                    // TODO save track in background
+                    // Tracking is stopped when user presses home button
+                    RouteManager.getInstance().stopTracking(getApplicationContext());
                 }
 
                 Intent intent = new Intent();
-                intent.putExtra(
-                        RouteTrackerConstants.INTENT_EXTRA_FOR_RESULT_CODE,
-                        mResultCode);
-                setResult(Activity.RESULT_OK, intent);
+                setResult(RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_CREATED, intent);
                 finish();
                 return true;
             default:
@@ -93,7 +86,7 @@ public class NewRouteActivity extends AppCompatActivity implements
 
     @Override
     public void onFragmentInteraction(int code) {
-        mResultCode = code;
+        // Not implemented
     }
 
     @Override

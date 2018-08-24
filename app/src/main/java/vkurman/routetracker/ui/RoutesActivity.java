@@ -15,6 +15,7 @@
  */
 package vkurman.routetracker.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -195,7 +196,19 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
         Intent intent = new Intent(this, SharedTrackDetailsActivity.class);
         intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_NAME_FOR_TRACK_ID, trackId);
         intent.putExtra(RouteTrackerConstants.INTENT_EXTRA_IS_TRACK_SHARED, true);
-        startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT_SHARED_TRACK);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "Entering onActivityResult() method...");
+        if(requestCode == RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT) {
+            Log.d(TAG, "********************* Result code: " + resultCode + " *******************");
+            if(resultCode == RouteTrackerConstants.TRACK_DETAILS_ACTIVITY_RESULT_CODE_CREATED) {
+                Log.d(TAG, "Track created");
+                retrieveData();
+            }
+        }
     }
 
     @Override

@@ -30,8 +30,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import vkurman.routetracker.R;
@@ -59,6 +57,10 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
      * Adapter for RecycleView
      */
     private RecyclerView.Adapter mAdapter;
+    /**
+     * LayoutManager for RecyclerView
+     */
+    private RecyclerView.LayoutManager mLayoutManager;
 
     /**
      * Binding Views
@@ -84,7 +86,7 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
         // Binding views
         ButterKnife.bind(this, rootView);
         // use a linear layout manager
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
+        mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         // This fragment is a static fragment and it is created before parent activity,
         // therefore recipes not set
@@ -161,7 +163,7 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
     public void onClick(View view) {
         if(view == mFloatingActionButton) {
             Intent intent = new Intent(getActivity(), NewRouteActivity.class);
-            startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT);
+            getActivity().startActivityForResult(intent, RouteTrackerConstants.ROUTES_ACTIVITY_REQUEST_CODE_FOR_RESULT);
         }
     }
 
@@ -181,26 +183,6 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
         } else {
             if(mAdapter instanceof TracksAdapter) {
                 ((TracksAdapter) mAdapter).updateData(data);
-            }
-        }
-    }
-
-    /**
-     * Pass new List<Track> here into fragment if data has been updated.
-     *
-     * @param data - List<Track>
-     */
-    protected void updateSharedData(List<Track> data) {
-        if(refreshLayout != null && refreshLayout.isRefreshing()) {
-            refreshLayout.setRefreshing(false);
-        }
-
-        if(mAdapter == null || mAdapter instanceof TracksAdapter) {
-            mAdapter = new SharedTracksAdapter(getActivity(), data, this);
-            mRecyclerView.setAdapter(mAdapter);
-        } else {
-            if(mAdapter instanceof SharedTracksAdapter) {
-                ((SharedTracksAdapter) mAdapter).updateData(data);
             }
         }
     }
