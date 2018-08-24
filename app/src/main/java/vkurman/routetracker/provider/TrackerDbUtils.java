@@ -18,6 +18,7 @@ package vkurman.routetracker.provider;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import vkurman.routetracker.model.Track;
 import vkurman.routetracker.model.User;
@@ -31,6 +32,8 @@ import vkurman.routetracker.model.Waypoint;
  * Version 1.0
  */
 public class TrackerDbUtils {
+
+    private static final String TAG = TrackerDbUtils.class.getSimpleName();
     /**
      * Saves user into database
      *
@@ -76,6 +79,7 @@ public class TrackerDbUtils {
      * @return Uri - uri pointing to row inserted
      */
     public static Uri addWaypoint(Context context, Waypoint waypoint) {
+        Log.d(TAG, "Entering addWaypoint()...");
         // Create new empty ContentValues object
         ContentValues waypointContentValues = new ContentValues();
         // Put data into the ContentValues
@@ -85,6 +89,7 @@ public class TrackerDbUtils {
         waypointContentValues.put(TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_LATITUDE, waypoint.getLatitude());
         waypointContentValues.put(TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_LONGITUDE, waypoint.getLongitude());
         waypointContentValues.put(TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_ALTITUDE, waypoint.getAltitude());
+        Log.d(TAG, "... requesting insert waypoint and addWaypoint() exiting!");
         // Insert the content values via a ContentResolver
         return context.getContentResolver().insert(TrackerContract.WaypointsEntry.CONTENT_URI_WAYPOINTS, waypointContentValues);
     }

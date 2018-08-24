@@ -15,7 +15,6 @@
  */
 package vkurman.routetracker.receiver;
 
-import android.app.LoaderManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

@@ -70,6 +70,10 @@
         <receiver android:name=".widget.TrackWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="vkurman.routetracker.ACTION_LOCATION" />
+                <action android:name="vkurman.routetracker.widget.action.WIDGET_ACTION_START" />
+                <action android:name="vkurman.routetracker.widget.action.WIDGET_ACTION_STOP" />
+                <action android:name="vkurman.routetracker.widget.action.WIDGET_ACTION_SHOW" />
             </intent-filter>
 
             <meta-data
