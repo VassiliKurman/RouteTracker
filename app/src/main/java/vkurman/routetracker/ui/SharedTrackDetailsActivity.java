@@ -170,23 +170,27 @@ public class SharedTrackDetailsActivity extends AppCompatActivity implements OnM
             public void onMapLoaded() {
                 // Displaying points on the map
                 if(mWaypoints != null && mWaypoints.size() > 0) {
+                    // Creating bounds fo map
                     LatLngBounds.Builder builder = LatLngBounds.builder();
-
+                    // Creating Markers
                     LatLng firstLatLng = new LatLng(mWaypoints.get(0).getLatitude(), mWaypoints.get(0).getLongitude());
-                    LatLng lastLatLng = new LatLng(mWaypoints.get(mWaypoints.size() - 1).getLatitude(), mWaypoints.get(mWaypoints.size() - 1).getLongitude());
                     mMap.addMarker(new MarkerOptions().position(firstLatLng));
-                    mMap.addMarker(new MarkerOptions().position(lastLatLng));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(firstLatLng));
-                    mMap.moveCamera(CameraUpdateFactory.zoomIn());
-                    PolylineOptions rectOptions = new PolylineOptions();
-                    for(Waypoint point : mWaypoints) {
-                        LatLng ll = new LatLng(point.getLatitude(), point.getLongitude());
-                        builder.include(ll);
-                        rectOptions.add(ll);
+                    if(mWaypoints.size() > 1) {
+                        LatLng lastLatLng = new LatLng(mWaypoints.get(mWaypoints.size() - 1).getLatitude(),
+                                mWaypoints.get(mWaypoints.size() - 1).getLongitude());
+                        mMap.addMarker(new MarkerOptions().position(lastLatLng));
+                        PolylineOptions rectOptions = new PolylineOptions();
+                        for (Waypoint point : mWaypoints) {
+                            LatLng ll = new LatLng(point.getLatitude(), point.getLongitude());
+                            builder.include(ll);
+                            rectOptions.add(ll);
+                        }
+                        // Get back the mutable Polyline
+                        mMap.addPolyline(rectOptions);
+                    } else {
+                        // If only one point exists
+                        builder.include(firstLatLng);
                     }
-                    // Get back the mutable Polyline
-                    mMap.addPolyline(rectOptions);
-
                     LatLngBounds bounds = builder.build();
                     mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
                 }
