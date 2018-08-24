@@ -61,21 +61,6 @@ public class TrackWidget extends AppWidgetProvider {
      */
     private static long mCurrentTrackId;
 
-    public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                       int appWidgetId) {
-        // Construct the RemoteViews object
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.track_widget);
-        // Create an Intent to launch TrackDetailsActivity
-//        Intent clickIntent = new Intent(context, TrackWidget.class);
-//        clickIntent.setAction(WIDGET_ACTION_START);
-//        PendingIntent pendingClickIntent = PendingIntent.getBroadcast(context, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        remoteViews.setOnClickPendingIntent(R.id.widget_button, pendingClickIntent);
-
-
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-    }
-
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.d(TAG, "onUpdate() called");
