@@ -76,6 +76,8 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // retain this fragment when activity is re-initialised
+        setRetainInstance(true);
     }
 
     @Override
