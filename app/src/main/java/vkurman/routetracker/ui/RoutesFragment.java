@@ -87,18 +87,21 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
         final View rootView = inflater.inflate(R.layout.fragment_routes, container, true);
         // Binding views
         ButterKnife.bind(this, rootView);
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        // This fragment is a static fragment and it is created before parent activity,
-        // therefore recipes not set
-        mAdapter = new TracksAdapter(getContext(), null, this);
+        // Checking if created view first time
+        if (savedInstanceState == null) {
+            // use a linear layout manager
+            mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            // This fragment is a static fragment and it is created before parent activity,
+            // therefore recipes not set
+            mAdapter = new TracksAdapter(getContext(), null, this);
+        }
         // Set the adapter on the ListView
         mRecyclerView.setAdapter(mAdapter);
         // Setting listener for FAB
         mFloatingActionButton.setOnClickListener(this);
         // Setting SwipeRefreshLayout.OnRefreshListener
-        if(getActivity() instanceof SwipeRefreshLayout.OnRefreshListener) {
+        if (getActivity() instanceof SwipeRefreshLayout.OnRefreshListener) {
             refreshLayout.setOnRefreshListener((SwipeRefreshLayout.OnRefreshListener) getActivity());
         }
 
