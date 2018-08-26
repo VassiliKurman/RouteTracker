@@ -87,11 +87,11 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
         final View rootView = inflater.inflate(R.layout.fragment_routes, container, true);
         // Binding views
         ButterKnife.bind(this, rootView);
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         // Checking if created view first time
         if (savedInstanceState == null) {
-            // use a linear layout manager
-            mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
-            mRecyclerView.setLayoutManager(mLayoutManager);
             // This fragment is a static fragment and it is created before parent activity,
             // therefore recipes not set
             mAdapter = new TracksAdapter(getContext(), null, this);
