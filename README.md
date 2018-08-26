@@ -48,3 +48,7 @@ Capstone, Stage 2 - Build
   * It it performs short duration, on-demand requests(such as search), app uses an AsyncTask.
 * If Content provider is used, the app uses a Loader to move its data to its views.
 * If Room is used then LiveData and ViewModel are used when required and no unnecessary calls to the database are made.
+
+## Project setup
+* google-services.json file needed to put in RouteTracker/app/src folder to work with Firebase
+* api_keys.xml file needed in res/values package to work with Google Maps API in following format: <resources><string name="GEO_API_KEY">YourKeyHere</string></resources>
