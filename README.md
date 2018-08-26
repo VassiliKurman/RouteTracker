@@ -51,4 +51,4 @@ Capstone, Stage 2 - Build
 
 ## Project setup
 * google-services.json file needed to put in RouteTracker/app/src folder to work with Firebase
-* api_keys.xml file needed in res/values package to work with Google Maps API in following format: <code><resources><string name="GEO_API_KEY">YourKeyHere</string></resources></code>
+* api_keys.xml file needed in res/values package to work with Google Maps API in following format: ```<resources><string name="GEO_API_KEY">YourKeyHere</string></resources>```
