@@ -115,7 +115,7 @@ public class RoutesFragment extends Fragment implements TracksAdapter.TrackClick
             mOnItemSelectedListener = (OnItemSelectedListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnItemSelectedListener");
+                    + getString(R.string.text_must_implement_OnItemSelectedListener));
         }
     }
 

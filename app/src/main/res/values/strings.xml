@@ -108,4 +108,20 @@
     <string name="widget_button_stop">Stop</string>
     <string name="widget_button_show">Show</string>
 
+    <!-- Strings -->
+    <string name="toast_text_missing_last_location">Last known location is missing</string>
+    <string name="toast_location_provider_text">Location provider</string>
+    <string name="text_enabled">enabled</string>
+    <string name="text_disabled">disabled</string>
+    <string name="text_must_implement_OnFragmentInteractionListener">must implement OnFragmentInteractionListener</string>
+    <string name="text_permissions_granted">Permissions granted</string>
+    <string name="text_permissions_denied">Permission denied</string>
+    <string name="text_gps_is_disabled">GPS is disabled! Do you want to enable it?</string>
+    <string name="text_track_name_not_specified">Track name not specified</string>
+    <string name="text_switching_track_recording">Switching track recording in background!</string>
+    <string name="text_error_finding_fragment">Error finding fragment with list of tracks</string>
+    <string name="text_must_implement_OnItemSelectedListener">must implement OnItemSelectedListener</string>
+    <string name="text_error_finding_track_fragment">Error finding track fragment</string>
+    <string name="text_must_implement_TrackNameDialogListener">must implement TrackNameDialogListener</string>
+
 </resources>

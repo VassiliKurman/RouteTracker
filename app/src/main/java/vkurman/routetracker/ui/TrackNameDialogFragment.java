@@ -65,7 +65,7 @@ public class TrackNameDialogFragment extends DialogFragment {
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(context.toString()
-                    + " must implement TrackNameDialogListener");
+                    + getString(R.string.text_must_implement_TrackNameDialogListener));
         }
     }
 

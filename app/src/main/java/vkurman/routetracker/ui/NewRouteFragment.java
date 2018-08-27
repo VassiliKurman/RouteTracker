@@ -27,13 +27,12 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -147,14 +146,16 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
                 mTextAltitude.setText(String.format(Locale.getDefault(), "%f", location.getAltitude()));
                 mTextDuration.setText(RouteTrackerUtils.convertMillisecondsToFormattedString(location.getTime() - mStartLocation.getTime()));
             } else {
-                Toast.makeText(getContext(), "Last known location is missing", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.toast_text_missing_last_location, Toast.LENGTH_SHORT).show();
             }
             Log.d(TAG, "... exiting LocationReceiver.locationChanged()");
         }
 
         @Override
         public void providerStateChanged(boolean enabled) {
-            Toast.makeText(getActivity(), "Location provider " + (enabled ? "enabled" : "disabled"), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.toast_location_provider_text)
+                    + (enabled ? getString(R.string.text_enabled)
+                    : getString(R.string.text_disabled)), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -207,7 +208,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
             mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + getString(R.string.text_must_implement_OnFragmentInteractionListener));
         }
     }
 
@@ -273,7 +274,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
                     if(mToast != null) {
                         mToast.cancel();
                     }
-                    mToast.makeText(getContext(), "Permissions granted", Toast.LENGTH_SHORT).show();
+                    mToast.makeText(getContext(), R.string.text_permissions_granted, Toast.LENGTH_SHORT).show();
                     // permission was granted!
                     // Ask to enter track name
                     if(mListener != null) {
@@ -284,7 +285,7 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
                     if(mToast != null) {
                         mToast.cancel();
                     }
-                    mToast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                    mToast.makeText(getContext(), R.string.text_permissions_denied, Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
@@ -338,11 +339,11 @@ public class NewRouteFragment extends Fragment implements View.OnClickListener,
      */
     private void requestToEnableGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("GPS is disabled! Do you want to enable it?")
+        builder.setMessage(R.string.text_gps_is_disabled)
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

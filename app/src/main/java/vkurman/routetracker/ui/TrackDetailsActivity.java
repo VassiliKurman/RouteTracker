@@ -142,7 +142,7 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
                 finish();
                 return true;
             case R.id.action_share:
-                FirebaseInterface.getInstance().shareTrack(mTrack, mWaypoints);
+                FirebaseInterface.shareTrack(mTrack, mWaypoints);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -227,7 +227,7 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
         if(fragment != null) {
             fragment.setTrackData(mTrack, mWaypoints);
         } else {
-            Toast.makeText(this, "Error finding track fragment", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.text_error_finding_track_fragment, Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -44,6 +44,11 @@ public class NewRouteActivity extends AppCompatActivity implements
      */
     private NewRouteFragment mNewRouteFragment;
 
+    /**
+     * Tag
+     */
+    private String tag = "TrackNameDialogFragment";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +75,7 @@ public class NewRouteActivity extends AppCompatActivity implements
         switch (item.getItemId()) {
             case android.R.id.home:
                 if (RouteManager.getInstance().isTracking(this)) {
-                    Toast.makeText(this, "Switching track recording in background!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.text_switching_track_recording, Toast.LENGTH_LONG).show();
                     // Tracking is stopped when user presses home button
                     RouteManager.getInstance().stopTracking(getApplicationContext());
                 }
@@ -93,7 +98,7 @@ public class NewRouteActivity extends AppCompatActivity implements
     public void onTrackNameRequest() {
         // Create an instance of the dialog fragment and show it
         TrackNameDialogFragment dialog = new TrackNameDialogFragment();
-        dialog.show(getSupportFragmentManager(), "TrackNameDialogFragment");
+        dialog.show(getSupportFragmentManager(), tag);
     }
 
     @Override
@@ -108,7 +113,7 @@ public class NewRouteActivity extends AppCompatActivity implements
                 }
                 mNewRouteFragment.startLocationTracking(trackName);
             } else {
-                Toast.makeText(this, "Track name not specified", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.text_track_name_not_specified, Toast.LENGTH_SHORT).show();
             }
         }
     }

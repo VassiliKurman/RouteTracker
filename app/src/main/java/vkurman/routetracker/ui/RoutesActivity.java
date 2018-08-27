@@ -15,7 +15,6 @@
  */
 package vkurman.routetracker.ui;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -176,7 +175,7 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
             Log.d(TAG, "Passing new data to fragment from onLoadFinished() for local tracks");
             fragment.updateData(data);
         } else {
-            Toast.makeText(this, "Error finding fragment with list of tracks", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.text_error_finding_fragment, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -245,7 +244,7 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
             Log.d(TAG, "Setting data to null before update");
             fragment.updateData(null);
         } else {
-            Toast.makeText(this, "Error finding fragment with list of tracks", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.text_error_finding_fragment, Toast.LENGTH_LONG).show();
         }
 
         FirebaseInterface.getInstance().attachListener(this);
@@ -280,7 +279,7 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
             Log.d(TAG, "Passing new data to fragment from onTrackAdded() for shared tracks");
             fragment.addTrack(track);
         } else {
-            Toast.makeText(this, "Error finding fragment with list of tracks", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.text_error_finding_fragment, Toast.LENGTH_LONG).show();
         }
     }
 }
