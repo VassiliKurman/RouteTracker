@@ -61,7 +61,8 @@ public class LocationReceiver extends BroadcastReceiver {
     /**
      * New location received. Needs overriding in Activity or Fragment.
      *
-     * @param location
+     * @param context - Context
+     * @param location - Location
      */
     protected void locationChanged(Context context, Location location) {
         Intent intent = new Intent(RouteManager.ACTION_LOCATION);
@@ -75,7 +76,7 @@ public class LocationReceiver extends BroadcastReceiver {
     /**
      * Provider state changed. Needs overriding in Activity or Fragment.
      *
-     * @param enabled
+     * @param enabled - boolean
      */
     protected void providerStateChanged(boolean enabled) {}
 }
