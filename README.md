@@ -43,7 +43,7 @@ Capstone, Stage 2 - Build
 ## Data Persistence
 * App stores data locally either by implementing a ContentProvider OR using Firebase Realtime Database OR using Room. No third party frameworks nor Persistence Libraries may be used.
 * Must implement at least __one__ of the three:
-  * If it regularly pulls or sends data to/from a web service or API, app updates data in its cache at regular intervals using a SyncAdapter or JobDispacter.
+  * If it regularly pulls or sends data to/from a web service or API, app updates data in its cache at regular intervals using a SyncAdapter or JobDispatcher.
   * If it needs to pull or send data to/from a web service or API only once, or on a per request basis (such as a search application), app uses an IntentService to do so.
   * It it performs short duration, on-demand requests(such as search), app uses an AsyncTask.
 * If Content provider is used, the app uses a Loader to move its data to its views.
