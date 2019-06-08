@@ -8,7 +8,7 @@ Project requirements document from stage 1 can be found in: [Capstone-Project](h
 Capstone, Stage 2 - Build
 
 ## Common Project Requirements
-* App conforms to common standards found in the Android Nanodegree General Project Guidelines
+* App conforms to common standards found in the [Android Nanodegree General Project Guidelines](https://udacity.github.io/android-nanodegree-guidelines/index.html "Udacity Android Developer Nanodegree Guidelines")
 * App is written solely in the Java Programming Language
 * App utilizes stable release versions of all libraries, Gradle, and Android Studio.
 
