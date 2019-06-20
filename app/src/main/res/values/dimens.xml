@@ -8,6 +8,8 @@
     <dimen name="credits_text_size_subtitle">18sp</dimen>
     <dimen name="credits_text_padding_start">24dp</dimen>
 
+    <dimen name="textview_default_radius">10dp</dimen>
+
     <!-- CardView -->
     <dimen name="cardview_main_text_size">22sp</dimen>
     <dimen name="cardview_secondary_text_size">14sp</dimen>

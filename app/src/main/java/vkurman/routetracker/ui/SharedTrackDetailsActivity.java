@@ -85,8 +85,6 @@ public class SharedTrackDetailsActivity extends AppCompatActivity implements OnM
     /**
      * Binding Views
      */
-    @BindView(R.id.text_track_id)
-    TextView mTextTrackId;
     @BindView(R.id.text_track_owner)
     TextView mTextTrackOwner;
     @BindView(R.id.text_track_waypoints)
@@ -233,7 +231,6 @@ public class SharedTrackDetailsActivity extends AppCompatActivity implements OnM
     }
 
     private void displayData() {
-        mTextTrackId.setText(String.valueOf(mTrack.getId()));
         mTextTrackOwner.setText(TextUtils.isEmpty(mTrack.getOwnerName()) ? mTrack.getOwner() : mTrack.getOwnerName());
         mTextTrackWaypoints.setText(String.valueOf(mWaypoints.size()));
         mTextTrackTimestamp.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(mTrack.getId()));

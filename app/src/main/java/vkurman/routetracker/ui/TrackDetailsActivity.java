@@ -27,11 +27,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import java.util.List;
 import java.util.Objects;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import vkurman.routetracker.R;
 import vkurman.routetracker.firebase.FirebaseInterface;
 import vkurman.routetracker.loader.TrackDetailsLoader;
@@ -39,6 +41,7 @@ import vkurman.routetracker.model.Track;
 import vkurman.routetracker.model.Waypoint;
 import vkurman.routetracker.provider.TrackerContract;
 import vkurman.routetracker.utils.RouteTrackerConstants;
+import vkurman.routetracker.utils.RouteTrackerUtils;
 
 /**
  * TrackDetailsActivity
@@ -73,6 +76,10 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
      */
     private Waypoint[] mWaypoints;
 
+    @BindView(R.id.tv_owner) TextView tvOwner;
+    @BindView(R.id.tv_waypoints) TextView tvWaypoints;
+    @BindView(R.id.tv_date) TextView tvDate;
+
     /**
      * Indicator that track is shared
      */
@@ -82,6 +89,10 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_track_details);
+
+        // Binding views
+        ButterKnife.bind(this);
+
         // Setup toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -196,6 +207,9 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
             String ownerName = cursor.getString(cursor.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_OWNER_NAME));
             String image = cursor.getString(cursor.getColumnIndex(TrackerContract.TracksEntry.COLUMN_TRACKS_IMAGE));
             mTrack = new Track(id, name, ownerId, ownerName, image);
+            // TODO remove data above
+            tvOwner.setText(ownerName);
+            tvDate.setText(RouteTrackerUtils.convertMillisecondsToDateTimeFormat(mTrack.getId()));
         }
         // Getting waypoints data from cursor
         if(data.size() > RouteTrackerConstants.LOADER_WAYPOINTS_INDEX) {
@@ -212,9 +226,10 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
                     long timeStamp = cursor.getLong(cursor.getColumnIndex(TrackerContract.WaypointsEntry.COLUMN_WAYPOINTS_TIMESTAMP));
                     mWaypoints[i] = new Waypoint(id, trackId, latitude, longitude, altitude, timeStamp);
                 }
+                tvWaypoints.setText(String.valueOf(mWaypoints.length));
             }
         }
-        if(cursor.isClosed()){
+        if(!cursor.isClosed()){
             cursor.close();
         }
 
@@ -222,13 +237,13 @@ public class TrackDetailsActivity extends AppCompatActivity implements LoaderMan
         if(getSupportActionBar() != null) {
             getSupportActionBar().setTitle(TextUtils.isEmpty(mTrack.getName()) ? Long.toString(mTrack.getId()) : mTrack.getName());
         }
-        // Passing data to fragment
-        TrackDetailsFragment fragment = (TrackDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.track_container);
-        if(fragment != null) {
-            fragment.setTrackData(mTrack, mWaypoints);
-        } else {
-            Toast.makeText(this, R.string.text_error_finding_track_fragment, Toast.LENGTH_SHORT).show();
-        }
+//        // Passing data to fragment
+//        TrackDetailsFragment fragment = (TrackDetailsFragment) getSupportFragmentManager().findFragmentById(R.id.track_container);
+//        if(fragment != null) {
+//            fragment.setTrackData(mTrack, mWaypoints);
+//        } else {
+//            Toast.makeText(this, R.string.text_error_finding_track_fragment, Toast.LENGTH_SHORT).show();
+//        }
     }
 
     @Override
