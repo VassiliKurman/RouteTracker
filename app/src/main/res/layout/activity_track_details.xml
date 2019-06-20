@@ -25,15 +25,6 @@
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <!-- Container for track fragment -->
-    <fragment
-        android:id="@+id/track_container"
-        android:name="vkurman.routetracker.ui.TrackDetailsFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
     <!-- Container for map fragment -->
     <fragment
         android:id="@+id/map_container"
@@ -42,8 +33,75 @@
         android:layout_height="0dp"
         app:layout_constraintVertical_weight="1"
         tools:context="vkurman.routetracker.ui.TrackDetailsFragment"
-        app:layout_constraintTop_toBottomOf="@id/track_container"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/label_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/rounded_corner"
+        android:text="@string/label_track_owner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <TextView
+        android:id="@+id/tv_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/rounded_corner"
+        app:layout_constraintStart_toEndOf="@id/label_owner"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <TextView
+        android:id="@+id/label_waypoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/rounded_corner"
+        android:text="@string/label_waypoints"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/label_owner" />
+
+    <TextView
+        android:id="@+id/tv_waypoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/rounded_corner"
+        app:layout_constraintStart_toEndOf="@id/label_waypoints"
+        app:layout_constraintTop_toBottomOf="@id/label_owner" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/rounded_corner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -24,116 +24,183 @@
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <!-- Container for track fragment -->
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/container_track_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:context=".ui.SharedTrackDetailsActivity">
+    <!--&lt;!&ndash; Container for track fragment &ndash;&gt;-->
+    <!--<android.support.constraint.ConstraintLayout-->
+        <!--android:id="@+id/container_track_details"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/toolbar"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--tools:context=".ui.SharedTrackDetailsActivity">-->
 
-        <!-- Labels -->
-        <TextView
-            android:id="@+id/label_track_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/container_track_details"
-            app:layout_constraintTop_toTopOf="@id/container_track_details"
-            android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="@dimen/default_padding"
-            android:textSize="@dimen/default_text_size"
-            android:textStyle="bold"
-            android:text="@string/label_track_id"/>
-        <TextView
-            android:id="@+id/label_track_owner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/container_track_details"
-            app:layout_constraintTop_toBottomOf="@id/label_track_id"
-            android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="@dimen/default_padding"
-            android:textSize="@dimen/default_text_size"
-            android:textStyle="bold"
-            android:text="@string/label_track_owner"/>
-        <TextView
-            android:id="@+id/label_track_waypoints"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/container_track_details"
-            app:layout_constraintTop_toBottomOf="@id/label_track_owner"
-            android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="@dimen/default_padding"
-            android:textSize="@dimen/default_text_size"
-            android:textStyle="bold"
-            android:text="@string/label_waypoints"/>
-        <TextView
-            android:id="@+id/label_track_timestamp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@id/container_track_details"
-            app:layout_constraintTop_toBottomOf="@id/label_track_waypoints"
-            android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="@dimen/default_padding"
-            android:textSize="@dimen/default_text_size"
-            android:textStyle="bold"
-            android:text="@string/label_date"/>
+        <!--&lt;!&ndash; Labels &ndash;&gt;-->
+        <!--<TextView-->
+            <!--android:id="@+id/label_track_id"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintStart_toStartOf="@id/container_track_details"-->
+            <!--app:layout_constraintTop_toTopOf="@id/container_track_details"-->
+            <!--android:paddingStart="@dimen/default_padding"-->
+            <!--android:paddingEnd="@dimen/default_padding"-->
+            <!--android:textSize="@dimen/default_text_size"-->
+            <!--android:textStyle="bold"-->
+            <!--android:text="@string/label_track_id"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/label_track_owner"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintStart_toStartOf="@id/container_track_details"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/label_track_id"-->
+            <!--android:paddingStart="@dimen/default_padding"-->
+            <!--android:paddingEnd="@dimen/default_padding"-->
+            <!--android:textSize="@dimen/default_text_size"-->
+            <!--android:textStyle="bold"-->
+            <!--android:text="@string/label_track_owner"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/label_track_waypoints"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintStart_toStartOf="@id/container_track_details"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/label_track_owner"-->
+            <!--android:paddingStart="@dimen/default_padding"-->
+            <!--android:paddingEnd="@dimen/default_padding"-->
+            <!--android:textSize="@dimen/default_text_size"-->
+            <!--android:textStyle="bold"-->
+            <!--android:text="@string/label_waypoints"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/label_track_timestamp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintStart_toStartOf="@id/container_track_details"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/label_track_waypoints"-->
+            <!--android:paddingStart="@dimen/default_padding"-->
+            <!--android:paddingEnd="@dimen/default_padding"-->
+            <!--android:textSize="@dimen/default_text_size"-->
+            <!--android:textStyle="bold"-->
+            <!--android:text="@string/label_date"/>-->
 
-        <!-- Data -->
-        <TextView
-            android:id="@+id/text_track_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/label_track_id"
-            app:layout_constraintTop_toTopOf="@id/container_track_details"
-            android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="@dimen/default_padding"
-            android:textSize="@dimen/default_text_size"
-            android:text="@string/text_unknown"/>
-        <TextView
-            android:id="@+id/text_track_owner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/label_track_owner"
-            app:layout_constraintTop_toBottomOf="@id/text_track_id"
-            android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="@dimen/default_padding"
-            android:textSize="@dimen/default_text_size"
-            android:text="@string/text_unknown"/>
-        <TextView
-        android:id="@+id/text_track_waypoints"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/label_track_waypoints"
-        app:layout_constraintTop_toBottomOf="@id/text_track_owner"
-        android:paddingStart="@dimen/default_padding"
-        android:paddingEnd="@dimen/default_padding"
-        android:textSize="@dimen/default_text_size"
-        android:text="@string/text_waypoints"/>
+        <!--&lt;!&ndash; Data &ndash;&gt;-->
+        <!--<TextView-->
+            <!--android:id="@+id/text_track_id"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintStart_toEndOf="@id/label_track_id"-->
+            <!--app:layout_constraintTop_toTopOf="@id/container_track_details"-->
+            <!--android:paddingStart="@dimen/default_padding"-->
+            <!--android:paddingEnd="@dimen/default_padding"-->
+            <!--android:textSize="@dimen/default_text_size"-->
+            <!--android:text="@string/text_unknown"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/text_track_owner"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintStart_toEndOf="@id/label_track_owner"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/text_track_id"-->
+            <!--android:paddingStart="@dimen/default_padding"-->
+            <!--android:paddingEnd="@dimen/default_padding"-->
+            <!--android:textSize="@dimen/default_text_size"-->
+            <!--android:text="@string/text_unknown"/>-->
+        <!--<TextView-->
+        <!--android:id="@+id/text_track_waypoints"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--app:layout_constraintStart_toEndOf="@id/label_track_waypoints"-->
+        <!--app:layout_constraintTop_toBottomOf="@id/text_track_owner"-->
+        <!--android:paddingStart="@dimen/default_padding"-->
+        <!--android:paddingEnd="@dimen/default_padding"-->
+        <!--android:textSize="@dimen/default_text_size"-->
+        <!--android:text="@string/text_waypoints"/>-->
 
-        <TextView
-            android:id="@+id/text_track_timestamp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/label_track_timestamp"
-            app:layout_constraintTop_toBottomOf="@id/text_track_waypoints"
-            android:paddingStart="@dimen/default_padding"
-            android:paddingEnd="@dimen/default_padding"
-            android:textSize="@dimen/default_text_size"
-            android:text="@string/text_unknown"/>
+        <!--<TextView-->
+            <!--android:id="@+id/text_track_timestamp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintStart_toEndOf="@id/label_track_timestamp"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/text_track_waypoints"-->
+            <!--android:paddingStart="@dimen/default_padding"-->
+            <!--android:paddingEnd="@dimen/default_padding"-->
+            <!--android:textSize="@dimen/default_text_size"-->
+            <!--android:text="@string/text_unknown"/>-->
 
-    </android.support.constraint.ConstraintLayout>
+    <!--</android.support.constraint.ConstraintLayout>-->
 
     <!-- Container for map fragment -->
     <fragment
         android:id="@+id/map_container"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
         tools:context="vkurman.routetracker.ui.SharedTrackDetailsActivity"
-        app:layout_constraintTop_toBottomOf="@id/container_track_details"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/label_track_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/rounded_corner"
+        android:text="@string/label_track_owner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <TextView
+        android:id="@+id/text_track_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/rounded_corner"
+        app:layout_constraintStart_toEndOf="@id/label_track_owner"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <TextView
+        android:id="@+id/label_track_waypoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/rounded_corner"
+        android:text="@string/label_waypoints"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/label_track_owner" />
+
+    <TextView
+        android:id="@+id/text_track_waypoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/rounded_corner"
+        app:layout_constraintStart_toEndOf="@id/label_track_waypoints"
+        app:layout_constraintTop_toBottomOf="@id/label_track_owner" />
+
+    <TextView
+        android:id="@+id/text_track_timestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:paddingStart="@dimen/default_padding"
+        android:paddingEnd="@dimen/default_padding"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/rounded_corner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
