@@ -102,6 +102,10 @@ public class RoutesActivity extends AppCompatActivity implements RoutesFragment.
                             menuItem.setChecked(true);
                             // change title in action bar
                             switch (menuItem.getItemId()) {
+                                case R.id.nav_spot_me: {
+                                    // TODO
+                                    break;
+                                }
                                 case R.id.nav_my_tracks: {
                                     if (getSupportActionBar() != null) {
                                         getSupportActionBar().setTitle(menuItem.getTitle());

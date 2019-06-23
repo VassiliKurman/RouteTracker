@@ -52,6 +52,9 @@
 
 
     <!-- Navigation drawer strings -->
+    <string name="nav_live_tracking_title">Live tracking</string>
+    <string name="nav_tracks_title">Tracks</string>
+    <string name="nav_spot_me_title">Spot me</string>
     <string name="nav_my_tracks_title">My track</string>
     <string name="nav_shared_tracks_title">Shared tracks</string>
     <string name="nav_credits_title">Credits</string>
