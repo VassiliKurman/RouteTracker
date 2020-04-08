@@ -1,6 +1,6 @@
 # RouteTracker
 
-This is Project 7 in the Android Developer Nanodegree programme developwed by Udacity in partnership with Google: Capstone Project Stage 2.
+This is Project 7 in the Android Developer Nanodegree programme developed by Udacity in partnership with Google: Capstone Project Stage 2.
 Project requirements document from stage 1 can be found in: [Capstone-Project](https://github.com/VassiliKurman/Capstone-Project)
 
 ## Project Specification
